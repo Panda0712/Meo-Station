@@ -36,6 +36,7 @@ const General = () => {
         className="w-24 h-24 rounded-full border-[2px] border-blue-400"
         alt=""
       />
+      <Input type="file" />
 
       <div className="mt-5">
         <div className="flex flex-col mb-5">

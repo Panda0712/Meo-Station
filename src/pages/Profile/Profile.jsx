@@ -14,7 +14,7 @@ const Profile = () => {
 
   return (
     <section className="px-24 py-16">
-      <div className="flex items-center gap-5 text-[18px] font-semibold">
+      <div className="relative flex items-center border border-b-gray-300 border-x-0 border-t-0 pb-4 gap-5 text-[18px] font-semibold">
         <div
           onClick={() => navigate("/account/general")}
           className={`${infoStyle} ${isGeneral && "bg-gray-200"}`}
@@ -22,6 +22,7 @@ const Profile = () => {
           <span>ℹ️</span>
           <span>Thông tin chung</span>
         </div>
+        <div className="w-[1px] h-[40px] ml-[-0.5] bg-gray-300" />
         <div
           onClick={() => navigate("/account/security")}
           className={`${infoStyle} ${isSecurity && "bg-gray-200"}`}
