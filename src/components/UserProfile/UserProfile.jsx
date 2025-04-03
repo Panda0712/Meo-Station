@@ -73,7 +73,7 @@ const UserProfile = ({ currentUser }) => {
           <Link to="/account/general">
             <li className={profileItemStyle}>Thông tin cá nhân</li>
           </Link>
-          <Link to="/booking_history">
+          <Link to="/booking/history">
             <li className={profileItemStyle}>Lịch sử đặt phòng</li>
           </Link>
           <li onClick={() => setOpenModal(true)} className={profileItemStyle}>

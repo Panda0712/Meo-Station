@@ -21,7 +21,7 @@ const DateRangePicker = ({ toggleOpen, range, isOpen, handleSelect }) => {
       </div>
 
       {isOpen && (
-        <div className="absolute z-10 bg-white shadow-md p-4 rounded-md">
+        <div className="absolute z-10 right-0 bg-white shadow-md p-4 rounded-md min-w-[680px]">
           <DayPicker
             mode="range"
             selected={range}

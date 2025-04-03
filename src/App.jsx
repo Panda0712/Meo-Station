@@ -12,7 +12,7 @@ import NotFound from "~/pages/404/NotFound";
 import Auth from "~/pages/Auth/Auth";
 import Verification from "~/pages/Auth/Verification";
 import Blog from "~/pages/Blog/Blog";
-import BookingHistory from "~/pages/BookingHistory/BookingHistory";
+import Booking from "~/pages/Booking/Booking";
 import Contact from "~/pages/Contact/Contact";
 import Homepage from "~/pages/Homepage/Homepage";
 import Hotel from "~/pages/Hotel/Hotel";
@@ -51,8 +51,11 @@ const App = () => {
             <Route path="/account/security" element={<Profile />} />
             <Route path="/account/general" element={<Profile />} />
 
-            {/* Booking History */}
-            <Route path="/booking_history" element={<BookingHistory />} />
+            {/* Booking  */}
+            <Route path="/booking/info" element={<Booking />} />
+            <Route path="/booking/payment" element={<Booking />} />
+            <Route path="/booking/complete" element={<Booking />} />
+            <Route path="/booking/history" element={<Booking />} />
           </Route>
 
           {/* Authentication */}
