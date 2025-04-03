@@ -13,11 +13,11 @@ const Homepage = () => {
       <section className="mt-24 w-full">
         <Popular />
         <div className="h-12" />
-        <Introduce />
+        <Introduce title="Phòng có sân vườn" />
         <div className="h-12" />
-        <Introduce />
+        <Introduce title="Phòng có bếp" />
         <div className="h-12" />
-        <Introduce />
+        <Introduce title="Phòng có phòng khách" />
       </section>
 
       <section className="mt-24">
