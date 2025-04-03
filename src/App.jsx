@@ -16,6 +16,7 @@ import BookingHistory from "~/pages/BookingHistory/BookingHistory";
 import Contact from "~/pages/Contact/Contact";
 import Homepage from "~/pages/Homepage/Homepage";
 import Hotel from "~/pages/Hotel/Hotel";
+import HotelDetails from "~/pages/Hotel/HotelDetails";
 import Profile from "~/pages/Profile/Profile";
 import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
 
@@ -44,6 +45,7 @@ const App = () => {
 
             {/* Hotel */}
             <Route path="/hotels" element={<Hotel />} />
+            <Route path="/hotels/:hotelId" element={<HotelDetails />} />
 
             {/* Profile */}
             <Route path="/account/security" element={<Profile />} />
