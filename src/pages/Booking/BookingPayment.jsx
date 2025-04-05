@@ -3,6 +3,7 @@ import Button from "~/components/Button/Button";
 import BookingCard from "~/pages/Booking/BookingCard/BookingCard";
 import BookingHeading from "~/pages/Booking/BookingHeading/BookingHeading";
 import BookingSeparate from "~/pages/Booking/BookingSeparate/BookingSeparate";
+import { PAYMENT_METHODS } from "~/utils/constants";
 
 const orderInfo = {
   roomImage:
@@ -14,7 +15,7 @@ const orderInfo = {
 };
 
 const BookingPayment = () => {
-  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS.CASH);
 
   const handleChange = (e) => {
     setPaymentMethod(e.target.value);
@@ -27,7 +28,7 @@ const BookingPayment = () => {
         subHeading="Hãy theo hướng dẫn thanh toán phía bên dưới"
       />
 
-      <div className="flex items-center gap-24 px-[70px] my-16">
+      <div className="flex items-center gap-24 px-[70px]">
         <BookingCard orderInfo={orderInfo} />
         <BookingSeparate />
         <div>
@@ -39,8 +40,8 @@ const BookingPayment = () => {
               <input
                 type="radio"
                 name="payment"
-                value="cash"
-                checked={paymentMethod === "cash"}
+                value={PAYMENT_METHODS.CASH}
+                checked={paymentMethod === PAYMENT_METHODS.CASH}
                 onChange={handleChange}
               />
               <span className="text-[16px] font-medium text-[#152c5b]">
@@ -51,8 +52,8 @@ const BookingPayment = () => {
               <input
                 type="radio"
                 name="payment"
-                value="momo"
-                checked={paymentMethod === "momo"}
+                value={PAYMENT_METHODS.MOMO}
+                checked={paymentMethod === PAYMENT_METHODS.MOMO}
                 onChange={handleChange}
               />
               <span className="text-[16px] font-medium text-[#152c5b]">
@@ -63,8 +64,8 @@ const BookingPayment = () => {
               <input
                 type="radio"
                 name="payment"
-                value="zalo"
-                checked={paymentMethod === "zalo"}
+                value={PAYMENT_METHODS.ZALOPAY}
+                checked={paymentMethod === PAYMENT_METHODS.ZALOPAY}
                 onChange={handleChange}
               />
               <span className="text-[16px] font-medium text-[#152c5b]">
