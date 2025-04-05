@@ -3,7 +3,7 @@ import Stepper from "~/components/Stepper/Stepper";
 import BookingComplete from "~/pages/Booking/BookingComplete";
 import BookingInfo from "~/pages/Booking/BookingInfo";
 import BookingPayment from "~/pages/Booking/BookingPayment";
-import BookingHistory from "~/pages/BookingHistory/BookingHistory";
+import BookingHistory from "~/pages/Booking/BookingHistory";
 
 const Booking = () => {
   const location = useLocation();
@@ -15,7 +15,7 @@ const Booking = () => {
 
   return (
     <section className="px-24 py-16">
-      <Stepper currentStep={1} />
+      {!isBookingHistory && <Stepper currentStep={1} />}
       {isBookingInfo && <BookingInfo />}{" "}
       {isBookingPayment && <BookingPayment />}
       {isBookingComplete && <BookingComplete />}
