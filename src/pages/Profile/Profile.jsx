@@ -1,3 +1,4 @@
+import { InfoIcon, LockKeyholeIcon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import General from "~/pages/Profile/General";
 import Security from "~/pages/Profile/Security";
@@ -10,7 +11,7 @@ const Profile = () => {
   const isGeneral = location.pathname === "/account/general";
 
   const infoStyle =
-    "flex items-center gap-1 p-3 rounded-md transition hover:bg-gray-200 cursor-pointer";
+    "flex items-center gap-2 p-3 rounded-md transition hover:bg-gray-200 cursor-pointer";
 
   return (
     <section className="px-24 py-16">
@@ -19,7 +20,7 @@ const Profile = () => {
           onClick={() => navigate("/account/general")}
           className={`${infoStyle} ${isGeneral && "bg-gray-200"}`}
         >
-          <span>ℹ️</span>
+          <InfoIcon />
           <span>Thông tin chung</span>
         </div>
         <div className="w-[1px] h-[40px] ml-[-0.5] bg-gray-300" />
@@ -27,7 +28,7 @@ const Profile = () => {
           onClick={() => navigate("/account/security")}
           className={`${infoStyle} ${isSecurity && "bg-gray-200"}`}
         >
-          <span>🔐</span>
+          <LockKeyholeIcon />
           <span>Bảo mật tài khoản</span>
         </div>
       </div>

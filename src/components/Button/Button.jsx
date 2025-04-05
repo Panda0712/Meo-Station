@@ -5,6 +5,9 @@ const Button = ({ title, style, onClick, type = "primary", ...props }) => {
     case "primary":
       buttonColor = "bg-[#3252DF] text-white";
       break;
+    case "submit":
+      buttonColor = "bg-[#3252DF] text-white";
+      break;
     case "cancel":
       buttonColor = "bg-gray-400 text-white";
       break;
