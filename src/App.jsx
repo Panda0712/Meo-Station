@@ -10,14 +10,18 @@ import Footer from "~/components/Footer/Footer";
 import Navbar from "~/components/Navbar/Navbar";
 import NotFound from "~/pages/404/NotFound";
 import Admin from "~/pages/Admin/Admin";
+import BookingManagement from "~/pages/Admin/Booking/Booking";
+import ContactManagement from "~/pages/Admin/Contact/Contact";
+import Dashboard from "~/pages/Admin/Dashboard/Dashboard";
+import HotelsManagement from "~/pages/Admin/Hotels/Hotels";
 import Auth from "~/pages/Auth/Auth";
 import Verification from "~/pages/Auth/Verification";
 import Blog from "~/pages/Blog/Blog";
 import Booking from "~/pages/Booking/Booking";
 import Contact from "~/pages/Contact/Contact";
 import Homepage from "~/pages/Homepage/Homepage";
-import Hotels from "~/pages/Hotel/Hotels";
 import HotelDetails from "~/pages/Hotel/HotelDetails";
+import Hotels from "~/pages/Hotel/Hotels";
 import Profile from "~/pages/Profile/Profile";
 import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
 import { ACCOUNT_ROLES } from "~/utils/constants";
@@ -43,7 +47,10 @@ const App = () => {
         <Route element={<AdminRoutes user={currentUser} />}>
           <Route path="/admin" element={<Admin />}>
             <Route index element={<Admin />} />
-            <Route path="dashboard" element={<Homepage />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="hotels" element={<HotelsManagement />} />
+            <Route path="contact" element={<ContactManagement />} />
+            <Route path="booking" element={<BookingManagement />} />
           </Route>
         </Route>
 
