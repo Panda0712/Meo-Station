@@ -16,7 +16,7 @@ import Blog from "~/pages/Blog/Blog";
 import Booking from "~/pages/Booking/Booking";
 import Contact from "~/pages/Contact/Contact";
 import Homepage from "~/pages/Homepage/Homepage";
-import Hotel from "~/pages/Hotel/Hotel";
+import Hotels from "~/pages/Hotel/Hotels";
 import HotelDetails from "~/pages/Hotel/HotelDetails";
 import Profile from "~/pages/Profile/Profile";
 import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
@@ -68,7 +68,7 @@ const App = () => {
             <Route path="/blog" element={<Blog />} />
 
             {/* Hotel */}
-            <Route path="/hotels" element={<Hotel />} />
+            <Route path="/hotels" element={<Hotels />} />
             <Route path="/hotels/:hotelId" element={<HotelDetails />} />
 
             {/* Profile */}

@@ -1,28 +1,31 @@
 const Button = ({ title, style, onClick, type = "primary", ...props }) => {
-  let buttonColor = "bg-[#3252DF]";
+  let buttonStyle = "bg-[#3252DF]";
 
   switch (type) {
     case "primary":
-      buttonColor = "bg-[#3252DF] text-white";
+      buttonStyle = "bg-[#3252DF] text-white rounded-sm";
       break;
     case "submit":
-      buttonColor = "bg-[#3252DF] text-white";
+      buttonStyle = "bg-[#3252DF] text-white rounded-sm";
+      break;
+    case "search":
+      buttonStyle = "bg-[#064749] text-white rounded-[40px] h-[48px]";
       break;
     case "cancel":
-      buttonColor = "bg-gray-400 text-white";
+      buttonStyle = "bg-gray-400 text-white rounded-sm";
       break;
     case "cancel-secondary":
-      buttonColor = "bg-[#f5f6f8] text-[#b3b3b3]";
+      buttonStyle = "bg-[#f5f6f8] text-[#b3b3b3] rounded-sm";
       break;
     case "warning":
-      buttonColor = "bg-red-500 text-white";
+      buttonStyle = "bg-red-500 text-white rounded-sm";
       break;
   }
 
   return (
     <button
       onClick={onClick}
-      className={`${buttonColor} py-2 rounded-sm transition hover:opacity-90 cursor-pointer px-6 shadow-md ${style}`}
+      className={`${buttonStyle} py-2 transition hover:opacity-90 cursor-pointer px-6 shadow-md ${style}`}
       {...props}
     >
       {title}
