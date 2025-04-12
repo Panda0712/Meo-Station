@@ -11,8 +11,23 @@ const Input = ({
 }) => {
   const { error } = props;
 
+  const globalStyle =
+    "bg-[#F2F0F2] text-[16px] text-[#49735A] rounded-[12px] px-4 h-[50px] my-2 sm:w-[400px] w-[350px]";
+
   if (type === "file") {
     return <FileInput image={image} handleImageChange={handleImageChange} />;
+  }
+
+  if (type === "textarea") {
+    return (
+      <textarea
+        name={name}
+        placeholder={content}
+        type={type}
+        className={`${globalStyle} h-[96px] ${style}`}
+        {...props}
+      />
+    );
   }
 
   return (
@@ -21,7 +36,7 @@ const Input = ({
         name={name}
         placeholder={content}
         type={type}
-        className={`bg-[#F2F0F2] text-[16px] text-[#49735A] rounded-[12px] px-4 h-[50px] my-2 sm:w-[400px] w-[350px] ${style}`}
+        className={`${globalStyle} ${style}`}
         {...props}
       />
       {error && (

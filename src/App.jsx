@@ -9,6 +9,7 @@ import {
 import Footer from "~/components/Footer/Footer";
 import Navbar from "~/components/Navbar/Navbar";
 import NotFound from "~/pages/404/NotFound";
+import Admin from "~/pages/Admin/Admin";
 import Auth from "~/pages/Auth/Auth";
 import Verification from "~/pages/Auth/Verification";
 import Blog from "~/pages/Blog/Blog";
@@ -19,9 +20,16 @@ import Hotel from "~/pages/Hotel/Hotel";
 import HotelDetails from "~/pages/Hotel/HotelDetails";
 import Profile from "~/pages/Profile/Profile";
 import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
+import { ACCOUNT_ROLES } from "~/utils/constants";
 
 const ProtectedRoutes = ({ user }) => {
   if (!user) return <Navigate to="/login" replace={true} />;
+  return <Outlet />;
+};
+
+const AdminRoutes = ({ user }) => {
+  if (!user || user.role !== ACCOUNT_ROLES.ADMIN)
+    return <Navigate to="/" replace={true} />;
   return <Outlet />;
 };
 
@@ -30,9 +38,25 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <div className="flex flex-col justify-between min-h-screen">
-        <Navbar />
-        <Routes>
+      <Routes>
+        {/* Admin Routes */}
+        <Route element={<AdminRoutes user={currentUser} />}>
+          <Route path="/admin" element={<Admin />}>
+            <Route index element={<Admin />} />
+            <Route path="dashboard" element={<Homepage />} />
+          </Route>
+        </Route>
+
+        {/* User Routes */}
+        <Route
+          element={
+            <div className="flex flex-col justify-between min-h-screen">
+              <Navbar />
+              <Outlet />
+              <Footer />
+            </div>
+          }
+        >
           <Route element={<ProtectedRoutes user={currentUser} />}>
             {/* Homepage */}
             <Route path="/" element={<Homepage />} />
@@ -62,12 +86,11 @@ const App = () => {
           <Route path="/login" element={<Auth />} />
           <Route path="/register" element={<Auth />} />
           <Route path="/account/verification" element={<Verification />} />
+        </Route>
 
-          {/* 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
-      </div>
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </BrowserRouter>
   );
 };
