@@ -13,7 +13,9 @@ import Admin from "~/pages/Admin/Admin";
 import BookingManagement from "~/pages/Admin/Booking/Booking";
 import ContactManagement from "~/pages/Admin/Contact/Contact";
 import Dashboard from "~/pages/Admin/Dashboard/Dashboard";
+import HotelDetailsManagement from "~/pages/Admin/Hotels/HotelDetails";
 import HotelsManagement from "~/pages/Admin/Hotels/Hotels";
+import NotificationManagement from "~/pages/Admin/Notification/Notification";
 import Auth from "~/pages/Auth/Auth";
 import Verification from "~/pages/Auth/Verification";
 import Blog from "~/pages/Blog/Blog";
@@ -28,6 +30,10 @@ import { ACCOUNT_ROLES } from "~/utils/constants";
 
 const ProtectedRoutes = ({ user }) => {
   if (!user) return <Navigate to="/login" replace={true} />;
+
+  if (user?.role === ACCOUNT_ROLES.ADMIN)
+    return <Navigate to="/admin" replace={true} />;
+
   return <Outlet />;
 };
 
@@ -46,11 +52,15 @@ const App = () => {
         {/* Admin Routes */}
         <Route element={<AdminRoutes user={currentUser} />}>
           <Route path="/admin" element={<Admin />}>
-            <Route index element={<Admin />} />
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route index element={<Dashboard />} />
             <Route path="hotels" element={<HotelsManagement />} />
+            <Route
+              path="hotels/:hotelId"
+              element={<HotelDetailsManagement />}
+            />
             <Route path="contact" element={<ContactManagement />} />
             <Route path="booking" element={<BookingManagement />} />
+            <Route path="notification" element={<NotificationManagement />} />
           </Route>
         </Route>
 
