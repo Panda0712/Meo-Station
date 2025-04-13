@@ -16,6 +16,7 @@ import Dashboard from "~/pages/Admin/Dashboard/Dashboard";
 import HotelDetailsManagement from "~/pages/Admin/Hotels/HotelDetails";
 import HotelsManagement from "~/pages/Admin/Hotels/Hotels";
 import NotificationManagement from "~/pages/Admin/Notification/Notification";
+import AdminProfile from "~/pages/Admin/Profile/AdminProfile";
 import Auth from "~/pages/Auth/Auth";
 import Verification from "~/pages/Auth/Verification";
 import Blog from "~/pages/Blog/Blog";
@@ -61,6 +62,7 @@ const App = () => {
             <Route path="contact" element={<ContactManagement />} />
             <Route path="booking" element={<BookingManagement />} />
             <Route path="notification" element={<NotificationManagement />} />
+            <Route path="profile" element={<AdminProfile />} />
           </Route>
         </Route>
 
