@@ -53,6 +53,14 @@ export const updateHotelAPI = async (hotelId, data) => {
   return res.data;
 };
 
+// Delete hotel
+export const deleteHotelAPI = async (hotelId) => {
+  const res = await authorizedAxiosInstance.delete(
+    `${API_ROOT}/v1/hotels/${hotelId}`
+  );
+  return res.data;
+};
+
 // Upload hotel images
 export const uploadHotelImagesAPI = async (data) => {
   const res = await authorizedAxiosInstance.post(
