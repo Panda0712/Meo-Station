@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import authorizedAxiosInstance from "~/utils/authorizeAxios";
 import { API_ROOT } from "~/utils/constants";
 
-// Authentication
+// Handle refresh token
 export const refreshTokenAPI = async () => {
   const res = await authorizedAxiosInstance.get(
     `${API_ROOT}/v1/users/refresh_token`
@@ -10,6 +10,7 @@ export const refreshTokenAPI = async () => {
   return res.data;
 };
 
+// Handle register new user
 export const registerUserAPI = async (data) => {
   const res = await authorizedAxiosInstance.post(
     `${API_ROOT}/v1/users/register`,
@@ -18,6 +19,7 @@ export const registerUserAPI = async (data) => {
   return res.data;
 };
 
+// Handle verify new email
 export const verifyUserAPI = async (data) => {
   const res = await authorizedAxiosInstance.put(
     `${API_ROOT}/v1/users/verify`,
@@ -66,6 +68,31 @@ export const uploadHotelImagesAPI = async (data) => {
   const res = await authorizedAxiosInstance.post(
     `${API_ROOT}/v1/hotels/uploads`,
     data
+  );
+  return res.data;
+};
+
+// Get list contacts
+export const getListContactsAPI = async (searchPath) => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/contacts${searchPath}`
+  );
+  return res.data;
+};
+
+// Create new contact
+export const createNewContactAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/contacts`,
+    data
+  );
+  return res.data;
+};
+
+// Delete contact
+export const deleteContactAPI = async (contactId) => {
+  const res = await authorizedAxiosInstance.delete(
+    `${API_ROOT}/v1/contacts/${contactId}`
   );
   return res.data;
 };
