@@ -6,6 +6,17 @@ export const color = {
   mail: "#3e65cf",
 };
 
+export const UTILITIES_LIST = [
+  "bedroom",
+  "livingRoom",
+  "bathroom",
+  "diningRoom",
+  "internet",
+  "coldMachine",
+  "refrigerator",
+  "TV",
+];
+
 export const PAYMENT_METHODS = {
   MOMO: "MOMO",
   ZALOPAY: "ZALOPAY",

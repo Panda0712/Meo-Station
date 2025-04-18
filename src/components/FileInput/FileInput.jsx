@@ -1,4 +1,9 @@
-const FileInput = ({ image, handleImageChange }) => {
+const FileInput = ({
+  image = null,
+  images = [],
+  handleImageChange,
+  multiple = false,
+}) => {
   return (
     <div className="w-full max-w-sm mx-auto">
       <label
@@ -17,6 +22,21 @@ const FileInput = ({ image, handleImageChange }) => {
             alt="Preview"
             className="w-full h-full object-cover rounded-lg"
           />
+        ) : images.length > 0 ? (
+          <div className="grid grid-cols-3 gap-2 p-2 w-full">
+            {images.map((img, idx) => (
+              <div
+                key={idx}
+                className="relative w-full aspect-square overflow-hidden rounded-lg border border-gray-300"
+              >
+                <img
+                  src={img}
+                  alt={`Preview ${idx + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="flex flex-col items-center">
             <svg
@@ -47,6 +67,7 @@ const FileInput = ({ image, handleImageChange }) => {
           className="hidden"
           accept="image/"
           onChange={handleImageChange}
+          multiple={multiple}
         />
       </label>
     </div>
