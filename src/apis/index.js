@@ -29,3 +29,35 @@ export const verifyUserAPI = async (data) => {
   );
   return res.data;
 };
+
+// Get list hotels
+export const fetchHotelsAPI = async (searchPath) => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/hotels${searchPath}`
+  );
+  return res.data;
+};
+
+// Create new hotel
+export const createNewHotelAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(`${API_ROOT}/v1/hotels`, data);
+  return res.data;
+};
+
+// Update hotel
+export const updateHotelAPI = async (hotelId, data) => {
+  const res = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/hotels/${hotelId}`,
+    data
+  );
+  return res.data;
+};
+
+// Upload hotel images
+export const uploadHotelImagesAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/hotels/uploads`,
+    data
+  );
+  return res.data;
+};
