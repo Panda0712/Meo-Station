@@ -1,6 +1,6 @@
 export function capitalizeWords(str) {
   return str
-    .split(" ") // Split string into words
+    ?.split(" ") // Split string into words
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
     .join(" "); // Join words back into a sentence
 }

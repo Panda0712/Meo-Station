@@ -1,7 +1,37 @@
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { createNewContactAPI } from "~/apis";
 import Button from "~/components/Button/Button";
 import Input from "~/components/Input/Input";
+import {
+  EMAIL_RULE,
+  EMAIL_RULE_MESSAGE,
+  FIELD_REQUIRED_MESSAGE,
+  PHONE_RULE,
+  PHONE_RULE_MESSAGE,
+} from "~/utils/validators";
 
 const Contact = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    toast
+      .promise(createNewContactAPI(data), {
+        pending: "Đang gửi liên hệ...",
+      })
+      .then((res) => {
+        if (!res.error) {
+          toast.success("Gửi liên hệ thành công!!!");
+          reset();
+        }
+      });
+  };
+
   return (
     <section className="px-24 py-16">
       <h3 className="text-[32px] text-[#152c5b] font-semibold mb-12">
@@ -13,14 +43,67 @@ const Contact = () => {
           <h4 className="text-[24px] text-[#152c5b] font-medium mb-8">
             Bạn muốn liên hệ chúng tôi vì điều gì?
           </h4>
-          <form className="flex flex-col gap-[8px] relative">
-            <Input name="name" content="Nhập họ tên" />
-            <Input name="email" type="email" content="Nhập email" />
-            <Input name="phone" content="Nhập số điện thoại" />
+          <form
+            className="flex flex-col gap-[8px] relative"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <Input
+              name="name"
+              content="Nhập họ tên"
+              {...register("name", {
+                required: FIELD_REQUIRED_MESSAGE,
+                minLength: {
+                  value: 5,
+                  message: "Tên tối thiểu 5 ký tự!",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "Tên tối đa 50 ký tự!",
+                },
+              })}
+              error={errors?.name}
+            />
+            <Input
+              name="email"
+              type="email"
+              content="Nhập email"
+              {...register("email", {
+                required: FIELD_REQUIRED_MESSAGE,
+                pattern: {
+                  value: EMAIL_RULE,
+                  message: EMAIL_RULE_MESSAGE,
+                },
+              })}
+              error={errors?.email}
+            />
+            <Input
+              name="phone"
+              content="Nhập số điện thoại"
+              {...register("phone", {
+                required: FIELD_REQUIRED_MESSAGE,
+                pattern: {
+                  value: PHONE_RULE,
+                  message: PHONE_RULE_MESSAGE,
+                },
+              })}
+              error={errors?.phone}
+            />
             <Input
               name="message"
               type="textarea"
               content="Nhập nội dung"
+              {...register("message", {
+                required: FIELD_REQUIRED_MESSAGE,
+                minLength: {
+                  value: 10,
+                  message: "Nội dung tối thiểu 10 ký tự!",
+                },
+                maxLength: {
+                  value: 200,
+                  message: "Nội dung tối đa 200 ký tự!!!",
+                },
+              })}
+              error={errors?.message}
               style="pt-3"
             />
             <div className="flex justify-start mt-1">
