@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   createNewHotelAPI,
+  deleteHotelAPI,
   fetchHotelsAPI,
   updateHotelAPI,
   uploadHotelImagesAPI,
@@ -18,63 +19,16 @@ import {
   singleFileValidator,
 } from "~/utils/validators";
 
-// const listHotels = [
-//   {
-//     name: "CineBox 03",
-//     location: "25A, 3/2, HCM",
-//     description: "BlissHome Number 1",
-//     images: [
-//       "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/1-20241130121516-twsr-.jpg",
-//       "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/2-20241130121516-3oai-.jpg",
-//       "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
-//     ],
-//     utilities: [
-//       {
-//         type: "bedroom",
-//         value: "5 phòng ngủ",
-//       },
-//       {
-//         type: "livingRoom",
-//         value: "1 phòng khách",
-//       },
-//       {
-//         type: "bathroom",
-//         value: "3 phòng tắm",
-//       },
-//       {
-//         type: "diningRoom",
-//         value: "1 phòng ăn",
-//       },
-//       {
-//         type: "internet",
-//         value: "10 mbp/s",
-//       },
-//       {
-//         type: "coldMachine",
-//         value: "7 máy lạnh",
-//       },
-//       {
-//         type: "refrigerator",
-//         value: "2 tủ lạnh",
-//       },
-//       {
-//         type: "TV",
-//         value: "4 tivi",
-//       },
-//     ],
-//     pricePerNight: 300,
-//     priceFirstHour: 80,
-//     priceEachHour: 100,
-//     discount: 20,
-//   },
-// ];
-
 const HotelsManagement = () => {
   const [hotels, setHotels] = useState([]);
   const [totalHotels, setTotalHotels] = useState(null);
   const [editing, setEditing] = useState({
     edit: false,
     data: null,
+  });
+  const [deleting, setDeleting] = useState({
+    delete: false,
+    id: null,
   });
   const [openOptions, setOpenOptions] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -165,55 +119,72 @@ const HotelsManagement = () => {
 
   const toggleOpenModal = () => setOpenModal(!openModal);
 
-  const handleToggleEditing = (data) => {
-    setOpenModal(true);
-    setEditing({
-      edit: true,
-      data,
-    });
+  const handleToggle = (type, data) => {
+    setOpenModal(type === "options" ? false : true);
+    if (type === "edit")
+      setEditing({
+        edit: true,
+        data,
+      });
+    else if (type === "delete")
+      setDeleting({
+        delete: true,
+        id: data,
+      });
+    else if (type === "options")
+      setOpenOptions((prevOptions) =>
+        prevOptions.map((item, index) =>
+          index === data
+            ? {
+                ...item,
+                open: !item.open,
+              }
+            : {
+                ...item,
+                open: false,
+              }
+        )
+      );
   };
 
-  const handleResetEditing = () => {
+  const handleReset = () => {
     setEditing({
       edit: false,
       data: null,
     });
+    setDeleting({
+      delete: false,
+      id: null,
+    });
+    setOpenOptions((prevOptions) =>
+      prevOptions.map((item) => ({
+        ...item,
+        open: false,
+      }))
+    );
     setOpenModal(false);
   };
 
-  const handleToggleOptions = (currentIndex) =>
-    setOpenOptions((prevOptions) =>
-      prevOptions.map((item, index) =>
-        index === currentIndex
-          ? {
-              ...item,
-              open: !item.open,
-            }
-          : {
-              ...item,
-              open: false,
-            }
-      )
-    );
+  const onDeleting = async () => {
+    toast
+      .promise(deleteHotelAPI(deleting.id), {
+        pending: "Đang xóa phòng...",
+      })
+      .then((res) => {
+        if (!res.error) {
+          toast.success("Xóa phòng thành công!!!");
+          handleAfterCUDNewHotel();
+        }
+      });
+
+    handleReset();
+  };
 
   const onSubmit = async (data) => {
     if (!images.length) {
       toast.error("Vui lòng chọn ảnh trước khi tạo!!!");
       return;
     }
-
-    // let isImagesListDifferent = false;
-    // const currentImagesFormData = getValues("images") || [];
-    // console.log("current Form Data: ", currentImagesFormData);
-
-    // if (editing.data) {
-    //   const checkHotel = hotels.find((i) => i._id === editing.data._id)?.images;
-    //   console.log("check Hotel: ", checkHotel);
-
-    //   isImagesListDifferent = checkHotel.some(
-    //     (image, index) => image !== currentImagesFormData[index]
-    //   );
-    // }
 
     const formData = reqDataRef.current;
     if (!formData && !editing.edit) {
@@ -223,7 +194,6 @@ const HotelsManagement = () => {
 
     const currentImagesFormData = getValues("images") || [];
     let imagesList = [];
-    // console.log("is Image Different: ", isImagesListDifferent);
     if (formData)
       imagesList = await toast.promise(uploadHotelImagesAPI(formData), {
         pending: "Đang tải ảnh lên...",
@@ -231,7 +201,6 @@ const HotelsManagement = () => {
         error: "Tải ảnh thất bại!",
       });
 
-    console.log("image List: ", imagesList);
     if (imagesList?.length || currentImagesFormData.length) {
       const utilitiesList = UTILITIES_LIST.map((utility, index) => ({
         type: utility,
@@ -264,19 +233,18 @@ const HotelsManagement = () => {
                 ? "Chỉnh sửa thành công"
                 : "Tạo khách sạn mới thành công!!!"
             );
-            handleAfterCreateUpdateNewHotel();
+            handleAfterCUDNewHotel();
           }
 
-          if (editing.edit) handleResetEditing();
+          handleReset();
           setImages([]);
           reset();
-          setOpenModal(false);
           reqDataRef.current = null;
         });
     }
   };
 
-  const handleAfterCreateUpdateNewHotel = () => {
+  const handleAfterCUDNewHotel = () => {
     fetchHotelsAPI(location.search).then(updateStateData);
   };
 
@@ -300,6 +268,21 @@ const HotelsManagement = () => {
       });
 
       setImages(editing.data.images || []);
+    } else {
+      reset({
+        title: "",
+        location: "",
+        description: "",
+        images: [],
+        utilities: "",
+        maxGuest: "",
+        pricePerNight: "",
+        priceFirstHour: "",
+        priceEachHour: "",
+        discount: "",
+      });
+
+      setImages([]);
     }
   }, [editing, reset]);
 
@@ -311,194 +294,224 @@ const HotelsManagement = () => {
     <div className="flex flex-col">
       {openModal && (
         <Modal
-          title={editing.edit ? "Chỉnh sửa phòng" : "Thêm phòng mới"}
-          handleCloseModal={() => setOpenModal(false)}
+          title={
+            editing.edit
+              ? "Chỉnh sửa phòng"
+              : !deleting.delete
+              ? "Thêm phòng mới"
+              : "Xóa phòng"
+          }
+          handleCloseModal={() => handleReset()}
           modalStyle="w-[450px]"
         >
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="mt-5 flex flex-col gap-4"
-          >
-            <div className="flex flex-col gap-1">
-              <label htmlFor="title" className="font-medium">
-                Tên phòng
-              </label>
+          {deleting.delete ? (
+            <div className="mt-6 relative">
+              <p className="text-black">
+                Bạn có chắc chắn muốn xóa phòng không? Sau khi xóa không thể
+                hoàn tác!
+              </p>
+
+              <div className="flex justify-end">
+                <div className="flex items-center gap-2 mt-8">
+                  <Button
+                    title="Trở lại"
+                    type="cancel"
+                    onClick={() => handleReset()}
+                  />
+                  <Button
+                    title="Xóa phòng"
+                    type="warning"
+                    onClick={onDeleting}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="mt-5 flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-1">
+                <label htmlFor="title" className="font-medium">
+                  Tên phòng
+                </label>
+                <Input
+                  name="title"
+                  content="Nhập tên phòng"
+                  {...register("title", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                    minLength: {
+                      value: 5,
+                      message: "Tên tối thiểu 5 ký tự",
+                    },
+                    maxLength: {
+                      value: 50,
+                      message: "Tên tối đa 50 ký tự",
+                    },
+                  })}
+                  error={errors?.title}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label htmlFor="location" className="font-medium">
+                  Địa chỉ
+                </label>
+                <Input
+                  name="location"
+                  content="Nhập địa chỉ"
+                  {...register("location", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                    minLength: {
+                      value: 5,
+                      message: "Địa chỉ tối thiểu 5 ký tự",
+                    },
+                    maxLength: {
+                      value: 80,
+                      message: "Địa chỉ tối đa 50 ký tự",
+                    },
+                  })}
+                  error={errors?.location}
+                />
+              </div>
+
               <Input
-                name="title"
-                content="Nhập tên phòng"
-                {...register("title", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                  minLength: {
-                    value: 5,
-                    message: "Tên tối thiểu 5 ký tự",
-                  },
-                  maxLength: {
-                    value: 50,
-                    message: "Tên tối đa 50 ký tự",
-                  },
-                })}
-                error={errors?.title}
+                type="file"
+                images={images}
+                handleImageChange={handleImageChange}
+                multiple
               />
-            </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="location" className="font-medium">
-                Địa chỉ
-              </label>
-              <Input
-                name="location"
-                content="Nhập địa chỉ"
-                {...register("location", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                  minLength: {
-                    value: 5,
-                    message: "Địa chỉ tối thiểu 5 ký tự",
-                  },
-                  maxLength: {
-                    value: 80,
-                    message: "Địa chỉ tối đa 50 ký tự",
-                  },
-                })}
-                error={errors?.location}
-              />
-            </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="description" className="font-medium">
+                  Mô tả
+                </label>
+                <Input
+                  name="description"
+                  content="Nhập mô tả"
+                  type="textarea"
+                  style="pt-3"
+                  {...register("description", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                    minLength: {
+                      value: 5,
+                      message: "Mô tả tối thiểu 5 ký tự",
+                    },
+                    maxLength: {
+                      value: 150,
+                      message: "Mô tả tối đa 150 ký tự",
+                    },
+                  })}
+                  error={errors?.description}
+                />
+              </div>
 
-            <Input
-              type="file"
-              images={images}
-              handleImageChange={handleImageChange}
-              multiple
-            />
+              <div className="flex flex-col gap-1">
+                <label htmlFor="utilities" className="font-medium">
+                  Tiện ích (Nhập theo thứ tự: số phòng ngủ, phòng khách, phòng
+                  tắm, phòng ăn, tốc độ internet, số máy lạnh, số tủ lạnh, TV) *
+                  Lưu ý: Nhập cách nhau bởi dấu phẩy và khoảng trắng
+                </label>
+                <Input
+                  name="utilities"
+                  content="Nhập tiện ích"
+                  type="textarea"
+                  style="pt-3"
+                  {...register("utilities", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                    minLength: {
+                      value: 5,
+                      message: "Tiện ích tối thiểu 5 ký tự",
+                    },
+                    maxLength: {
+                      value: 150,
+                      message: "Tiện ích tối đa 150 ký tự",
+                    },
+                  })}
+                  error={errors?.utilities}
+                />
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="description" className="font-medium">
-                Mô tả
-              </label>
-              <Input
-                name="description"
-                content="Nhập mô tả"
-                type="textarea"
-                style="pt-3"
-                {...register("description", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                  minLength: {
-                    value: 5,
-                    message: "Mô tả tối thiểu 5 ký tự",
-                  },
-                  maxLength: {
-                    value: 150,
-                    message: "Mô tả tối đa 150 ký tự",
-                  },
-                })}
-                error={errors?.description}
-              />
-            </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="maxGuest" className="font-medium">
+                  Số khách tối đa
+                </label>
+                <Input
+                  name="maxGuest"
+                  content="Nhập số khách tối đa"
+                  type="number"
+                  {...register("maxGuest", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                  })}
+                  error={errors?.maxGuest}
+                />
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="utilities" className="font-medium">
-                Tiện ích (Nhập theo thứ tự: số phòng ngủ, phòng khách, phòng
-                tắm, phòng ăn, tốc độ internet, số máy lạnh, số tủ lạnh, TV) *
-                Lưu ý: Nhập cách nhau bởi dấu phẩy và khoảng trắng
-              </label>
-              <Input
-                name="utilities"
-                content="Nhập tiện ích"
-                type="textarea"
-                style="pt-3"
-                {...register("utilities", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                  minLength: {
-                    value: 5,
-                    message: "Tiện ích tối thiểu 5 ký tự",
-                  },
-                  maxLength: {
-                    value: 150,
-                    message: "Tiện ích tối đa 150 ký tự",
-                  },
-                })}
-                error={errors?.utilities}
-              />
-            </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="pricePerNight" className="font-medium">
+                  Giá mỗi đêm
+                </label>
+                <Input
+                  name="pricePerNight"
+                  content="Nhập giá mỗi đêm"
+                  type="number"
+                  {...register("pricePerNight", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                  })}
+                  error={errors?.pricePerNight}
+                />
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="maxGuest" className="font-medium">
-                Số khách tối đa
-              </label>
-              <Input
-                name="maxGuest"
-                content="Nhập số khách tối đa"
-                type="number"
-                {...register("maxGuest", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                })}
-                error={errors?.maxGuest}
-              />
-            </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="priceFirstHour" className="font-medium">
+                  Giá giờ đầu
+                </label>
+                <Input
+                  name="priceFirstHour"
+                  content="Nhập giá giờ đầu"
+                  type="number"
+                  {...register("priceFirstHour", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                  })}
+                  error={errors?.priceFirstHour}
+                />
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="pricePerNight" className="font-medium">
-                Giá mỗi đêm
-              </label>
-              <Input
-                name="pricePerNight"
-                content="Nhập giá mỗi đêm"
-                type="number"
-                {...register("pricePerNight", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                })}
-                error={errors?.pricePerNight}
-              />
-            </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="priceEachHour" className="font-medium">
+                  Giá gốc
+                </label>
+                <Input
+                  name="priceEachHour"
+                  content="Nhập giá gốc"
+                  type="number"
+                  {...register("priceEachHour", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                  })}
+                  error={errors?.priceEachHour}
+                />
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="priceFirstHour" className="font-medium">
-                Giá giờ đầu
-              </label>
-              <Input
-                name="priceFirstHour"
-                content="Nhập giá giờ đầu"
-                type="number"
-                {...register("priceFirstHour", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                })}
-                error={errors?.priceFirstHour}
-              />
-            </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="discount" className="font-medium">
+                  Khuyến mãi
+                </label>
+                <Input
+                  name="discount"
+                  content="Nhập khuyến mãi"
+                  type="number"
+                  {...register("discount", {
+                    required: FIELD_REQUIRED_MESSAGE,
+                  })}
+                  error={errors?.discount}
+                />
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="priceEachHour" className="font-medium">
-                Giá gốc
-              </label>
-              <Input
-                name="priceEachHour"
-                content="Nhập giá gốc"
-                type="number"
-                {...register("priceEachHour", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                })}
-                error={errors?.priceEachHour}
-              />
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label htmlFor="discount" className="font-medium">
-                Khuyến mãi
-              </label>
-              <Input
-                name="discount"
-                content="Nhập khuyến mãi"
-                type="number"
-                {...register("discount", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                })}
-                error={errors?.discount}
-              />
-            </div>
-
-            <div className="flex justify-end mt-5">
-              <Button title={editing.edit ? "Chỉnh sửa" : "Thêm phòng"} />
-            </div>
-          </form>
+              <div className="flex justify-end mt-5">
+                <Button title={editing.edit ? "Chỉnh sửa" : "Thêm phòng"} />
+              </div>
+            </form>
+          )}
         </Modal>
       )}
 
@@ -534,7 +547,7 @@ const HotelsManagement = () => {
                 <Ellipsis
                   size={18}
                   className="cursor-pointer mx-auto"
-                  onClick={() => handleToggleOptions(index)}
+                  onClick={() => handleToggle("options", index)}
                 />
 
                 {openOptions[index]?.open && (
@@ -547,11 +560,16 @@ const HotelsManagement = () => {
                     </li>
                     <li
                       className={`${optionStyle} border-b border-slate-200 `}
-                      onClick={() => handleToggleEditing(hotel)}
+                      onClick={() => handleToggle("edit", hotel)}
                     >
                       Chỉnh sửa
                     </li>
-                    <li className={`${optionStyle}`}>Xóa phòng</li>
+                    <li
+                      className={`${optionStyle}`}
+                      onClick={() => handleToggle("delete", hotel?._id)}
+                    >
+                      Xóa phòng
+                    </li>
                   </ul>
                 )}
               </td>
