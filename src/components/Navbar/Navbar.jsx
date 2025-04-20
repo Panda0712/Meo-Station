@@ -4,6 +4,7 @@ import { menuList } from "~/components/Navbar/constants";
 import UserProfile from "~/components/UserProfile/UserProfile";
 import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
 import MeoLogo from "/panda-logo.png";
+import Notifications from "~/components/Notifications/Notifications";
 
 const Navbar = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ const Navbar = () => {
             </li>
           </Link>
         ))}
+        <Notifications />
         {currentUser && <UserProfile currentUser={currentUser} />}
       </ul>
     </nav>
