@@ -22,6 +22,8 @@ const Input = ({
         images={images}
         handleImageChange={handleImageChange}
         multiple={multiple}
+        style={style}
+        {...props}
       />
     );
   }
@@ -32,6 +34,8 @@ const Input = ({
         image={image}
         handleImageChange={handleImageChange}
         multiple={multiple}
+        style={style}
+        {...props}
       />
     );
   }

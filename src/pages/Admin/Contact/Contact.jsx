@@ -127,28 +127,30 @@ const ContactManagement = () => {
               <td className={`${tHeadStyle}`}>{contact?.phone}</td>
               <td className={`${tHeadStyle}`}>{contact?.message}</td>
               <td className={`${tHeadStyle} relative`}>
-                <Ellipsis
-                  size={18}
-                  className="cursor-pointer mx-auto"
-                  onClick={() => handleToggleOptions(index)}
-                />
+                <div className="relative">
+                  <Ellipsis
+                    size={18}
+                    className="cursor-pointer mx-auto"
+                    onClick={() => handleToggleOptions(index)}
+                  />
 
-                {openOptions[index]?.open && (
-                  <ul
-                    className="w-[150px] bg-white shadow-md z-100
-              border border-slate-100 rounded-sm absolute bottom-[-40px] text-[14px] right-0"
-                  >
-                    <li
-                      className={`${optionStyle}`}
-                      onClick={() => {
-                        setOpenModal(true);
-                        setCurrentId(contact._id);
-                      }}
+                  {openOptions[index]?.open && (
+                    <ul
+                      className="w-[150px] bg-white shadow-md z-100
+              border border-slate-100 rounded-sm absolute bottom-[-calc(50%)] text-[14px] right-0"
                     >
-                      Xóa liên hệ
-                    </li>
-                  </ul>
-                )}
+                      <li
+                        className={`${optionStyle}`}
+                        onClick={() => {
+                          setOpenModal(true);
+                          setCurrentId(contact._id);
+                        }}
+                      >
+                        Xóa liên hệ
+                      </li>
+                    </ul>
+                  )}
+                </div>
               </td>
             </tr>
           ))}

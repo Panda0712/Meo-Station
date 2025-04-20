@@ -96,3 +96,38 @@ export const deleteContactAPI = async (contactId) => {
   );
   return res.data;
 };
+
+// Create new notification
+export const createNewNotificationAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/notifications`,
+    data
+  );
+  return res.data;
+};
+
+// Upload hotel notification image
+export const uploadHotelNotificationImageAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/notifications/uploads`,
+    data
+  );
+  return res.data;
+};
+
+// Update notification
+export const updateNotificationAPI = async (notificationId, updateData) => {
+  const res = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/notifications/${notificationId}`,
+    updateData
+  );
+  return res.data;
+};
+
+// Delete notification
+export const deleteNotificationAPI = async (notificationId) => {
+  const res = await authorizedAxiosInstance.delete(
+    `${API_ROOT}/v1/notifications/${notificationId}`
+  );
+  return res.data;
+};

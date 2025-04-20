@@ -3,9 +3,10 @@ const FileInput = ({
   images = [],
   handleImageChange,
   multiple = false,
+  style,
 }) => {
   return (
-    <div className="w-full max-w-sm mx-auto">
+    <div className={`w-full ${style}`}>
       <label
         htmlFor="file_input"
         className="block mb-2 text-sm font-medium text-black dark:text-black"

@@ -286,7 +286,8 @@ const HotelsManagement = () => {
     }
   }, [editing, reset]);
 
-  const tHeadStyle = "font-medium border border-gray-200 px-4 py-2 text-[18px]";
+  const tHeadStyle =
+    "font-medium border border-gray-200 px-4 py-2 text-[18px] break-words whitespace-normal";
   const optionStyle =
     "py-[12px] px-[16px] transition hover:bg-slate-100 cursor-pointer";
 
@@ -544,34 +545,38 @@ const HotelsManagement = () => {
               <td className={`${tHeadStyle}`}>{hotel?.location}</td>
               <td className={`${tHeadStyle}`}>{hotel?.pricePerNight}</td>
               <td className={`${tHeadStyle} relative`}>
-                <Ellipsis
-                  size={18}
-                  className="cursor-pointer mx-auto"
-                  onClick={() => handleToggle("options", index)}
-                />
+                <div className="relative">
+                  <Ellipsis
+                    size={18}
+                    className="cursor-pointer mx-auto"
+                    onClick={() => handleToggle("options", index)}
+                  />
 
-                {openOptions[index]?.open && (
-                  <ul
-                    className="w-[150px] bg-white shadow-md z-100
-                  border border-slate-100 rounded-sm absolute bottom-[-75px] text-[14px] right-0"
-                  >
-                    <li className={`${optionStyle} border-b border-slate-200`}>
-                      Xem thông tin
-                    </li>
-                    <li
-                      className={`${optionStyle} border-b border-slate-200 `}
-                      onClick={() => handleToggle("edit", hotel)}
+                  {openOptions[index]?.open && (
+                    <ul
+                      className="w-[150px] bg-white shadow-md z-100
+                  border border-slate-100 rounded-sm absolute bottom-[-calc(50%)] text-[14px] right-0"
                     >
-                      Chỉnh sửa
-                    </li>
-                    <li
-                      className={`${optionStyle}`}
-                      onClick={() => handleToggle("delete", hotel?._id)}
-                    >
-                      Xóa phòng
-                    </li>
-                  </ul>
-                )}
+                      <li
+                        className={`${optionStyle} border-b border-slate-200`}
+                      >
+                        Xem thông tin
+                      </li>
+                      <li
+                        className={`${optionStyle} border-b border-slate-200 `}
+                        onClick={() => handleToggle("edit", hotel)}
+                      >
+                        Chỉnh sửa
+                      </li>
+                      <li
+                        className={`${optionStyle}`}
+                        onClick={() => handleToggle("delete", hotel?._id)}
+                      >
+                        Xóa phòng
+                      </li>
+                    </ul>
+                  )}
+                </div>
               </td>
             </tr>
           ))}
