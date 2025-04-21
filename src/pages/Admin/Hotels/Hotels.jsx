@@ -399,8 +399,8 @@ const HotelsManagement = () => {
                       message: "Mô tả tối thiểu 5 ký tự",
                     },
                     maxLength: {
-                      value: 150,
-                      message: "Mô tả tối đa 150 ký tự",
+                      value: 350,
+                      message: "Mô tả tối đa 350 ký tự",
                     },
                   })}
                   error={errors?.description}

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import bathroom from "~/assets/images/bathroom.png";
 import bedroom from "~/assets/images/bedroom.png";
 import internet from "~/assets/images/internet.png";
@@ -15,10 +16,14 @@ const HotelResultCard = ({ hotel }) => {
     hotelUtilities.includes(h.type)
   );
 
+  const navigate = useNavigate();
+
   return (
     <div
+      onClick={() => navigate(`/hotels/${hotel?._id}`)}
       className="bg-[#f2f0f2] flex items-center gap-5 
-    relative rounded-tl-[60px] rounded-bl-[15px] rounded-tr-[70px] rounded-br-[70px] overflow-hidden"
+    relative rounded-tl-[60px] rounded-bl-[15px] rounded-tr-[70px] 
+    rounded-br-[70px] overflow-hidden cursor-pointer transition transform hover:translate-y-[-5px]"
     >
       <div className="relative basis-[calc(40%-10px)]">
         <img
@@ -29,7 +34,7 @@ const HotelResultCard = ({ hotel }) => {
       </div>
       <div className="p-[32px] basis-[calc(60%-10px)]">
         <h3 className="text-[18px] font-bold text-[#152c5b] mb-3">
-          {hotel?.name}
+          {hotel?.title}
         </h3>
         <div className="flex items-center gap-5">
           {hotelFilterUtilities?.map((utility) => (
@@ -51,8 +56,7 @@ const HotelResultCard = ({ hotel }) => {
             <p className="text-[16px] font-medium">Còn trống 20/4/2025</p>
           </div>
           <p className="text-[16px]">
-            Từ{" "}
-            <span className="font-semibold">{hotel?.pricePerNight}.000đ</span>
+            Từ <span className="font-semibold">{hotel?.pricePerNight}đ</span>
             /tháng
           </p>
         </div>

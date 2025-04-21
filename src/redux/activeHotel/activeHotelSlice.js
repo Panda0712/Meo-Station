@@ -6,7 +6,7 @@ const initialState = {
   activeHotel: null,
 };
 
-const fetchHotelDetailsAPI = createAsyncThunk(
+export const fetchHotelDetailsAPI = createAsyncThunk(
   "activeHotel/fetchHotelDetailsAPI",
   async (hotelId) => {
     const res = await authorizedAxiosInstance.get(
