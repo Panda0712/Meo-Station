@@ -131,3 +131,37 @@ export const deleteNotificationAPI = async (notificationId) => {
   );
   return res.data;
 };
+
+// Get list comments
+export const getListCommentsAPI = async (data) => {
+  const res = await authorizedAxiosInstance.get(`${API_ROOT}/v1/comments`, {
+    params: data,
+  });
+  return res.data;
+};
+
+// Create new comment
+export const createNewCommentAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/comments`,
+    data
+  );
+  return res.data;
+};
+
+// Update comment
+export const updateCommentAPI = async (commentId, updateData) => {
+  const res = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/comments/${commentId}`,
+    updateData
+  );
+  return res.data;
+};
+
+// Delete comment
+export const deleteCommentAPI = async (commentId) => {
+  const res = await authorizedAxiosInstance.delete(
+    `${API_ROOT}/v1/comments/${commentId}`
+  );
+  return res.data;
+};
