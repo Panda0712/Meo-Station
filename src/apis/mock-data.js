@@ -1,4 +1,4 @@
-const hotelResults = [
+export const hotelResults = [
   {
     name: "CineBox 03",
     location: "25A, 3/2, HCM",

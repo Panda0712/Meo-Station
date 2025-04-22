@@ -82,8 +82,6 @@ const HotelComments = ({ hotelId }) => {
       prevComments.filter((comment) => comment._id !== commentId)
     );
 
-    setModalVisible(false);
-
     toast
       .promise(deleteCommentAPI(commentId), {
         pending: "Đang xóa bình luận...",
@@ -94,6 +92,7 @@ const HotelComments = ({ hotelId }) => {
         } else {
           getListCommentsAPI({ hotelId }).then((res) => setComments(res || []));
         }
+        setModalVisible(false);
       });
   };
 
@@ -143,8 +142,6 @@ const HotelComments = ({ hotelId }) => {
         prevComments.map((c) => (c._id === comment._id ? updatedComment : c))
       );
 
-      setEditingCommentId(null);
-
       toast
         .promise(updateCommentAPI(comment._id, updatedData), {
           pending: "Đang cập nhật bình luận...",
@@ -157,6 +154,7 @@ const HotelComments = ({ hotelId }) => {
               setComments(res || [])
             );
           }
+          setEditingCommentId(null);
         });
     };
 
