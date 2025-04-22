@@ -13,6 +13,7 @@ import {
   FIELD_REQUIRED_MESSAGE,
 } from "~/utils/validators";
 import NoUser from "/none-user.webp";
+import { useNavigate } from "react-router-dom";
 
 const orderInfo = {
   roomImage:
@@ -37,6 +38,8 @@ const BookingInfo = () => {
       note: "",
     },
   });
+
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     console.log(data);
@@ -133,8 +136,13 @@ const BookingInfo = () => {
       </div>
 
       <div className="flex flex-col gap-3 items-center mt-12">
-        <Button title="Tiếp tục đặt phòng" style="w-[300px] p-6" />
         <Button
+          onClick={() => navigate("/booking/payment")}
+          title="Tiếp tục đặt phòng"
+          style="w-[300px] p-6"
+        />
+        <Button
+          onClick={() => navigate(-1)}
           title="Trở lại"
           style="w-[300px] font-medium"
           type="cancel-secondary"

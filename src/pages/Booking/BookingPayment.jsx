@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "~/components/Button/Button";
 import BookingCard from "~/pages/Booking/BookingCard/BookingCard";
 import BookingHeading from "~/pages/Booking/BookingHeading/BookingHeading";
@@ -16,6 +17,8 @@ const orderInfo = {
 
 const BookingPayment = () => {
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS.CASH);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setPaymentMethod(e.target.value);
@@ -107,6 +110,7 @@ const BookingPayment = () => {
       <div className="flex flex-col gap-3 items-center mt-12">
         <Button title="Tiếp tục đặt phòng" style="w-[300px] p-6" />
         <Button
+          onClick={() => navigate(-1)}
           title="Trở lại"
           style="w-[300px] font-medium"
           type="cancel-secondary"

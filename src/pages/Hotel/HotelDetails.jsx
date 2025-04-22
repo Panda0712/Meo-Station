@@ -1,6 +1,7 @@
+import { differenceInDays } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import bathroom from "~/assets/images/bathroom.png";
 import bedroom from "~/assets/images/bedroom.png";
 import coldMachine from "~/assets/images/coldMachine.png";
@@ -11,13 +12,17 @@ import refrigerator from "~/assets/images/refrigerator.png";
 import TV from "~/assets/images/TV.png";
 import Button from "~/components/Button/Button";
 import DateRangePicker from "~/components/DatePicker/DatePicker";
+import DateSelect from "~/components/DayPicker/DayPicker";
 import NightSelector from "~/components/NightSelector/NightSelector";
+import TimeSlotSelector from "~/components/TimeSlotSelector/TimeSlotSelector";
 import Introduce from "~/pages/Homepage/Introduce/Introduce";
 import HotelComments from "~/pages/Hotel/HotelComments/HotelComments";
 import {
   fetchHotelDetailsAPI,
   selectActiveHotel,
 } from "~/redux/activeHotel/activeHotelSlice";
+import { BOOKING_MODE } from "~/utils/constants";
+import { formatVND } from "~/utils/formatters";
 
 const imagesMap = {
   bedroom,
@@ -34,20 +39,33 @@ const HotelDetails = () => {
   const [range, setRange] = useState({ from: null, to: null });
   const [isOpen, setIsOpen] = useState(false);
   const [nights, setNights] = useState(2);
+  const [bookingMode, setBookingMode] = useState(BOOKING_MODE.night);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
 
   const activeHotel = useSelector(selectActiveHotel);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { hotelId } = useParams();
+
+  const handleChangeBookingMode = (value) => setBookingMode(value);
 
   const handleChangeNight = (value) => setNights(value);
 
   const handleSelect = (selectedRange) => {
     setRange(selectedRange);
     setIsOpen(false);
+
+    if (selectedRange.from && selectedRange.to) {
+      const numberOfNights =
+        differenceInDays(selectedRange.to, selectedRange.from) || 1;
+      setNights(numberOfNights);
+    }
   };
 
   const toggleOpen = () => setIsOpen(!isOpen);
+  console.log(selectedTimeSlot);
 
   useEffect(() => {
     dispatch(fetchHotelDetailsAPI(hotelId));
@@ -124,40 +142,113 @@ const HotelDetails = () => {
             </h5>
             <p className="text-[36px]">
               <span className="text-[#1ABC9C] font-medium">
-                {activeHotel?.pricePerNight}đ
+                {formatVND(activeHotel?.pricePerNight - activeHotel?.discount)}đ
               </span>
               <span className="text-[#b0b0b0] font-[300]"> mỗi đêm</span>
             </p>
 
-            <div className="mb-7 mt-5">
-              <h6 className="text-[16px] text-[#152C5B] mb-3">
-                Bạn sẽ ở trong bao lâu?
-              </h6>
-              <NightSelector
-                nights={nights}
-                handleChangeNight={handleChangeNight}
-              />
+            <div className="flex items-center justify-between gap-3 py-5">
+              <div
+                className="flex items-center gap-2"
+                onClick={() => handleChangeBookingMode(BOOKING_MODE.night)}
+              >
+                <input
+                  type="radio"
+                  id="night"
+                  name="mode-booking"
+                  checked={bookingMode === BOOKING_MODE.night}
+                />
+                <label htmlFor="night" className="text-[18px]">
+                  Đặt theo đêm
+                </label>
+              </div>
+              <div
+                className="flex items-center gap-2"
+                onClick={() => handleChangeBookingMode(BOOKING_MODE.day)}
+              >
+                <input
+                  type="radio"
+                  id="day"
+                  name="mode-booking"
+                  checked={bookingMode === BOOKING_MODE.day}
+                />
+                <label htmlFor="day" className="text-[18px]">
+                  Đặt trong ngày
+                </label>
+              </div>
             </div>
 
-            <div>
-              <h6 className="text-[16px] text-[#152C5B] mb-3">Chọn ngày</h6>
-              <DateRangePicker
-                toggleOpen={toggleOpen}
-                range={range}
-                isOpen={isOpen}
-                handleSelect={handleSelect}
-              />
-            </div>
+            {bookingMode === BOOKING_MODE.night ? (
+              <div>
+                <div className="mb-7 mt-5">
+                  <h6 className="text-[16px] text-[#152C5B] mb-3">
+                    Bạn sẽ ở trong bao lâu?
+                  </h6>
+                  <NightSelector
+                    nights={nights}
+                    handleChangeNight={handleChangeNight}
+                  />
+                </div>
+
+                <div>
+                  <h6 className="text-[16px] text-[#152C5B] mb-3">Chọn ngày</h6>
+                  <DateRangePicker
+                    toggleOpen={toggleOpen}
+                    mode={bookingMode}
+                    range={range}
+                    isOpen={isOpen}
+                    handleSelect={handleSelect}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="mb-7 mt-5">
+                  <h6 className="text-[16px] text-[#152C5B] mb-3">
+                    Chọn khung giờ
+                  </h6>
+                  <TimeSlotSelector
+                    selectedSlot={selectedTimeSlot}
+                    onChange={setSelectedTimeSlot}
+                  />
+                </div>
+                <div>
+                  <h6 className="text-[16px] text-[#152C5B] mb-3">Chọn ngày</h6>
+                  <DateSelect
+                    isOpen={isOpen}
+                    toggleOpen={toggleOpen}
+                    mode={bookingMode}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                  />
+                </div>
+              </div>
+            )}
 
             <p className="text-[16px] mt-4 font-light text-[#b0b0b0]">
               Bạn sẽ trả{" "}
               <span className="font-medium text-[#152c5b]">
-                {activeHotel?.pricePerNight}đ
+                {formatVND(
+                  bookingMode === BOOKING_MODE.night
+                    ? activeHotel?.pricePerNight * nights -
+                        activeHotel?.discount
+                    : activeHotel?.priceEachHour * 3 -
+                        activeHotel?.discount -
+                        (activeHotel?.priceEachHour -
+                          activeHotel?.priceFirstHour)
+                )}
+                đ
               </span>{" "}
-              cho <span className="font-medium text-[#152c5b]">2 đêm</span>
+              cho{" "}
+              <span className="font-medium text-[#152c5b]">
+                {bookingMode === BOOKING_MODE.night
+                  ? `${nights} đêm`
+                  : `khung giờ ${selectedTimeSlot.label || "8h - 11h"}`}
+              </span>
             </p>
 
             <Button
+              onClick={() => navigate("/booking/info")}
               title="Tiếp tục đặt phòng"
               style="w-full mt-12 text-[18px] py-3 font-medium shadow-lg"
             />

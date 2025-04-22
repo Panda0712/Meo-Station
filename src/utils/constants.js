@@ -6,6 +6,34 @@ export const color = {
   mail: "#3e65cf",
 };
 
+export const TIME_SLOTS = [
+  {
+    label: "8h - 11h",
+    startTime: "08:00",
+    endTime: "11:00",
+  },
+  {
+    label: "12h - 15h",
+    startTime: "12:00",
+    endTime: "15:00",
+  },
+  {
+    label: "16h - 19h",
+    startTime: "16:00",
+    endTime: "19:00",
+  },
+  {
+    label: "20h - 23h",
+    startTime: "20:00",
+    endTime: "23:00",
+  },
+];
+
+export const BOOKING_MODE = {
+  night: "in-nights",
+  day: "in-day",
+};
+
 export const UTILITIES_LIST = [
   "bedroom",
   "livingRoom",
