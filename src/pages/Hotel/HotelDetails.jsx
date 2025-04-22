@@ -13,6 +13,7 @@ import Button from "~/components/Button/Button";
 import DateRangePicker from "~/components/DatePicker/DatePicker";
 import NightSelector from "~/components/NightSelector/NightSelector";
 import Introduce from "~/pages/Homepage/Introduce/Introduce";
+import HotelComments from "~/pages/Hotel/HotelComments/HotelComments";
 import {
   fetchHotelDetailsAPI,
   selectActiveHotel,
@@ -38,7 +39,6 @@ const HotelDetails = () => {
   const dispatch = useDispatch();
 
   const { hotelId } = useParams();
-  console.log(hotelId);
 
   const handleChangeNight = (value) => setNights(value);
 
@@ -163,6 +163,10 @@ const HotelDetails = () => {
             />
           </div>
         </div>
+      </div>
+
+      <div className="mt-24 mb-20">
+        <HotelComments hotelId={hotelId} />
       </div>
 
       <div className="mt-24 mb-20">

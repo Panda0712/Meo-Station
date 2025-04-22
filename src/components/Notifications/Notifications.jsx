@@ -1,6 +1,7 @@
 import { Bell } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   addNotifications,
   deleteNotificationAPI,
@@ -16,6 +17,7 @@ const Notifications = () => {
 
   const currentNotifications = useSelector(selectCurrentNotifications);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleOpenNotification = () => setOpenNotification(!openNotification);
 
@@ -68,12 +70,16 @@ const Notifications = () => {
       ) : null}
 
       {openNotification && (
-        <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-auto rounded-md bg-white shadow-lg border border-slate-300 z-50">
+        <div
+          className="absolute right-0 mt-2 w-80 max-h-96 overflow-auto 
+        overflow-x-hidden rounded-md bg-white shadow-lg border border-slate-300 z-50"
+        >
           <div className="p-4">
             {currentNotifications?.length > 0 ? (
               currentNotifications.map((notify, index) => (
                 <div
                   key={index}
+                  onClick={() => navigate(`/hotels/${notify?.hotelId}`)}
                   className={`flex items-center gap-3 mb-3 hover:bg-slate-100 p-2 rounded-md ${
                     index < currentNotifications.length - 1 &&
                     "border-b border-slate-300"
@@ -89,7 +95,7 @@ const Notifications = () => {
                       {notify.name}
                     </p>
                     <span
-                      className="text-xs text-gray-600 max-w-[50%] truncate"
+                      className="text-xs text-gray-600 max-w-[300px] w-[50%] truncate"
                       title={notify.message}
                     >
                       {notify.message}
