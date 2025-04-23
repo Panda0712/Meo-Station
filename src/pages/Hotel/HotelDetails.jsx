@@ -1,7 +1,9 @@
+import { Spin } from "antd";
 import { differenceInDays } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import bathroom from "~/assets/images/bathroom.png";
 import bedroom from "~/assets/images/bedroom.png";
 import coldMachine from "~/assets/images/coldMachine.png";
@@ -21,8 +23,9 @@ import {
   fetchHotelDetailsAPI,
   selectActiveHotel,
 } from "~/redux/activeHotel/activeHotelSlice";
+import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
 import { BOOKING_MODE } from "~/utils/constants";
-import { formatVND } from "~/utils/formatters";
+import { formatVND, toVNISOString } from "~/utils/formatters";
 
 const imagesMap = {
   bedroom,
@@ -42,12 +45,75 @@ const HotelDetails = () => {
   const [bookingMode, setBookingMode] = useState(BOOKING_MODE.night);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const { hotelId } = useParams();
+
+  const currentUser = useSelector(selectCurrentUser);
   const activeHotel = useSelector(selectActiveHotel);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { hotelId } = useParams();
+  const nightMode = bookingMode === BOOKING_MODE.night;
+  const dayMode = bookingMode === BOOKING_MODE.day;
+  const disabledButton = dayMode
+    ? !selectedDate || !selectedTimeSlot
+    : !nights || !range.from || !range.to;
+  const totalPrice =
+    nightMode && !disabledButton
+      ? activeHotel?.pricePerNight * nights - activeHotel?.discount
+      : activeHotel?.priceEachHour * 3 -
+        activeHotel?.discount -
+        (activeHotel?.priceEachHour - activeHotel?.priceFirstHour);
+  const priceText = nightMode
+    ? `${nights} đêm`
+    : `khung giờ ${selectedTimeSlot.label || "8h - 11h"}`;
+
+  const handleSubmit = () => {
+    if (range.from && range.to && range.from === range.to) {
+      toast.error(
+        "Vui lòng chọn 2 ngày khác nhau!!! Nếu cùng 1 ngày, hãy đặt phòng theo ngày!!!"
+      );
+      return;
+    }
+
+    const numberOfNights = differenceInDays(range.to, range.from) || 1;
+    if (numberOfNights !== nights) {
+      toast.error("Vui lòng chọn đúng số đêm!!!");
+      return;
+    }
+
+    const checkInOutDate = {
+      checkInDate: nightMode
+        ? toVNISOString(range.from, "20:00")
+        : toVNISOString(selectedDate, selectedTimeSlot.startTime),
+      checkOutDate: nightMode
+        ? toVNISOString(range.to, "12:00")
+        : toVNISOString(selectedDate, selectedTimeSlot.endTime),
+    };
+
+    const bookingDataTemplate = {
+      hotelId: activeHotel?._id,
+      userId: currentUser?._id,
+      images: activeHotel?.images,
+      totalPrice,
+      mode: bookingMode,
+      checkInDate: checkInOutDate.checkInDate,
+      checkOutDate: checkInOutDate.checkOutDate,
+    };
+
+    const bookingData = nightMode
+      ? {
+          ...bookingDataTemplate,
+          numberOfNights: nights,
+        }
+      : bookingDataTemplate;
+
+    console.log(bookingData);
+
+    // localStorage.setItem("booking-data", JSON.parse(bookingData));
+    // navigate("/booking/info");
+  };
 
   const handleChangeBookingMode = (value) => setBookingMode(value);
 
@@ -65,15 +131,22 @@ const HotelDetails = () => {
   };
 
   const toggleOpen = () => setIsOpen(!isOpen);
-  console.log(selectedTimeSlot);
 
   useEffect(() => {
-    dispatch(fetchHotelDetailsAPI(hotelId));
+    setLoading(true);
+    dispatch(fetchHotelDetailsAPI(hotelId)).then(() => setLoading(false));
   }, [dispatch, hotelId]);
 
   const imageStyle =
     "object-cover rounded-[15px] basis-[calc(100%-5px)] h-[calc(50%-5px)]";
   const hoverImageStyle = "transition transform hover:translate-y-[-5px]";
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center">
+        <Spin size="large" />
+      </div>
+    );
 
   return (
     <section className="px-24 py-16 relative w-full">
@@ -156,7 +229,8 @@ const HotelDetails = () => {
                   type="radio"
                   id="night"
                   name="mode-booking"
-                  checked={bookingMode === BOOKING_MODE.night}
+                  onChange={() => handleChangeBookingMode(BOOKING_MODE.night)}
+                  checked={nightMode}
                 />
                 <label htmlFor="night" className="text-[18px]">
                   Đặt theo đêm
@@ -170,7 +244,8 @@ const HotelDetails = () => {
                   type="radio"
                   id="day"
                   name="mode-booking"
-                  checked={bookingMode === BOOKING_MODE.day}
+                  onChange={() => handleChangeBookingMode(BOOKING_MODE.day)}
+                  checked={dayMode}
                 />
                 <label htmlFor="day" className="text-[18px]">
                   Đặt trong ngày
@@ -178,7 +253,7 @@ const HotelDetails = () => {
               </div>
             </div>
 
-            {bookingMode === BOOKING_MODE.night ? (
+            {nightMode ? (
               <div>
                 <div className="mb-7 mt-5">
                   <h6 className="text-[16px] text-[#152C5B] mb-3">
@@ -228,29 +303,19 @@ const HotelDetails = () => {
             <p className="text-[16px] mt-4 font-light text-[#b0b0b0]">
               Bạn sẽ trả{" "}
               <span className="font-medium text-[#152c5b]">
-                {formatVND(
-                  bookingMode === BOOKING_MODE.night
-                    ? activeHotel?.pricePerNight * nights -
-                        activeHotel?.discount
-                    : activeHotel?.priceEachHour * 3 -
-                        activeHotel?.discount -
-                        (activeHotel?.priceEachHour -
-                          activeHotel?.priceFirstHour)
-                )}
-                đ
+                {formatVND(totalPrice)}đ
               </span>{" "}
               cho{" "}
-              <span className="font-medium text-[#152c5b]">
-                {bookingMode === BOOKING_MODE.night
-                  ? `${nights} đêm`
-                  : `khung giờ ${selectedTimeSlot.label || "8h - 11h"}`}
-              </span>
+              <span className="font-medium text-[#152c5b]">{priceText}</span>
             </p>
 
             <Button
-              onClick={() => navigate("/booking/info")}
+              onClick={handleSubmit}
+              disabled={disabledButton}
               title="Tiếp tục đặt phòng"
-              style="w-full mt-12 text-[18px] py-3 font-medium shadow-lg"
+              style={`interceptor-loading w-full mt-12 text-[18px] py-3 font-medium shadow-lg ${
+                disabledButton && "bg-slate-300 cursor-default"
+              }`}
             />
           </div>
         </div>
