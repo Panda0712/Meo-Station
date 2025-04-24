@@ -1,12 +1,11 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { TIME_SLOTS } from "~/utils/constants";
 
-const TimeSlotSelector = ({ selectedSlot, onChange }) => {
+const GuestSelector = ({ guestCount, maxGuest, handleChangeGuestCount }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (slot) => {
-    onChange(slot);
+    handleChangeGuestCount(slot);
     setIsOpen(false);
   };
 
@@ -14,28 +13,26 @@ const TimeSlotSelector = ({ selectedSlot, onChange }) => {
     <div className="relative w-full">
       <div
         className="flex items-center justify-between px-4 h-10 bg-gray-100 
-        rounded-lg cursor-pointer shadow-sm hover:bg-gray-200 transition"
+          rounded-lg cursor-pointer shadow-sm hover:bg-gray-200 transition"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <span className="text-[#152C5B] font-medium text-[16px]">
-          {selectedSlot?.label || "Chọn khung giờ"}
+          {guestCount || "Chọn số khách"}
         </span>
         <ChevronDown size={20} className="text-[#152C5B]" />
       </div>
 
       {isOpen && (
         <ul className="absolute z-20 w-full bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
-          {TIME_SLOTS.map((slot) => (
+          {Array.from({ length: maxGuest }).map((_, index) => (
             <li
-              key={slot.label}
+              key={index}
               className={`px-4 py-3 hover:bg-[#f0f4ff] text-[#152C5B] cursor-pointer transition ${
-                selectedSlot?.label === slot.label
-                  ? "bg-[#e0eaff] font-semibold"
-                  : ""
+                guestCount === index + 1 ? "bg-[#e0eaff] font-semibold" : ""
               }`}
-              onClick={() => handleSelect(slot)}
+              onClick={() => handleSelect(index + 1)}
             >
-              {slot.label}
+              {index + 1} khách
             </li>
           ))}
         </ul>
@@ -44,4 +41,4 @@ const TimeSlotSelector = ({ selectedSlot, onChange }) => {
   );
 };
 
-export default TimeSlotSelector;
+export default GuestSelector;

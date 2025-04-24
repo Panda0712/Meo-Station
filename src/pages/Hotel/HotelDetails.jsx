@@ -15,6 +15,7 @@ import TV from "~/assets/images/TV.png";
 import Button from "~/components/Button/Button";
 import DateRangePicker from "~/components/DatePicker/DatePicker";
 import DateSelect from "~/components/DayPicker/DayPicker";
+import GuestSelector from "~/components/GuestSelector/GuestSelector";
 import NightSelector from "~/components/NightSelector/NightSelector";
 import TimeSlotSelector from "~/components/TimeSlotSelector/TimeSlotSelector";
 import Introduce from "~/pages/Homepage/Introduce/Introduce";
@@ -25,7 +26,11 @@ import {
 } from "~/redux/activeHotel/activeHotelSlice";
 import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
 import { BOOKING_MODE } from "~/utils/constants";
-import { formatVND, toVNISOString } from "~/utils/formatters";
+import {
+  formatVND,
+  interceptorLoadingElements,
+  toVNISOString,
+} from "~/utils/formatters";
 
 const imagesMap = {
   bedroom,
@@ -45,6 +50,7 @@ const HotelDetails = () => {
   const [bookingMode, setBookingMode] = useState(BOOKING_MODE.night);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const [guestCount, setGuestCount] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { hotelId } = useParams();
@@ -56,9 +62,10 @@ const HotelDetails = () => {
 
   const nightMode = bookingMode === BOOKING_MODE.night;
   const dayMode = bookingMode === BOOKING_MODE.day;
-  const disabledButton = dayMode
-    ? !selectedDate || !selectedTimeSlot
-    : !nights || !range.from || !range.to;
+  const disabledButton =
+    !guestCount || dayMode
+      ? !selectedDate || !selectedTimeSlot
+      : !nights || !range.from || !range.to;
   const totalPrice =
     nightMode && !disabledButton
       ? activeHotel?.pricePerNight * nights - activeHotel?.discount
@@ -74,6 +81,11 @@ const HotelDetails = () => {
       toast.error(
         "Vui lòng chọn 2 ngày khác nhau!!! Nếu cùng 1 ngày, hãy đặt phòng theo ngày!!!"
       );
+      return;
+    }
+
+    if (!guestCount) {
+      toast.error("Vui lòng chọn số khách!!!");
       return;
     }
 
@@ -93,9 +105,13 @@ const HotelDetails = () => {
     };
 
     const bookingDataTemplate = {
-      hotelId: activeHotel?._id,
       userId: currentUser?._id,
-      images: activeHotel?.images,
+      userEmail: currentUser?.email,
+      hotelId: activeHotel?._id,
+      hotelName: activeHotel?.title,
+      hotelLocation: activeHotel?.location,
+      hotelImages: activeHotel?.images,
+      guest: guestCount,
       totalPrice,
       mode: bookingMode,
       checkInDate: checkInOutDate.checkInDate,
@@ -109,11 +125,11 @@ const HotelDetails = () => {
         }
       : bookingDataTemplate;
 
-    console.log(bookingData);
-
-    // localStorage.setItem("booking-data", JSON.parse(bookingData));
-    // navigate("/booking/info");
+    localStorage.setItem("booking-data", JSON.stringify(bookingData));
+    navigate("/booking/info");
   };
+
+  const handleChangeGuestCount = (value) => setGuestCount(value);
 
   const handleChangeBookingMode = (value) => setBookingMode(value);
 
@@ -136,6 +152,10 @@ const HotelDetails = () => {
     setLoading(true);
     dispatch(fetchHotelDetailsAPI(hotelId)).then(() => setLoading(false));
   }, [dispatch, hotelId]);
+
+  useEffect(() => {
+    interceptorLoadingElements(disabledButton);
+  }, [disabledButton]);
 
   const imageStyle =
     "object-cover rounded-[15px] basis-[calc(100%-5px)] h-[calc(50%-5px)]";
@@ -251,6 +271,15 @@ const HotelDetails = () => {
                   Đặt trong ngày
                 </label>
               </div>
+            </div>
+
+            <div>
+              <h6 className="text-[16px] text-[#152C5B] mb-3">Số khách</h6>
+              <GuestSelector
+                maxGuest={activeHotel?.maxGuest}
+                guestCount={guestCount}
+                handleChangeGuestCount={handleChangeGuestCount}
+              />
             </div>
 
             {nightMode ? (

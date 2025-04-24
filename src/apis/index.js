@@ -165,3 +165,30 @@ export const deleteCommentAPI = async (commentId) => {
   );
   return res.data;
 };
+
+// Create new booking
+export const createNewBookingAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/bookings`,
+    data
+  );
+  return res.data;
+};
+
+// Momo Payment
+export const momoPaymentAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/payment/momo`,
+    data
+  );
+  return res.data;
+};
+
+// Zalopay Payment
+export const zaloPaymentAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/payment/zalopay`,
+    data
+  );
+  return res.data;
+};

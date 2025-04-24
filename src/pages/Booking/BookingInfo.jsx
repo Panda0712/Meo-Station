@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Button from "~/components/Button/Button";
 import Input from "~/components/Input/Input";
 import BookingCard from "~/pages/Booking/BookingCard/BookingCard";
@@ -11,18 +12,10 @@ import {
   EMAIL_RULE,
   EMAIL_RULE_MESSAGE,
   FIELD_REQUIRED_MESSAGE,
+  PHONE_RULE,
+  PHONE_RULE_MESSAGE,
 } from "~/utils/validators";
 import NoUser from "/none-user.webp";
-import { useNavigate } from "react-router-dom";
-
-const orderInfo = {
-  roomImage:
-    "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/2-20241130121516-3oai-.jpg",
-  checkInDate: "2023-10-01",
-  checkOutDate: "2023-10-05",
-  guest: 1,
-  totalPrice: 400,
-};
 
 const BookingInfo = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -39,11 +32,22 @@ const BookingInfo = () => {
     },
   });
 
+  const bookingData = JSON.parse(localStorage.getItem("booking-data"));
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const bookingInfo = {
+      ...bookingData,
+      userName: data.name,
+      userEmail: data.email,
+      phone: data.phone,
+      note: data.note,
+    };
+    localStorage.setItem("booking-data", JSON.stringify(bookingInfo));
+    navigate("/booking/payment");
   };
+
+  if (!bookingData) navigate("/");
 
   const inputLabelStyle = "text-[16px] font-medium text-[#181A18]";
 
@@ -55,7 +59,7 @@ const BookingInfo = () => {
       />
 
       <div className="flex gap-24 items-center justify-center relative">
-        <BookingCard orderInfo={orderInfo} />
+        <BookingCard bookingData={bookingData} />
         <BookingSeparate />
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -113,6 +117,10 @@ const BookingInfo = () => {
                 content="Số điện thoại"
                 {...register("phone", {
                   required: FIELD_REQUIRED_MESSAGE,
+                  pattern: {
+                    value: PHONE_RULE,
+                    message: PHONE_RULE_MESSAGE,
+                  },
                 })}
                 error={errors?.phone}
               />
@@ -125,28 +133,26 @@ const BookingInfo = () => {
               <Input
                 name="note"
                 content="Nội dung ghi chú"
-                {...register("note", {
-                  required: FIELD_REQUIRED_MESSAGE,
-                })}
+                {...register("note")}
                 error={errors?.note}
               />
             </div>
           </div>
-        </form>
-      </div>
 
-      <div className="flex flex-col gap-3 items-center mt-12">
-        <Button
-          onClick={() => navigate("/booking/payment")}
-          title="Tiếp tục đặt phòng"
-          style="w-[300px] p-6"
-        />
-        <Button
-          onClick={() => navigate(-1)}
-          title="Trở lại"
-          style="w-[300px] font-medium"
-          type="cancel-secondary"
-        />
+          <div className="flex flex-col gap-3 items-center mt-12">
+            <Button
+              type="submit"
+              title="Tiếp tục đặt phòng"
+              style="w-[300px] p-6"
+            />
+            <Button
+              onClick={() => navigate(-1)}
+              title="Trở lại"
+              style="w-[300px] font-medium"
+              type="cancel-secondary"
+            />
+          </div>
+        </form>
       </div>
     </div>
   );

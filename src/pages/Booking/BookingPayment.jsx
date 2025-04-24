@@ -1,28 +1,73 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { createNewBookingAPI, momoPaymentAPI, zaloPaymentAPI } from "~/apis";
 import Button from "~/components/Button/Button";
 import BookingCard from "~/pages/Booking/BookingCard/BookingCard";
 import BookingHeading from "~/pages/Booking/BookingHeading/BookingHeading";
 import BookingSeparate from "~/pages/Booking/BookingSeparate/BookingSeparate";
-import { PAYMENT_METHODS } from "~/utils/constants";
-
-const orderInfo = {
-  roomImage:
-    "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/2-20241130121516-3oai-.jpg",
-  checkInDate: "2023-10-01",
-  checkOutDate: "2023-10-05",
-  guest: 1,
-  totalPrice: 400,
-};
+import { ORDER_STATUS, PAYMENT_METHODS } from "~/utils/constants";
 
 const BookingPayment = () => {
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS.CASH);
 
+  const bookingData = JSON.parse(localStorage.getItem("booking-data"));
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setPaymentMethod(e.target.value);
   };
+
+  const handleBooking = async () => {
+    const bookingInfoData = {
+      ...bookingData,
+      paymentMethod,
+    };
+
+    if (paymentMethod === PAYMENT_METHODS.CASH) {
+      toast
+        .promise(
+          createNewBookingAPI({
+            ...bookingInfoData,
+            status: ORDER_STATUS.PENDING,
+          }),
+          {
+            pending: "Đang tạo đơn đặt phòng mới....",
+          }
+        )
+        .then((res) => {
+          if (!res.error) {
+            toast.success("Đặt phòng thành công!!!!");
+            navigate("/booking/complete");
+          }
+        });
+    } else if (paymentMethod === PAYMENT_METHODS.MOMO) {
+      await handleMomoPayment(bookingInfoData);
+    } else if (paymentMethod === PAYMENT_METHODS.ZALOPAY) {
+      await handleZaloPayment(bookingInfoData);
+    }
+  };
+
+  const handleMomoPayment = async (bookingInfoData) => {
+    const data = await momoPaymentAPI(bookingInfoData);
+
+    const { payUrl } = data;
+
+    if (payUrl) {
+      window.location.href = payUrl;
+    } else toast.error("Không thể tạo đường dẫn thanh toán!!!");
+  };
+
+  const handleZaloPayment = async (bookingInfoData) => {
+    const data = await zaloPaymentAPI(bookingInfoData);
+
+    const { order_url } = data;
+
+    if (order_url) window.location.href = order_url;
+    else toast.error("Không thể tạo đường dẫn thanh toán!!!");
+  };
+
+  if (!bookingData) navigate("/");
 
   return (
     <div className="mt-12">
@@ -31,8 +76,8 @@ const BookingPayment = () => {
         subHeading="Hãy theo hướng dẫn thanh toán phía bên dưới"
       />
 
-      <div className="flex items-center gap-24 px-[70px]">
-        <BookingCard orderInfo={orderInfo} />
+      <div className="flex items-center justify-center gap-24 px-[70px]">
+        <BookingCard bookingData={bookingData} />
         <BookingSeparate />
         <div>
           <h6 className="text-[18px] text-[#152C5B] font-semibold">
@@ -108,7 +153,11 @@ const BookingPayment = () => {
       </div>
 
       <div className="flex flex-col gap-3 items-center mt-12">
-        <Button title="Tiếp tục đặt phòng" style="w-[300px] p-6" />
+        <Button
+          title="Đặt phòng"
+          onClick={handleBooking}
+          style="w-[300px] p-6"
+        />
         <Button
           onClick={() => navigate(-1)}
           title="Trở lại"

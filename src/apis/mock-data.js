@@ -97,6 +97,15 @@ export const hotelResults = [
   },
 ];
 
+export const orderInfo = {
+  roomImage:
+    "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/2-20241130121516-3oai-.jpg",
+  checkInDate: "2023-10-01",
+  checkOutDate: "2023-10-05",
+  guest: 1,
+  totalPrice: 400,
+};
+
 export const listContact = [
   {
     name: "Panda",
