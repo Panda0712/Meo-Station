@@ -1,12 +1,13 @@
 import { CalendarMinus2, CircleAlert, UsersRound } from "lucide-react";
 import BoxTimeline from "~/components/BoxTimeline/BoxTimeline";
+import { formatDate } from "~/utils/formatters";
 
-const BookingCard = ({ orderInfo }) => {
+const BookingCard = ({ bookingData }) => {
   const bookingInfoStyle = {
     containerInfo:
       "p-[40px] border-[1px] border-t-0 rounded-bl-[30px] rounded-br-[30px] border-green-600",
     cardInfoContainer:
-      "my-16 bg-[#F2F0F2] max-w-[522px] shadow-sm rounded-[30px] overflow-hidden",
+      "my-16 bg-[#F2F0F2] max-w-[600px] shadow-sm rounded-[30px] overflow-hidden",
     headingStyle: "text-[36px] text-[#152c5b] font-semibold text-center mb-1",
     textHeadingStyle: "text-[18px] font-semibold mb-3 text-[#181A18]",
     textRegularStyle: "text-[18px] text-[#181A18]",
@@ -16,20 +17,20 @@ const BookingCard = ({ orderInfo }) => {
     <div className={bookingInfoStyle.cardInfoContainer}>
       <div className="relative">
         <img
-          src={orderInfo.roomImage}
+          src={bookingData?.hotelImages[0]}
           className="w-full object-cover h-[282px]"
           alt=""
         />
       </div>
 
       <div className={bookingInfoStyle.containerInfo}>
-        <div className="flex items-center gap-32">
+        <div className="flex flex-col gap-5">
           <div>
             <h5 className={bookingInfoStyle.textHeadingStyle}>Check In</h5>
             <div className="flex items-center gap-2">
               <CalendarMinus2 />
               <p className={bookingInfoStyle.textRegularStyle}>
-                {orderInfo.checkInDate}
+                {formatDate(bookingData?.checkInDate)}
               </p>
             </div>
           </div>
@@ -38,7 +39,7 @@ const BookingCard = ({ orderInfo }) => {
             <div className="flex items-center gap-2">
               <CalendarMinus2 />
               <p className={bookingInfoStyle.textRegularStyle}>
-                {orderInfo.checkOutDate}
+                {formatDate(bookingData?.checkOutDate)}
               </p>
             </div>
           </div>
@@ -50,7 +51,7 @@ const BookingCard = ({ orderInfo }) => {
             <p className="text-[18px] font-semibold text-[#181A18]">Số Khách</p>
           </div>
           <p className="text-[18px] font-semibold text-[#181A18]">
-            {orderInfo.guest}
+            {bookingData?.guest}
           </p>
         </div>
 
@@ -69,7 +70,7 @@ const BookingCard = ({ orderInfo }) => {
                   <p className="text-[14px] text-[#181A18]">Ngay bây giờ</p>
                 </div>
                 <p className="text-[18px] mb-1 text-[#181A18]">
-                  {orderInfo.totalPrice}.000đ
+                  {bookingData?.totalPrice}đ
                 </p>
               </div>
               <div className="leading-[1.4]">

@@ -11,6 +11,11 @@ export const formatVND = (price) => {
   return price.toLocaleString("vi-VN");
 };
 
+export const formatDate = (date) => {
+  const d = new Date(date);
+  return d.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+};
+
 export const toVNISOString = (date, time) => {
   const fullDate = new Date(date);
   const year = fullDate.getFullYear();

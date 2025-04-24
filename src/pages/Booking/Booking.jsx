@@ -15,7 +15,9 @@ const Booking = () => {
 
   return (
     <section className="px-24 py-16">
-      {!isBookingHistory && <Stepper currentStep={1} />}
+      {!isBookingHistory && (
+        <Stepper currentStep={isBookingInfo ? 1 : isBookingPayment ? 2 : 3} />
+      )}
       {isBookingInfo && <BookingInfo />}{" "}
       {isBookingPayment && <BookingPayment />}
       {isBookingComplete && <BookingComplete />}
