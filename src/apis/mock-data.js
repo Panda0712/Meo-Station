@@ -1,3 +1,5 @@
+import { ORDER_STATUS, PAYMENT_METHODS } from "~/utils/constants";
+
 export const hotelResults = [
   {
     name: "CineBox 03",
@@ -94,6 +96,94 @@ export const hotelResults = [
     priceFirstHour: 80,
     priceEachHour: 100,
     discount: 20,
+  },
+];
+
+export const orderHistory = [
+  {
+    orderId: 1323232323,
+    userId: 2,
+    hotelId: 3,
+    checkInDate: "2023-10-01",
+    checkOutDate: "2023-10-05",
+    paymentMethod: PAYMENT_METHODS.MOMO,
+    totalPrice: 100000,
+    status: ORDER_STATUS.COMPLETED,
+    hotelDetails: {
+      name: "CineBox 03",
+      location: "25A, 3/2, HCM",
+      pricePerNight: 200000,
+      image:
+        "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
+    },
+  },
+  {
+    orderId: 1,
+    userId: 2,
+    hotelId: 3,
+    checkInDate: "2023-10-01",
+    checkOutDate: "2023-10-05",
+    paymentMethod: PAYMENT_METHODS.MOMO,
+    totalPrice: 100000,
+    status: ORDER_STATUS.CANCELLED,
+    hotelDetails: {
+      name: "CineBox 03",
+      location: "25A, 3/2, HCM",
+      pricePerNight: 200000,
+      image:
+        "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
+    },
+  },
+  {
+    orderId: 1,
+    userId: 2,
+    hotelId: 3,
+    checkInDate: "2023-10-01",
+    checkOutDate: "2023-10-05",
+    paymentMethod: PAYMENT_METHODS.MOMO,
+    totalPrice: 100000,
+    status: ORDER_STATUS.PENDING,
+    hotelDetails: {
+      name: "CineBox 03",
+      location: "25A, 3/2, HCM",
+      pricePerNight: 200000,
+      image:
+        "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
+    },
+  },
+  {
+    orderId: 1,
+    userId: 2,
+    hotelId: 3,
+    checkInDate: "2023-10-01",
+    checkOutDate: "2023-10-05",
+    paymentMethod: PAYMENT_METHODS.MOMO,
+    totalPrice: 100000,
+    status: ORDER_STATUS.COMPLETED,
+    hotelDetails: {
+      name: "CineBox 03",
+      location: "25A, 3/2, HCM",
+      pricePerNight: 200000,
+      image:
+        "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
+    },
+  },
+  {
+    orderId: 1,
+    userId: 2,
+    hotelId: 3,
+    checkInDate: "2023-10-01",
+    checkOutDate: "2023-10-05",
+    paymentMethod: PAYMENT_METHODS.MOMO,
+    totalPrice: 100000,
+    status: ORDER_STATUS.COMPLETED,
+    hotelDetails: {
+      name: "CineBox 03",
+      location: "25A, 3/2, HCM",
+      pricePerNight: 200000,
+      image:
+        "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
+    },
   },
 ];
 
