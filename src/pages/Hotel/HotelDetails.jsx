@@ -77,21 +77,23 @@ const HotelDetails = () => {
     : `khung giờ ${selectedTimeSlot.label || "8h - 11h"}`;
 
   const handleSubmit = () => {
-    if (range.from && range.to && range.from === range.to) {
-      toast.error(
-        "Vui lòng chọn 2 ngày khác nhau!!! Nếu cùng 1 ngày, hãy đặt phòng theo ngày!!!"
-      );
-      return;
+    if (range.from && range.to) {
+      if (range.from === range.to) {
+        toast.error(
+          "Vui lòng chọn 2 ngày khác nhau!!! Nếu cùng 1 ngày, hãy đặt phòng theo ngày!!!"
+        );
+        return;
+      }
+
+      const numberOfNights = differenceInDays(range.to, range.from) || 1;
+      if (numberOfNights !== nights) {
+        toast.error("Vui lòng chọn đúng số đêm!!!");
+        return;
+      }
     }
 
     if (!guestCount) {
       toast.error("Vui lòng chọn số khách!!!");
-      return;
-    }
-
-    const numberOfNights = differenceInDays(range.to, range.from) || 1;
-    if (numberOfNights !== nights) {
-      toast.error("Vui lòng chọn đúng số đêm!!!");
       return;
     }
 
