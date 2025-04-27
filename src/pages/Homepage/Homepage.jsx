@@ -34,10 +34,6 @@ const Homepage = () => {
     )
   );
 
-  console.log("first: ", hotelFilterRefrigerator);
-  console.log("second: ", hotelFilterDiningRoom);
-  console.log("third: ", hotelFilterLivingRoom);
-
   return (
     <div className="px-24 py-16 mb-8">
       {loading ? (
@@ -51,7 +47,7 @@ const Homepage = () => {
           </section>
 
           <section className="mt-24 w-full">
-            <Popular />
+            <Popular hotels={hotels} />
             <div className="h-12" />
             <Introduce
               title="Phòng có tủ lạnh"

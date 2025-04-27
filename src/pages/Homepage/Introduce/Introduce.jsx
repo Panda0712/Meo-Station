@@ -12,6 +12,7 @@ const Introduce = ({ title, filterList }) => {
           <HotelCard
             key={hotel?._id}
             // popular
+            id={hotel?._id}
             title={hotel?.title}
             location={hotel?.location}
             image={hotel?.images?.[0]}

@@ -1,6 +1,13 @@
-const HotelCard = ({ title, location, image, popular = false }) => {
+import { useNavigate } from "react-router-dom";
+
+const HotelCard = ({ id, title, location, image, popular = false }) => {
+  const navigate = useNavigate();
+
   return (
-    <section className="relative basis-[calc(25%-12px)] transition transform hover:opacity-95 hover:translate-y-[-5px] cursor-pointer rounded-[18px]">
+    <section
+      onClick={() => navigate(`/hotels/${id}`)}
+      className="relative basis-[calc(25%-12px)] transition transform hover:opacity-95 hover:translate-y-[-5px] cursor-pointer rounded-[18px]"
+    >
       {popular && (
         <div className="absolute right-0 top-0 bg-[#FF498B] px-4 py-2 rounded-tr-[18px] rounded-bl-[18px]">
           <p className="text-white text-[14px]">
