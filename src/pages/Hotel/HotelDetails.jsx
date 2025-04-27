@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { fetchHotelsAPI } from "~/apis";
 import bathroom from "~/assets/images/bathroom.png";
 import bedroom from "~/assets/images/bedroom.png";
 import coldMachine from "~/assets/images/coldMachine.png";
@@ -52,6 +53,7 @@ const HotelDetails = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [guestCount, setGuestCount] = useState("");
   const [loading, setLoading] = useState(false);
+  const [hotels, setHotels] = useState([]);
 
   const { hotelId } = useParams();
 
@@ -152,7 +154,11 @@ const HotelDetails = () => {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(fetchHotelDetailsAPI(hotelId)).then(() => setLoading(false));
+    dispatch(fetchHotelDetailsAPI(hotelId));
+    fetchHotelsAPI().then((res) => {
+      setHotels(res.hotels || []);
+      setLoading(false);
+    });
   }, [dispatch, hotelId]);
 
   useEffect(() => {
@@ -231,7 +237,7 @@ const HotelDetails = () => {
         </div>
 
         <div className="basis-[calc(35%-32px)] flex items-center justify-center min-h-[550px] rounded-xl border-[2px] border-gray-200">
-          <div>
+          <div className="py-8">
             <h5 className="text-[#152C5B] font-medium text-[20px] mb-3">
               Tiến hành đặt phòng
             </h5>
@@ -357,7 +363,7 @@ const HotelDetails = () => {
       </div>
 
       <div className="mt-24 mb-20">
-        <Introduce title="Lựa chọn hot" />
+        <Introduce title="Lựa chọn hot" filterList={hotels.slice(0, 4)} />
       </div>
     </section>
   );
