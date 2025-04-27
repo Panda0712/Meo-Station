@@ -166,6 +166,23 @@ export const deleteCommentAPI = async (commentId) => {
   return res.data;
 };
 
+// Get list bookings
+export const getListBookingsAPI = async (searchPath) => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/bookings${searchPath}`
+  );
+  return res.data;
+};
+
+// Update booking
+export const updateBookingAPI = async (bookingId, updateData) => {
+  const res = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/bookings/${bookingId}`,
+    updateData
+  );
+  return res.data;
+};
+
 // Create new booking
 export const createNewBookingAPI = async (data) => {
   const res = await authorizedAxiosInstance.post(
@@ -179,6 +196,14 @@ export const createNewBookingAPI = async (data) => {
 export const getBookingsHistoryAPI = async () => {
   const res = await authorizedAxiosInstance.get(
     `${API_ROOT}/v1/bookings/history`
+  );
+  return res.data;
+};
+
+// Delete booking
+export const deleteBookingAPI = async (bookingId) => {
+  const res = await authorizedAxiosInstance.delete(
+    `${API_ROOT}/v1/bookings/${bookingId}`
   );
   return res.data;
 };

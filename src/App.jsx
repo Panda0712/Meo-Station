@@ -11,6 +11,7 @@ import Navbar from "~/components/Navbar/Navbar";
 import NotFound from "~/pages/404/NotFound";
 import Admin from "~/pages/Admin/Admin";
 import BookingManagement from "~/pages/Admin/Booking/Booking";
+import BookingDetailsManagement from "~/pages/Admin/Booking/BookingDetailsManagement";
 import ContactManagement from "~/pages/Admin/Contact/Contact";
 import Dashboard from "~/pages/Admin/Dashboard/Dashboard";
 import HotelDetailsManagement from "~/pages/Admin/Hotels/HotelDetails";
@@ -61,6 +62,10 @@ const App = () => {
             />
             <Route path="contact" element={<ContactManagement />} />
             <Route path="booking" element={<BookingManagement />} />
+            <Route
+              path="booking/:bookingId"
+              element={<BookingDetailsManagement />}
+            />
             <Route path="notification" element={<NotificationManagement />} />
             <Route path="profile" element={<AdminProfile />} />
           </Route>
