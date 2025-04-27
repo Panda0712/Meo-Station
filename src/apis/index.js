@@ -33,7 +33,7 @@ export const verifyUserAPI = async (data) => {
 };
 
 // Get list hotels
-export const fetchHotelsAPI = async (searchPath) => {
+export const fetchHotelsAPI = async (searchPath = "") => {
   const res = await authorizedAxiosInstance.get(
     `${API_ROOT}/v1/hotels${searchPath}`
   );
