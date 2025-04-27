@@ -7,7 +7,7 @@ export const capitalizeWords = (str) => {
     .join(" ");
 };
 
-export const formatVND = (price) => {
+export const formatVND = (price = 0) => {
   return price.toLocaleString("vi-VN");
 };
 
