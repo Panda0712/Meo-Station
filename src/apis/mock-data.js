@@ -187,6 +187,48 @@ export const orderHistory = [
   },
 ];
 
+export const listBookings = [
+  {
+    hotelId: 1,
+    customerId: 2,
+    hotelName: "LoveBox 05",
+    hotelImage:
+      "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
+    customerName: "Panda",
+    checkInDate: "13/04/2025",
+    checkOutDate: "15/04/2025",
+    discount: 20,
+    totalPrice: 500,
+    status: ORDER_STATUS.CANCELLED,
+  },
+  {
+    hotelId: 1,
+    customerId: 2,
+    hotelName: "LoveBox 05",
+    hotelImage:
+      "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
+    customerName: "Panda",
+    checkInDate: "13/04/2025",
+    checkOutDate: "15/04/2025",
+    discount: 20,
+    totalPrice: 500,
+    status: ORDER_STATUS.PENDING,
+  },
+  {
+    hotelId: 1,
+    customerId: 2,
+    hotelName: "LoveBox 05",
+    hotelImage:
+      "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
+    customerName: "Panda",
+    checkInDate: "13/04/2025",
+    checkOutDate: "15/04/2025",
+    discount: 20,
+    totalPrice: 500,
+    status: ORDER_STATUS.COMPLETED,
+  },
+];
+
 export const orderInfo = {
   roomImage:
     "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/2-20241130121516-3oai-.jpg",

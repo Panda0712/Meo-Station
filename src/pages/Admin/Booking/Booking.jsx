@@ -1,71 +1,127 @@
 import { Ban, CircleCheckBig, CircleDot, Ellipsis } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { deleteBookingAPI, getListBookingsAPI, updateBookingAPI } from "~/apis";
+import Button from "~/components/Button/Button";
+import Modal from "~/components/Modal/Modal";
 import { ORDER_STATUS } from "~/utils/constants";
-
-const listBookings = [
-  {
-    hotelId: 1,
-    customerId: 2,
-    hotelName: "LoveBox 05",
-    hotelImage:
-      "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
-    customerName: "Panda",
-    checkInDate: "13/04/2025",
-    checkOutDate: "15/04/2025",
-    discount: 20,
-    totalPrice: 500,
-    status: ORDER_STATUS.CANCELLED,
-  },
-  {
-    hotelId: 1,
-    customerId: 2,
-    hotelName: "LoveBox 05",
-    hotelImage:
-      "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
-    customerName: "Panda",
-    checkInDate: "13/04/2025",
-    checkOutDate: "15/04/2025",
-    discount: 20,
-    totalPrice: 500,
-    status: ORDER_STATUS.PENDING,
-  },
-  {
-    hotelId: 1,
-    customerId: 2,
-    hotelName: "LoveBox 05",
-    hotelImage:
-      "https://w.ladicdn.com/s900x900/66091ab391c96600122e593a/3-20241130121515-r082r.jpg",
-    customerName: "Panda",
-    checkInDate: "13/04/2025",
-    checkOutDate: "15/04/2025",
-    discount: 20,
-    totalPrice: 500,
-    status: ORDER_STATUS.COMPLETED,
-  },
-];
+import { formatDate } from "~/utils/formatters";
 
 const BookingManagement = () => {
-  const [openOptions, setOpenOptions] = useState(
-    listBookings?.map((_, index) => ({
-      index,
-      open: false,
-    }))
-  );
+  const [bookings, setBookings] = useState([]);
+  const [totalBookings, setTotalBookings] = useState(null);
+  const [editing, setEditing] = useState({
+    edit: false,
+    data: null,
+  });
+  const [deleting, setDeleting] = useState({
+    delete: false,
+    id: null,
+  });
+  const [openOptions, setOpenOptions] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
-  const handleToggleOptions = (currentIndex) =>
-    setOpenOptions((prevOptions) =>
-      prevOptions.map((item, index) =>
-        index === currentIndex
-          ? {
-              ...item,
-              open: !item.open,
-            }
-          : {
-              ...item,
-              open: false,
-            }
-      )
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const updateStateData = (res) => {
+    setBookings(res.bookings || []);
+    setTotalBookings(res.totalBookings || 0);
+    setOpenOptions(
+      res.bookings?.map((_, index) => ({
+        index,
+        open: false,
+      }))
     );
+  };
+
+  const handleToggle = (type, data) => {
+    setOpenModal(type === "options" ? false : true);
+    if (type === "edit")
+      setEditing({
+        edit: true,
+        data,
+      });
+    else if (type === "delete")
+      setDeleting({
+        delete: true,
+        id: data,
+      });
+    else if (type === "options")
+      setOpenOptions((prevOptions) =>
+        prevOptions.map((item, index) =>
+          index === data
+            ? {
+                ...item,
+                open: !item.open,
+              }
+            : {
+                ...item,
+                open: false,
+              }
+        )
+      );
+  };
+
+  const handleReset = () => {
+    setEditing({
+      edit: false,
+      data: null,
+    });
+    setDeleting({
+      delete: false,
+      id: null,
+    });
+    setOpenOptions((prevOptions) =>
+      prevOptions.map((item) => ({
+        ...item,
+        open: false,
+      }))
+    );
+    setOpenModal(false);
+  };
+
+  const onUpdating = async () => {
+    const updateData = {
+      status: ORDER_STATUS.COMPLETED,
+    };
+
+    toast
+      .promise(updateBookingAPI(editing.data?._id, updateData), {
+        pending: "Đang thanh toán...",
+      })
+      .then((res) => {
+        if (!res.error) {
+          toast.success("Thanh toán thành công!!!");
+          handleAfterCUDNewBooking();
+        }
+        handleReset();
+      });
+  };
+
+  const onDeleting = async () => {
+    toast
+      .promise(deleteBookingAPI(deleting.id), {
+        pending: "Đang xóa đơn đặt phòng...",
+      })
+      .then((res) => {
+        if (!res.error) {
+          toast.success("Xóa đơn đặt phòng thành công!!!");
+          handleAfterCUDNewBooking();
+        }
+      });
+
+    handleReset();
+  };
+
+  const handleAfterCUDNewBooking = () => {
+    getListBookingsAPI(location.search).then(updateStateData);
+  };
+
+  useEffect(() => {
+    getListBookingsAPI(location.search).then(updateStateData);
+  }, [location.search]);
 
   const tHeadStyle = "font-medium border border-gray-200 px-4 py-2 text-[18px]";
   const optionStyle =
@@ -73,6 +129,61 @@ const BookingManagement = () => {
 
   return (
     <div className="flex flex-col">
+      {openModal && (
+        <Modal
+          title={
+            editing.edit ? "Thanh toán đơn đặt phòng" : "Xóa đơn đặt phòng"
+          }
+          handleCloseModal={() => handleReset()}
+          modalStyle="w-[450px]"
+        >
+          {deleting.delete ? (
+            <div className="mt-6 relative">
+              <p className="text-black">
+                Bạn có chắc chắn muốn xóa đơn đặt phòng này không? Sau khi xóa
+                không thể hoàn tác!
+              </p>
+
+              <div className="flex justify-end">
+                <div className="flex items-center gap-2 mt-8">
+                  <Button
+                    title="Trở lại"
+                    type="cancel"
+                    onClick={() => handleReset()}
+                  />
+                  <Button
+                    title="Xóa đơn đặt phòng"
+                    type="warning"
+                    onClick={onDeleting}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-6 relative">
+              <p className="text-black">
+                Xác nhận thanh toán cho đơn đặt phòng này?
+              </p>
+
+              <div className="flex justify-end">
+                <div className="flex items-center gap-2 mt-8">
+                  <Button
+                    title="Trở lại"
+                    type="cancel"
+                    onClick={() => handleReset()}
+                  />
+                  <Button
+                    title="Thanh toán"
+                    type="warning"
+                    onClick={onUpdating}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </Modal>
+      )}
+
       <h3 className="text-[20px] font-medium">Quản lý đặt phòng</h3>
 
       <table className="table-fixed w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
@@ -88,19 +199,21 @@ const BookingManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {listBookings?.map((booking, index) => (
+          {bookings?.map((booking, index) => (
             <tr key={index} className="text-center">
               <td className={`${tHeadStyle}`}>
                 <img
-                  src={booking?.hotelImage}
+                  src={booking?.hotelImages?.[0]}
                   className="object-cover w-[200px] h-[150px] mx-auto rounded-sm"
                   alt=""
                 />
               </td>
-              <td className={`${tHeadStyle}`}>{booking?.customerName}</td>
+              <td className={`${tHeadStyle}`}>{booking?.userName}</td>
               <td className={`${tHeadStyle}`}>{booking?.hotelName}</td>
               <td className={`${tHeadStyle}`}>
-                {booking?.checkInDate + "-" + booking?.checkOutDate}
+                {formatDate(booking?.checkInDate) +
+                  "-" +
+                  formatDate(booking?.checkOutDate)}
               </td>
               <td className={`${tHeadStyle}`}>
                 <div className="flex items-center justify-center gap-2 rounded-xl w-[120px] mx-auto bg-[#f5f5f5] py-1 shadow-sm">
@@ -129,12 +242,12 @@ const BookingManagement = () => {
                   </span>
                 </div>
               </td>
-              <td className={`${tHeadStyle}`}>{booking?.totalPrice}.000đ</td>
+              <td className={`${tHeadStyle}`}>{booking?.totalPrice}đ</td>
               <td className={`${tHeadStyle} relative`}>
                 <Ellipsis
                   size={18}
                   className="cursor-pointer mx-auto"
-                  onClick={() => handleToggleOptions(index)}
+                  onClick={() => handleToggle("options", index)}
                 />
 
                 {openOptions[index]?.open && (
@@ -142,13 +255,24 @@ const BookingManagement = () => {
                     className="w-[150px] bg-white shadow-md z-100
                   border border-slate-100 rounded-sm absolute bottom-[-75px] text-[14px] right-0"
                   >
-                    <li className={`${optionStyle} border-b border-slate-200`}>
+                    <li
+                      className={`${optionStyle} border-b border-slate-200`}
+                      onClick={() => navigate(`/admin/booking/${booking?._id}`)}
+                    >
                       Xem thông tin
                     </li>
-                    <li className={`${optionStyle} border-b border-slate-200 `}>
+                    <li
+                      className={`${optionStyle} border-b border-slate-200 `}
+                      onClick={() => handleToggle("edit", booking)}
+                    >
                       Thanh toán
                     </li>
-                    <li className={`${optionStyle}`}>Xóa đặt phòng</li>
+                    <li
+                      className={`${optionStyle}`}
+                      onClick={() => handleToggle("delete", booking?._id)}
+                    >
+                      Xóa đặt phòng
+                    </li>
                   </ul>
                 )}
               </td>
