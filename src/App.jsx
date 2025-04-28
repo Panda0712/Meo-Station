@@ -10,6 +10,8 @@ import Footer from "~/components/Footer/Footer";
 import Navbar from "~/components/Navbar/Navbar";
 import NotFound from "~/pages/404/NotFound";
 import Admin from "~/pages/Admin/Admin";
+import BlogManagement from "~/pages/Admin/Blog/Blog";
+import BlogDetailsManagement from "~/pages/Admin/Blog/BlogDetails";
 import BookingManagement from "~/pages/Admin/Booking/Booking";
 import BookingDetailsManagement from "~/pages/Admin/Booking/BookingDetailsManagement";
 import ContactManagement from "~/pages/Admin/Contact/Contact";
@@ -18,6 +20,7 @@ import HotelDetailsManagement from "~/pages/Admin/Hotels/HotelDetails";
 import HotelsManagement from "~/pages/Admin/Hotels/Hotels";
 import NotificationManagement from "~/pages/Admin/Notification/Notification";
 import AdminProfile from "~/pages/Admin/Profile/AdminProfile";
+import VoucherManagement from "~/pages/Admin/Voucher/Voucher";
 import Auth from "~/pages/Auth/Auth";
 import Verification from "~/pages/Auth/Verification";
 import Blog from "~/pages/Blog/Blog";
@@ -61,11 +64,14 @@ const App = () => {
               element={<HotelDetailsManagement />}
             />
             <Route path="contact" element={<ContactManagement />} />
+            <Route path="vouchers" element={<VoucherManagement />} />
             <Route path="booking" element={<BookingManagement />} />
             <Route
               path="booking/:bookingId"
               element={<BookingDetailsManagement />}
             />
+            <Route path="blogs" element={<BlogManagement />} />
+            <Route path="blogs/:blogId" element={<BlogDetailsManagement />} />
             <Route path="notification" element={<NotificationManagement />} />
             <Route path="profile" element={<AdminProfile />} />
           </Route>
