@@ -16,6 +16,13 @@ export const formatDate = (date) => {
   return d.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
 };
 
+export const formatDateV2 = (timestamp) => {
+  if (!timestamp) return "";
+
+  const date = new Date(timestamp);
+  return date.toISOString().split("T")[0]; // dạng "YYYY-MM-DD"
+};
+
 export const toVNISOString = (date, time) => {
   const fullDate = new Date(date);
   const year = fullDate.getFullYear();

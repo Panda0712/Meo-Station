@@ -225,3 +225,85 @@ export const zaloPaymentAPI = async (data) => {
   );
   return res.data;
 };
+
+// Get list vouchers
+export const getListVouchersAPI = async (searchPath) => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/vouchers${searchPath}`
+  );
+  return res.data;
+};
+
+// Create new voucher
+export const createNewVoucherAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/vouchers`,
+    data
+  );
+  return res.data;
+};
+
+// Update voucher
+export const updateVoucherAPI = async (voucherId, updateData) => {
+  const res = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/vouchers/${voucherId}`,
+    updateData
+  );
+  return res.data;
+};
+
+// Delete voucher
+export const deleteVoucherAPI = async (voucherId) => {
+  const res = await authorizedAxiosInstance.delete(
+    `${API_ROOT}/v1/vouchers/${voucherId}`
+  );
+  return res.data;
+};
+
+// Get list blogs
+export const getListBlogsAPI = async (searchPath) => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/blogs${searchPath}`
+  );
+  return res.data;
+};
+
+// Get blog detail
+export const getBlogDetailAPI = async (blogId) => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/blogs/${blogId}`
+  );
+  return res.data;
+};
+
+// Create new blog
+export const createNewBlogAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(`${API_ROOT}/v1/blogs`, data);
+  return res.data;
+};
+
+// Upload blog image
+export const uploadBlogImageAPI = async (data) => {
+  const res = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/blogs/uploads`,
+    data
+  );
+  return res.data;
+};
+
+// Update blog
+export const updateBlogAPI = async (blogId, updateData) => {
+  const res = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/blogs/${blogId}`,
+    updateData
+  );
+  return res.data;
+};
+
+// Delete blog
+export const deleteBlogAPI = async (blogId) => {
+  const res = await authorizedAxiosInstance.delete(
+    `${API_ROOT}/v1/blogs/${blogId}`
+  );
+  return res.data;
+};

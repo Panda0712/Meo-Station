@@ -1,4 +1,12 @@
-import { Bell, FileUser, House, LayoutDashboard, Sheet } from "lucide-react";
+import {
+  Bell,
+  FileUser,
+  House,
+  LayoutDashboard,
+  PencilLine,
+  Sheet,
+  TicketPercent,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { menuAdminList } from "~/pages/Admin/AdminSidebar/constants";
 import MeoLogo from "/panda-logo.png";
@@ -8,6 +16,8 @@ const iconMap = {
   hotels: <House size={24} />,
   dashboard: <LayoutDashboard size={24} />,
   booking: <Sheet size={24} />,
+  voucher: <TicketPercent size={24} />,
+  blog: <PencilLine size={24} />,
   notification: <Bell size={24} />,
 };
 
@@ -17,7 +27,7 @@ const AdminSidebar = () => {
   return (
     <div className="relative basis-[20%] h-screen bg-[#07275a] flex flex-col items-center py-[20px]">
       <Link to="/admin">
-        <div className="flex items-center gap-2 mb-16">
+        <div className="flex items-center gap-2 mb-10">
           <img src={MeoLogo} className="object-cover w-12 h-12" alt="" />
           <h1 className="font-medium text-[24px] text-white">
             <span className="text-blue-600">Meo</span>Station.
@@ -40,7 +50,7 @@ const AdminSidebar = () => {
         ))}
       </div>
 
-      <div className="absolute bottom-6">
+      <div className="absolute bottom-4">
         <p className="text-[18px] text-white">
           Bản quyền thuộc về{" "}
           <span className="text-blue-600 font-medium">Meo</span>Station.
