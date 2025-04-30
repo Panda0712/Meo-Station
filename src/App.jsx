@@ -12,6 +12,7 @@ import NotFound from "~/pages/404/NotFound";
 import Admin from "~/pages/Admin/Admin";
 import BlogManagement from "~/pages/Admin/Blog/Blog";
 import BlogDetailsManagement from "~/pages/Admin/Blog/BlogDetails";
+import BlogFormPage from "~/pages/Admin/Blog/BlogFormPage";
 import BookingManagement from "~/pages/Admin/Booking/Booking";
 import BookingDetailsManagement from "~/pages/Admin/Booking/BookingDetailsManagement";
 import ContactManagement from "~/pages/Admin/Contact/Contact";
@@ -72,6 +73,8 @@ const App = () => {
             />
             <Route path="blogs" element={<BlogManagement />} />
             <Route path="blogs/:blogId" element={<BlogDetailsManagement />} />
+            <Route path="blogs/create" element={<BlogFormPage />} />
+            <Route path="blogs/create/:blogId" element={<BlogFormPage />} />
             <Route path="notification" element={<NotificationManagement />} />
             <Route path="profile" element={<AdminProfile />} />
           </Route>

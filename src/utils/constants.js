@@ -6,6 +6,9 @@ export const color = {
   mail: "#3e65cf",
 };
 
+export const DEFAULT_PAGE = 1;
+export const DEFAULT_ITEMS_PER_PAGE = 8;
+
 export const TIME_SLOTS = [
   {
     label: "8h - 11h",
