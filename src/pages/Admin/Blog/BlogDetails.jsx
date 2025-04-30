@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { deleteBlogAPI, getBlogDetailAPI } from "~/apis";
 import Button from "~/components/Button/Button";
 import Modal from "~/components/Modal/Modal";
+import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
+import { ACCOUNT_ROLES } from "~/utils/constants";
 import { formatDate } from "~/utils/formatters";
 
 const BlogDetailManagement = () => {
@@ -11,6 +14,8 @@ const BlogDetailManagement = () => {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+
+  const currentUser = useSelector(selectCurrentUser);
 
   const { blogId } = useParams();
   const navigate = useNavigate();
@@ -60,7 +65,12 @@ const BlogDetailManagement = () => {
         <div className="bg-red-100 text-red-700 p-4 rounded-md mb-6">
           {"Không tìm thấy bài viết"}
         </div>
-        <Link to="/admin/blogs" className="text-blue-600 hover:underline">
+        <Link
+          to={`${
+            currentUser.role === ACCOUNT_ROLES.ADMIN ? "/admin/blogs" : "/blog"
+          }`}
+          className="text-blue-600 hover:underline"
+        >
           &larr; Trở về danh sách bài viết
         </Link>
       </div>
@@ -68,7 +78,13 @@ const BlogDetailManagement = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div
+      className={`container mx-auto ${
+        currentUser.role === ACCOUNT_ROLES.ADMIN
+          ? "px-4 py-8"
+          : "px-24 pt-16 pb-24"
+      }`}
+    >
       {openModal && deleting && (
         <Modal
           title="Xóa bài viết"
@@ -96,7 +112,9 @@ const BlogDetailManagement = () => {
       )}
 
       <Link
-        to="/admin/blogs"
+        to={`${
+          currentUser.role === ACCOUNT_ROLES.ADMIN ? "/admin/blogs" : "/blog"
+        }`}
         className="text-blue-600 hover:underline mb-6 inline-block"
       >
         &larr; Trở về danh sách bài viết
@@ -125,7 +143,9 @@ const BlogDetailManagement = () => {
           {blog.updatedAt !== blog.createdAt && (
             <>
               <span className="mx-3">•</span>
-              <span>Cập nhật: {formatDate(blog.updatedAt)}</span>
+              <span>
+                Cập nhật: {formatDate(blog.updatedAt || blog.createdAt)}
+              </span>
             </>
           )}
         </div>
@@ -144,23 +164,25 @@ const BlogDetailManagement = () => {
         )}
       </div>
 
-      <div className="flex gap-4 mb-8">
-        <Link
-          to={`/admin/blogs/create/${blogId}`}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
-        >
-          Chỉnh sửa bài viết
-        </Link>
-        <button
-          onClick={() => {
-            setOpenModal(true);
-            setDeleting(true);
-          }}
-          className="bg-red-600 hover:bg-red-700 cursor-pointer text-white px-4 py-2 rounded-md transition-colors"
-        >
-          Xóa bài viết
-        </button>
-      </div>
+      {currentUser.role === ACCOUNT_ROLES.ADMIN && (
+        <div className="flex gap-4 mb-8">
+          <Link
+            to={`/admin/blogs/create/${blogId}`}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+          >
+            Chỉnh sửa bài viết
+          </Link>
+          <button
+            onClick={() => {
+              setOpenModal(true);
+              setDeleting(true);
+            }}
+            className="bg-red-600 hover:bg-red-700 cursor-pointer text-white px-4 py-2 rounded-md transition-colors"
+          >
+            Xóa bài viết
+          </button>
+        </div>
+      )}
 
       <div className="prose prose-lg max-w-none">
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
