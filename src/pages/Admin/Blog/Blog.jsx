@@ -11,6 +11,7 @@ const BlogManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterField, setFilterField] = useState("title");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -18,12 +19,16 @@ const BlogManagement = () => {
   const query = new URLSearchParams(location.search);
   const currentPage = parseInt(query.get("page") || "1", 10);
   const searchTerm = query.get("search") || "";
+  const currentFilterField = query.get("filterField") || "title";
 
   const totalPages = Math.ceil(totalBlogs / DEFAULT_ITEMS_PER_PAGE);
 
   useEffect(() => {
     if (searchTerm) {
       setSearchQuery(searchTerm);
+    }
+    if (currentFilterField) {
+      setFilterField(currentFilterField);
     }
   }, []);
 
@@ -43,10 +48,13 @@ const BlogManagement = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const params = new URLSearchParams();
+
     if (searchQuery) {
-      params.set("search", searchQuery);
+      params.set("q", JSON.stringify({ [filterField]: searchQuery }));
     }
+
     params.set("page", "1");
+    params.set("filterField", filterField);
     navigate(`?${params.toString()}`);
   };
 
@@ -56,6 +64,10 @@ const BlogManagement = () => {
       params.set("page", newPage.toString());
       navigate(`?${params.toString()}`);
     }
+  };
+
+  const handleFilterFieldChange = (e) => {
+    setFilterField(e.target.value);
   };
 
   useEffect(() => {
@@ -76,6 +88,17 @@ const BlogManagement = () => {
 
       <div className="mb-8">
         <form onSubmit={handleSearch} className="flex gap-2">
+          <select
+            value={filterField}
+            onChange={handleFilterFieldChange}
+            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="title">Tiêu đề</option>
+            <option value="content">Nội dung</option>
+            <option value="author">Tác giả</option>
+            <option value="tags">Thẻ</option>
+            <option value="summary">Tóm tắt</option>
+          </select>
           <input
             type="text"
             placeholder="Tìm kiếm bài viết..."
