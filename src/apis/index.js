@@ -192,6 +192,14 @@ export const createNewBookingAPI = async (data) => {
   return res.data;
 };
 
+// Get booking statistics
+export const getBookingStatisticsAPI = async () => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/bookings/statistics`
+  );
+  return res.data;
+};
+
 // Get bookings history based on userId
 export const getBookingsHistoryAPI = async () => {
   const res = await authorizedAxiosInstance.get(
