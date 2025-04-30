@@ -99,6 +99,7 @@ const App = () => {
 
             {/* Blog */}
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:blogId" element={<BlogDetailsManagement />} />
 
             {/* Hotel */}
             <Route path="/hotels" element={<Hotels />} />

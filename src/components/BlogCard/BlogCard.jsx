@@ -1,10 +1,25 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
+import { ACCOUNT_ROLES } from "~/utils/constants";
 import { formatDate } from "~/utils/formatters";
 
-const BlogCard = ({ blog }) => {
+const BlogCard = ({ blog, userUi = false }) => {
+  const currentUser = useSelector(selectCurrentUser);
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
-      <Link to={`/admin/blogs/${blog._id}`}>
+    <div
+      className={`${
+        userUi && "min-w-xl"
+      } bg-white border border-slate-200 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1`}
+    >
+      <Link
+        to={`${
+          currentUser.role === ACCOUNT_ROLES.ADMIN
+            ? `/admin/blogs/${blog._id}`
+            : `/blog/${blog._id}`
+        }`}
+      >
         <img
           src={blog.coverImage}
           alt={blog.title}
@@ -34,7 +49,13 @@ const BlogCard = ({ blog }) => {
             </div>
           )}
         </div>
-        <Link to={`/admin/blogs/${blog._id}`}>
+        <Link
+          to={`${
+            currentUser.role === ACCOUNT_ROLES.ADMIN
+              ? `/admin/blogs/${blog._id}`
+              : `/blog/${blog._id}`
+          }`}
+        >
           <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors">
             {blog.title}
           </h3>
@@ -50,7 +71,11 @@ const BlogCard = ({ blog }) => {
             <span className="ml-2 text-sm text-gray-700">{blog.author}</span>
           </div>
           <Link
-            to={`/blogs/${blog._id}`}
+            to={`${
+              currentUser.role === ACCOUNT_ROLES.ADMIN
+                ? `/admin/blogs/${blog._id}`
+                : `/blog/${blog._id}`
+            }`}
             className="ml-auto text-blue-600 text-sm hover:underline"
           >
             Đọc thêm

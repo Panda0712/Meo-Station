@@ -117,7 +117,7 @@ const BlogFormPage = () => {
 
     const tagsArray = data.tags
       ? data.tags
-          .split(",")
+          .split(", ")
           .map((tag) => tag.trim())
           .filter((tag) => tag)
       : [];
