@@ -1,7 +1,10 @@
+import { Spin } from "antd";
 import { Ellipsis } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import ReactPaginate from "react-paginate";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   createNewHotelAPI,
@@ -13,7 +16,7 @@ import {
 import Button from "~/components/Button/Button";
 import Input from "~/components/Input/Input";
 import Modal from "~/components/Modal/Modal";
-import { UTILITIES_LIST } from "~/utils/constants";
+import { DEFAULT_ITEMS_PER_PAGE, UTILITIES_LIST } from "~/utils/constants";
 import {
   FIELD_REQUIRED_MESSAGE,
   singleFileValidator,
@@ -22,6 +25,7 @@ import {
 const HotelsManagement = () => {
   const [hotels, setHotels] = useState([]);
   const [totalHotels, setTotalHotels] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState({
     edit: false,
     data: null,
@@ -43,11 +47,21 @@ const HotelsManagement = () => {
   } = useForm();
 
   const location = useLocation();
-  // const query = new URLSearchParams(location.search);
+  const navigate = useNavigate();
 
-  // const page = parseInt(query.get("page") || "1", 10);
+  const query = new URLSearchParams(location.search);
+  const currentPage = parseInt(query.get("page") || "1", 10);
+  const totalPages = Math.ceil(totalHotels / DEFAULT_ITEMS_PER_PAGE);
 
   const reqDataRef = useRef(null);
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      const params = new URLSearchParams(location.search);
+      params.set("page", newPage.toString());
+      navigate(`?${params.toString()}`);
+    }
+  };
 
   const updateStateData = (res) => {
     setHotels(res.hotels || []);
@@ -249,7 +263,10 @@ const HotelsManagement = () => {
   };
 
   useEffect(() => {
-    fetchHotelsAPI(location.search).then(updateStateData);
+    setLoading(true);
+    fetchHotelsAPI(location.search)
+      .then(updateStateData)
+      .finally(() => setLoading(false));
   }, [location.search]);
 
   useEffect(() => {
@@ -290,6 +307,13 @@ const HotelsManagement = () => {
     "font-medium border border-gray-200 px-4 py-2 text-[18px] break-words whitespace-normal";
   const optionStyle =
     "py-[12px] px-[16px] transition hover:bg-slate-100 cursor-pointer";
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center">
+        <Spin size="large" />
+      </div>
+    );
 
   return (
     <div className="flex flex-col">
@@ -582,6 +606,29 @@ const HotelsManagement = () => {
           ))}
         </tbody>
       </table>
+
+      {totalPages > 1 && (
+        <div className="mt-10">
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel={<FiChevronRight />}
+            previousLabel={<FiChevronLeft />}
+            onPageChange={(selected) => handlePageChange(selected.selected + 1)}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={2}
+            pageCount={totalPages}
+            renderOnZeroPageCount={null}
+            forcePage={currentPage - 1}
+            containerClassName="flex items-center justify-center gap-2 mt-6"
+            pageClassName="px-4 py-2 text-sm font-medium text-black border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+            activeClassName="bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
+            previousClassName="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+            nextClassName="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+            disabledClassName="opacity-50 cursor-not-allowed"
+            breakClassName="px-3 py-2 text-gray-500"
+          />
+        </div>
+      )}
     </div>
   );
 };
