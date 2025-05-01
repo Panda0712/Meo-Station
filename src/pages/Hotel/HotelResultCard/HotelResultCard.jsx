@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import bathroom from "~/assets/images/bathroom.png";
 import bedroom from "~/assets/images/bedroom.png";
 import internet from "~/assets/images/internet.png";
+import { formatDateV2 } from "~/utils/formatters";
 
 const imagesMap = {
   bedroom,
@@ -53,11 +54,13 @@ const HotelResultCard = ({ hotel }) => {
 
         <div className="flex items-center gap-3 mt-6">
           <div className="bg-[#49735a] rounded-[30px] px-[20px] py-[4px] flex items-center justify-center text-white">
-            <p className="text-[16px] font-medium">Còn trống 20/4/2025</p>
+            <p className="text-[16px] font-medium">
+              Còn trống {formatDateV2(Date.now())}
+            </p>
           </div>
           <p className="text-[16px]">
             Từ <span className="font-semibold">{hotel?.pricePerNight}đ</span>
-            /tháng
+            /đêm
           </p>
         </div>
       </div>

@@ -40,6 +40,14 @@ export const fetchHotelsAPI = async (searchPath = "") => {
   return res.data;
 };
 
+// Get search hotels
+export const getSearchHotelsAPI = async (searchPath = "") => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/hotels/search${searchPath}`
+  );
+  return res.data;
+};
+
 // Create new hotel
 export const createNewHotelAPI = async (data) => {
   const res = await authorizedAxiosInstance.post(`${API_ROOT}/v1/hotels`, data);

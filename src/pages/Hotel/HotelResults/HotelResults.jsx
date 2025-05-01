@@ -1,40 +1,53 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { fetchHotelsAPI } from "~/apis";
+import { format } from "date-fns";
+import { useState } from "react";
 import Button from "~/components/Button/Button";
 import HotelResultCard from "~/pages/Hotel/HotelResultCard/HotelResultCard";
 
-const HotelResults = () => {
-  const [hotels, setHotels] = useState([]);
-  const [totalHotels, setTotalHotels] = useState(0);
+const HotelResults = ({ hotels, guestCount, checkIn = "", checkOut = "" }) => {
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const location = useLocation();
+  const totalPages = Math.ceil(hotels.length / 4);
 
-  const handleSetData = (res) => {
-    setHotels(res.hotels || []);
-    setTotalHotels(res.totalHotels || 0);
+  const endIndex = currentPage * 4;
+  const currentHotels = hotels.slice(0, endIndex);
+
+  const handleLoadMorePage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
-
-  useEffect(() => {
-    fetchHotelsAPI(location.search).then(handleSetData);
-  }, [location.search]);
 
   return (
     <div className="mt-[20px]">
       <div className="max-w-[80%] mx-auto mb-[36px]">
-        <h3 className="text-[18px] text-[#181a18] font-semibold">
-          52 kết quả <span className="font-normal">cho phòng 30m2</span>
-        </h3>
+        {guestCount && checkIn && checkOut ? (
+          <h3 className="text-[18px] text-[#181a18] font-semibold">
+            {hotels.length} kết quả{" "}
+            <span className="font-normal">
+              cho phòng {guestCount} người từ{" "}
+              {`${checkIn && format(checkIn, "d/M")}`} tới{" "}
+              {`${checkOut && format(checkOut, "d/M")}`}
+            </span>
+          </h3>
+        ) : (
+          <h3 className="text-[18px] text-[#181a18] font-semibold">
+            Kết quả tìm kiếm hiện ở đây
+          </h3>
+        )}
       </div>
 
       <div className="flex items-start justify-between gap-12">
         <div className="flex flex-col gap-[20px] basis-[calc(70%-24px)]">
-          {hotels?.map((hotel, index) => (
+          {currentHotels?.map((hotel, index) => (
             <HotelResultCard key={index} hotel={hotel} />
           ))}
-          <div className="flex justify-center mt-12">
-            <Button title="Hiện thêm phòng" type="search" />
-          </div>
+          {currentPage < totalPages && (
+            <div className="flex justify-center mt-12">
+              <Button
+                title="Hiện thêm phòng"
+                onClick={handleLoadMorePage}
+                type="search"
+              />
+            </div>
+          )}
         </div>
         <div className="flex justify-center mb-12 basis-[calc(30%-24px)]">
           <iframe

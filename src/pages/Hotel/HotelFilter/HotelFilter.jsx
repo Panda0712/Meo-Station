@@ -1,7 +1,12 @@
 import ArrowDownFill from "~/assets/images/arrow-down-fill.png";
-import ArrowDownBrown from "~/assets/images/arrow-down-brown.png";
 
-const HotelFilter = () => {
+const HotelFilter = ({
+  filterField,
+  sortType,
+  handleFilterChange,
+  handleChangeSortType,
+  handleSubmitFilter,
+}) => {
   return (
     <div className="flex items-center justify-between gap-5 mt-[20px] max-w-[80%] mx-auto">
       <div
@@ -18,10 +23,34 @@ const HotelFilter = () => {
           className="rounded-[40px] h-[48px] p-[20px] 
       flex items-center justify-between gap-5 cursor-pointer transition hover:opacity-90"
         >
-          <span className="text-[18px] font-semibold text-[#49735a]">
-            Độ phổ biến
-          </span>
-          <img src={ArrowDownBrown} alt="" />
+          <form onSubmit={handleSubmitFilter} className="flex gap-2">
+            <select
+              value={filterField}
+              onChange={handleFilterChange}
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="title">Tiêu đề</option>
+              <option value="maxGuest">Số khách tối đa</option>
+              <option value="pricePerNight">Giá mỗi đêm</option>
+              <option value="priceFirstHour">Giá giờ đầu</option>
+            </select>
+
+            <select
+              value={sortType}
+              onChange={handleChangeSortType}
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="ascending">Tăng dần</option>
+              <option value="descending">Giảm dần</option>
+            </select>
+
+            <button
+              type="submit"
+              className="bg-[#064749] hover:opacity-90 text-white px-4 py-2 rounded-md cursor-pointer transition-colors"
+            >
+              Lọc
+            </button>
+          </form>
         </div>
       </div>
     </div>
