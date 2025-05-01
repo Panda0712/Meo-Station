@@ -66,10 +66,10 @@ export const ACCOUNT_ROLES = {
 };
 
 let apiRoot = "http://localhost:8017";
-if (import.meta.env.BUILD_MODE === "dev") {
+if (import.meta.env.VITE_BUILD_MODE === "dev") {
   apiRoot = "http://localhost:8017";
 }
-if (import.meta.env.BUILD_MODE === "production") {
+if (import.meta.env.VITE_BUILD_MODE === "production") {
   apiRoot = "https://meo-station-backend.onrender.com";
 }
 export const API_ROOT = apiRoot;
