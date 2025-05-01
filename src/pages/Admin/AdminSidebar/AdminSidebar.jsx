@@ -25,7 +25,7 @@ const AdminSidebar = () => {
   const location = useLocation();
 
   return (
-    <div className="relative basis-[20%] h-screen bg-[#07275a] flex flex-col items-center py-[20px]">
+    <div className="relative basis-[20%] h-screen overflow-auto bg-[#07275a] flex flex-col items-center py-[20px]">
       <Link to="/admin">
         <div className="flex items-center gap-2 mb-10">
           <img src={MeoLogo} className="object-cover w-12 h-12" alt="" />
@@ -44,14 +44,14 @@ const AdminSidebar = () => {
               } border-y-[0.5px] border-slate-100 flex items-center justify-center gap-2 px-[16px] py-[24px] transition hover:bg-blue-400`}
             >
               {iconMap[menu.type]}
-              <span className="text-[18px] font-medium">{menu.name}</span>
+              <span className="text-[16px] font-medium">{menu.name}</span>
             </div>
           </Link>
         ))}
       </div>
 
-      <div className="absolute bottom-4">
-        <p className="text-[18px] text-white">
+      <div className="text-center mt-10">
+        <p className="text-[16px] text-white">
           Bản quyền thuộc về{" "}
           <span className="text-blue-600 font-medium">Meo</span>Station.
         </p>
