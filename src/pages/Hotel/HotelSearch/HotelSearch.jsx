@@ -6,59 +6,20 @@ import {
   Plus,
   UsersRound,
 } from "lucide-react";
-import { useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import Button from "~/components/Button/Button";
 
-const HotelSearch = () => {
-  const [guestCount, setGuestCount] = useState(1);
-  const [date, setDate] = useState({
-    checkIn: {
-      date: "",
-      open: false,
-    },
-    checkOut: {
-      date: "",
-      open: false,
-    },
-  });
-
-  console.log(date);
-
-  const handleChangeDateValue = (type, value) => {
-    setDate((date) => ({
-      ...date,
-      [type]: {
-        ...date[type],
-        ...value,
-      },
-    }));
-  };
-
-  const handleToggleDatePicker = (type) => {
-    setDate((date) => ({
-      ...date,
-      [type]: {
-        ...date[type],
-        open: !date[type].open,
-      },
-    }));
-  };
-
-  const handleIncrementGuestCount = () => {
-    if (guestCount >= 8) return;
-
-    setGuestCount(guestCount + 1);
-  };
-
-  const handleDecrementGuestCount = () => {
-    if (guestCount === 1) return;
-
-    setGuestCount(guestCount - 1);
-  };
-
+const HotelSearch = ({
+  guestCount,
+  date,
+  handleIncrementGuestCount,
+  handleDecrementGuestCount,
+  handleToggleDatePicker,
+  handleChangeDateValue,
+  handleSubmit,
+}) => {
   const spanTextStyle = "text-[16px] font-semibold";
 
   return (
@@ -152,7 +113,7 @@ const HotelSearch = () => {
       <div className="w-[2px] h-full bg-[#49735a]" />
 
       <div>
-        <Button title="Tìm kiếm" type="search" />
+        <Button title="Tìm kiếm" onClick={handleSubmit} type="search" />
       </div>
     </div>
   );
