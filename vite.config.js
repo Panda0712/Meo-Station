@@ -6,10 +6,15 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  // define: {
-  //   "process.env": process.env,
-  // },
-  plugins: [react(), tailwindcss(), svgr()],
+  plugins: [
+    react({
+      babel: {
+        plugins: ["@emotion/babel-plugin"],
+      },
+    }),
+    tailwindcss(),
+    svgr(),
+  ],
   resolve: {
     alias: [{ find: "~", replacement: "/src" }],
   },
