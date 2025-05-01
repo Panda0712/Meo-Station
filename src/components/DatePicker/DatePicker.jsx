@@ -4,7 +4,14 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { BOOKING_MODE } from "~/utils/constants";
 
-const DateRangePicker = ({ toggleOpen, range, mode, isOpen, handleSelect }) => {
+const DateRangePicker = ({
+  toggleOpen,
+  range,
+  mode,
+  isOpen,
+  handleSelect,
+  disabledDates,
+}) => {
   return (
     <div className="relative w-full">
       <div
@@ -28,6 +35,7 @@ const DateRangePicker = ({ toggleOpen, range, mode, isOpen, handleSelect }) => {
             selected={range}
             onSelect={handleSelect}
             numberOfMonths={2}
+            disabled={disabledDates}
           />
         </div>
       )}

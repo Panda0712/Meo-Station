@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { fetchHotelsAPI } from "~/apis";
+import { fetchHotelsAPI, getAllBookingsAPI } from "~/apis";
 import bathroom from "~/assets/images/bathroom.png";
 import bedroom from "~/assets/images/bedroom.png";
 import coldMachine from "~/assets/images/coldMachine.png";
@@ -54,6 +54,7 @@ const HotelDetails = () => {
   const [guestCount, setGuestCount] = useState("");
   const [loading, setLoading] = useState(false);
   const [hotels, setHotels] = useState([]);
+  const [bookings, setBookings] = useState([]);
 
   const { hotelId } = useParams();
 
@@ -61,6 +62,28 @@ const HotelDetails = () => {
   const activeHotel = useSelector(selectActiveHotel);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const listInDayBookings = bookings
+    ?.filter((booking) => booking.mode === BOOKING_MODE.day)
+    ?.map((booking) => ({
+      checkInDate: booking.checkInDate,
+      checkOutDate: booking.checkOutDate,
+    }));
+  const listInRangeBookings = bookings
+    ?.filter((booking) => booking.mode === BOOKING_MODE.night)
+    ?.map((booking) => ({
+      checkInDate: booking.checkInDate,
+      checkOutDate: booking.checkOutDate,
+    }));
+
+  const disabledDayRanges = listInDayBookings?.map((b) => ({
+    from: new Date(b.checkInDate),
+    to: new Date(b.checkOutDate),
+  }));
+  const disabledNightRanges = listInRangeBookings?.map((b) => ({
+    from: new Date(b.checkInDate),
+    to: new Date(b.checkOutDate),
+  }));
 
   const nightMode = bookingMode === BOOKING_MODE.night;
   const dayMode = bookingMode === BOOKING_MODE.day;
@@ -91,6 +114,18 @@ const HotelDetails = () => {
       if (numberOfNights !== nights) {
         toast.error("Vui lòng chọn đúng số đêm!!!");
         return;
+      }
+
+      if (nightMode) {
+        const hasOverlap = disabledNightRanges.some((disabled) => {
+          return range.from <= disabled.to && range.to >= disabled.from;
+        });
+        if (hasOverlap) {
+          toast.error(
+            "Khoảng thời gian bạn chọn đã có người đặt phòng. Vui lòng chọn khoảng thời gian khác!!!"
+          );
+          return;
+        }
       }
     }
 
@@ -155,6 +190,9 @@ const HotelDetails = () => {
   useEffect(() => {
     setLoading(true);
     dispatch(fetchHotelDetailsAPI(hotelId));
+    getAllBookingsAPI().then((res) => {
+      setBookings(res || []);
+    });
     fetchHotelsAPI().then((res) => {
       setHotels(res.hotels || []);
       setLoading(false);
@@ -310,6 +348,7 @@ const HotelDetails = () => {
                     range={range}
                     isOpen={isOpen}
                     handleSelect={handleSelect}
+                    disabledDates={disabledNightRanges}
                   />
                 </div>
               </div>
@@ -332,6 +371,7 @@ const HotelDetails = () => {
                     mode={bookingMode}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
+                    disabledDates={disabledDayRanges}
                   />
                 </div>
               </div>

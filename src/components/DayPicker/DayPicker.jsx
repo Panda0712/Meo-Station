@@ -9,6 +9,7 @@ const DateSelect = ({
   isOpen,
   toggleOpen,
   setSelectedDate,
+  disabledDates,
 }) => {
   const handleDateChange = (date) => {
     if (date) {
@@ -31,7 +32,11 @@ const DateSelect = ({
       </div>
       {isOpen && mode === BOOKING_MODE.day && (
         <div className="absolute z-10 right-0 bg-white shadow-md p-4 rounded-md min-w-[350px]">
-          <DayPicker selected={selectedDate} onDayClick={handleDateChange} />
+          <DayPicker
+            selected={selectedDate}
+            onDayClick={handleDateChange}
+            disabled={disabledDates}
+          />
         </div>
       )}
     </div>
