@@ -10,6 +10,7 @@ import {
   createNewVoucherAPI,
   deleteVoucherAPI,
   getListVouchersAPI,
+  getSearchHotelsAPI,
   updateVoucherAPI,
 } from "~/apis";
 import Button from "~/components/Button/Button";
@@ -20,8 +21,11 @@ import { formatDateV2 } from "~/utils/formatters";
 import { FIELD_REQUIRED_MESSAGE } from "~/utils/validators";
 
 const VoucherManagement = () => {
+  const [hotels, setHotels] = useState([]);
   const [vouchers, setVouchers] = useState([]);
   const [totalVouchers, setTotalVouchers] = useState(null);
+  const [listHotelFields, setListHotelFields] = useState([]);
+  const [currentSelectIndex, setCurrentSelectIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState({
     edit: false,
@@ -38,6 +42,7 @@ const VoucherManagement = () => {
     register,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors },
     reset,
   } = useForm();
@@ -54,6 +59,22 @@ const VoucherManagement = () => {
       const params = new URLSearchParams(location.search);
       params.set("page", newPage.toString());
       navigate(`?${params.toString()}`);
+    }
+  };
+
+  const handleChangeListHotelFields = (e) => {
+    const newListHotelFields = [...listHotelFields];
+    const checked = newListHotelFields.includes(e.target.value);
+    if (!checked) {
+      newListHotelFields.push(e.target.value);
+      setListHotelFields(newListHotelFields);
+      setCurrentSelectIndex(e.target.index);
+      setValue("hotelIds", newListHotelFields);
+    } else {
+      newListHotelFields.splice(newListHotelFields.indexOf(e.target.value), 1);
+      setListHotelFields(newListHotelFields);
+      setCurrentSelectIndex(e.target.index);
+      setValue("hotelIds", newListHotelFields);
     }
   };
 
@@ -107,6 +128,8 @@ const VoucherManagement = () => {
       delete: false,
       id: null,
     });
+    setCurrentSelectIndex(0);
+    setListHotelFields([]);
     setOpenOptions((prevOptions) =>
       prevOptions.map((item) => ({
         ...item,
@@ -123,6 +146,7 @@ const VoucherManagement = () => {
       ...data,
       discount: Number(data.discount),
       usedCount: editing.edit ? getValues("usedCount") : 0,
+      hotelIds: listHotelFields,
       expiredAt: new Date(data.expiredAt).getTime(),
     };
 
@@ -173,8 +197,11 @@ const VoucherManagement = () => {
 
   useEffect(() => {
     setLoading(true);
-    getListVouchersAPI(location.search)
-      .then(updateStateData)
+    getListVouchersAPI(location.search).then(updateStateData);
+    getSearchHotelsAPI(location.search)
+      .then((res) => {
+        setHotels(res || []);
+      })
       .finally(() => setLoading(false));
   }, [location.search]);
 
@@ -308,7 +335,8 @@ const VoucherManagement = () => {
                 </label>
                 <Input
                   name="hotelIds"
-                  content="Nhập danh sách phòng"
+                  disabled
+                  content="Danh sách phòng (lựa chọn các phòng tương ứng ở menu bên dưới)"
                   type="textarea"
                   style="pt-3"
                   {...register("hotelIds", {
@@ -319,11 +347,29 @@ const VoucherManagement = () => {
                     },
                     maxLength: {
                       value: 350,
-                      message: "Mô tả tối đa 350 ký tự",
+                      message: "Danh sách tối đa 350 ký tự",
                     },
                   })}
                   error={errors?.hotelIds}
                 />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label htmlFor="hotelIds" className="font-medium">
+                  Lựa chọn phòng
+                </label>
+                <select
+                  value={listHotelFields[currentSelectIndex]}
+                  onChange={handleChangeListHotelFields}
+                  className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {hotels?.map((hotel, index) => (
+                    <option key={hotel?._id} index={index} value={hotel?._id}>
+                      {hotel?.title}{" "}
+                      {listHotelFields.includes(hotel?._id) ? "✔️" : ""}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="flex flex-col gap-1">

@@ -266,6 +266,15 @@ export const getListVouchersAPI = async (searchPath) => {
   return res.data;
 };
 
+// Check voucher
+export const checkVoucherAPI = async (data) => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/vouchers/check`,
+    { params: data }
+  );
+  return res.data;
+};
+
 // Create new voucher
 export const createNewVoucherAPI = async (data) => {
   const res = await authorizedAxiosInstance.post(
