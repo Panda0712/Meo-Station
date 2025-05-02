@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { updateVoucherAPI } from "~/apis";
 import bookingComplete from "~/assets/images/bookingComplete.png";
 import Button from "~/components/Button/Button";
 
@@ -27,8 +28,16 @@ const BookingComplete = () => {
 
   useEffect(() => {
     const bookingData = JSON.parse(localStorage.getItem("booking-data"));
+    const voucherInfo = JSON.parse(localStorage.getItem("voucher-info"));
 
     if (!bookingData) navigate("/");
+
+    if (voucherInfo) {
+      const updateData = {
+        usedCount: voucherInfo.usedCount + 1,
+      };
+      updateVoucherAPI(voucherInfo?._id, updateData);
+    }
   }, [navigate]);
 
   return (

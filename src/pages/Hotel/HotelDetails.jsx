@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { fetchHotelsAPI, getAllBookingsAPI } from "~/apis";
+import { checkVoucherAPI, fetchHotelsAPI, getAllBookingsAPI } from "~/apis";
 import bathroom from "~/assets/images/bathroom.png";
 import bedroom from "~/assets/images/bedroom.png";
 import coldMachine from "~/assets/images/coldMachine.png";
@@ -17,6 +17,7 @@ import Button from "~/components/Button/Button";
 import DateRangePicker from "~/components/DatePicker/DatePicker";
 import DateSelect from "~/components/DayPicker/DayPicker";
 import GuestSelector from "~/components/GuestSelector/GuestSelector";
+import Input from "~/components/Input/Input";
 import NightSelector from "~/components/NightSelector/NightSelector";
 import TimeSlotSelector from "~/components/TimeSlotSelector/TimeSlotSelector";
 import Introduce from "~/pages/Homepage/Introduce/Introduce";
@@ -53,8 +54,11 @@ const HotelDetails = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [guestCount, setGuestCount] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
   const [hotels, setHotels] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const [voucher, setVoucher] = useState(null);
+  const [voucherCode, setVoucherCode] = useState("");
 
   const { hotelId } = useParams();
 
@@ -151,7 +155,9 @@ const HotelDetails = () => {
       hotelLocation: activeHotel?.location,
       hotelImages: activeHotel?.images,
       guest: guestCount,
-      totalPrice,
+      totalPrice: voucher?.discount
+        ? totalPrice - (totalPrice * voucher?.discount) / 100
+        : totalPrice,
       mode: bookingMode,
       checkInDate: checkInOutDate.checkInDate,
       checkOutDate: checkInOutDate.checkOutDate,
@@ -165,8 +171,28 @@ const HotelDetails = () => {
       : bookingDataTemplate;
 
     localStorage.setItem("booking-data", JSON.stringify(bookingData));
+    if (voucher) localStorage.setItem("voucher-info", JSON.stringify(voucher));
     navigate("/booking/info");
   };
+
+  const handleVoucherCode = () => {
+    if (!voucherCode) {
+      toast.error("Vui lòng nhập mã voucher!!!");
+      return;
+    }
+
+    setLoadingButton(true);
+    checkVoucherAPI({ code: voucherCode, hotelId })
+      .then((res) => {
+        if (!res.error) {
+          setVoucher(res);
+        }
+      })
+      .catch(() => setVoucher(null))
+      .finally(() => setLoadingButton(false));
+  };
+
+  const handleChangeVoucherCode = (e) => setVoucherCode(e.target.value);
 
   const handleChangeGuestCount = (value) => setGuestCount(value);
 
@@ -377,13 +403,41 @@ const HotelDetails = () => {
               </div>
             )}
 
+            <div className="flex items-center my-5">
+              <Input
+                name="voucher"
+                value={voucherCode}
+                content="Nhập mã voucher"
+                onChange={handleChangeVoucherCode}
+                style="sm:w-full w-full rounded-tr-none rounded-br-none outline-none"
+              />
+              <Button
+                title={loadingButton ? <Spin size="small" /> : "Áp dụng"}
+                disabled={loadingButton}
+                onClick={handleVoucherCode}
+                style="h-[50px] rounded-tl-none rounded-bl-none"
+              />
+            </div>
+
             <p className="text-[16px] mt-4 font-light text-[#b0b0b0]">
               Bạn sẽ trả{" "}
-              <span className="font-medium text-[#152c5b]">
+              <span
+                className={`font-medium text-[#152c5b] ${
+                  voucher?.discount && "line-through"
+                }`}
+              >
                 {formatVND(totalPrice)}đ
               </span>{" "}
+              {voucher?.discount && (
+                <span className="font-medium text-[#152c5b] text-[18px]">
+                  {voucher?.discount
+                    ? totalPrice - (totalPrice * voucher?.discount) / 100
+                    : totalPrice}
+                  đ
+                </span>
+              )}{" "}
               cho{" "}
-              <span className="font-medium text-[#152c5b]">{priceText}</span>
+              <span className="font-medium text-[#152c5b]">{priceText}</span>{" "}
             </p>
 
             <Button
