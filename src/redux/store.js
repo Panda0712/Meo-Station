@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { activeBookingReducer } from "~/redux/activeBooking/activeBookingSlice";
 import { activeHotelReducer } from "~/redux/activeHotel/activeHotelSlice";
 import { userReducer } from "~/redux/activeUser/activeUserSlice";
 import { notificationsReducer } from "~/redux/notifications/notificationsSlice";
@@ -14,6 +15,7 @@ const rootPersistConfig = {
 const reducers = combineReducers({
   user: userReducer,
   activeHotel: activeHotelReducer,
+  activeBooking: activeBookingReducer,
   notifications: notificationsReducer,
 });
 

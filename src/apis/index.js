@@ -182,6 +182,14 @@ export const getListBookingsAPI = async (searchPath) => {
   return res.data;
 };
 
+// Get specific booking details
+export const getBookingDetailsAPI = async (bookingId) => {
+  const res = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/bookings/${bookingId}`
+  );
+  return res.data;
+};
+
 // Update booking
 export const updateBookingAPI = async (bookingId, updateData) => {
   const res = await authorizedAxiosInstance.put(
