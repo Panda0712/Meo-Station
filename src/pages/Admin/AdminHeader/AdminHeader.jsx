@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import AvatarImg from "~/assets/images/avatar.png";
 import Button from "~/components/Button/Button";
 import Modal from "~/components/Modal/Modal";
 import {
@@ -44,7 +43,7 @@ const AdminHeader = () => {
         className="relative flex items-center gap-2 cursor-pointer transition hover:bg-slate-200 p-2 rounded-sm"
       >
         <img
-          src={AvatarImg}
+          src="https://static1.personalitydatabase.net/2/pdb-images-prod/3fda573a/profile_images/fa6d2cd57fde44adaf9c8ffa0f161079.png"
           className="w-[45px] h-[45px] object-cover"
           alt=""
         />
