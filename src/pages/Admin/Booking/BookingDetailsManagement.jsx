@@ -37,7 +37,7 @@ const BookingDetailsManagement = () => {
     };
 
     toast
-      .promise(updateBookingAPI(activeBooking?.hotelId, updateData), {
+      .promise(updateBookingAPI(activeBooking?._id, updateData), {
         pending: "Đang thanh toán...",
       })
       .then((res) => {
