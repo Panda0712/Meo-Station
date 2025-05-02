@@ -115,12 +115,12 @@ const App = () => {
             <Route path="/booking/complete" element={<Booking />} />
             <Route path="/booking/history" element={<Booking />} />
           </Route>
-
-          {/* Authentication */}
-          <Route path="/login" element={<Auth />} />
-          <Route path="/register" element={<Auth />} />
-          <Route path="/account/verification" element={<Verification />} />
         </Route>
+
+        {/* Authentication */}
+        <Route path="/login" element={<Auth />} />
+        <Route path="/register" element={<Auth />} />
+        <Route path="/account/verification" element={<Verification />} />
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />

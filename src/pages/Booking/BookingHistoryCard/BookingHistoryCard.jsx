@@ -1,14 +1,98 @@
 import { Ban, CircleCheckBig, CircleDot } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { updateBookingAPI } from "~/apis";
 import Button from "~/components/Button/Button";
+import Modal from "~/components/Modal/Modal";
 import { ORDER_STATUS } from "~/utils/constants";
 import { formatDate } from "~/utils/formatters";
 
 const BookingHistoryCard = ({ booking }) => {
+  const [openModal, setOpenModal] = useState(false);
+
   const navigate = useNavigate();
+
+  const FIFTEEN_MINUTES = 15 * 60 * 1000;
+  const TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
+
+  const bookingCheckInDate = booking?.checkInDate;
+  const bookingCreatedAt = booking?.createdAt;
+
+  const checkAvailableCancel = () => {
+    const timeNow = new Date();
+    const createdAtDiff = timeNow.getTime() - bookingCreatedAt;
+    const checkInDiff =
+      new Date(bookingCheckInDate).getTime() - timeNow.getTime();
+
+    return (
+      createdAtDiff <= FIFTEEN_MINUTES &&
+      checkInDiff > 0 &&
+      checkInDiff <= TWENTY_FOUR_HOURS
+    );
+  };
+
+  const handleReset = () => {
+    setOpenModal(false);
+  };
+
+  const handleAfterCUDNewBooking = () => {
+    window.location.reload();
+  };
+
+  const handleCancelBooking = () => {
+    const checkCancel = checkAvailableCancel();
+    if (!checkCancel) {
+      toast.error("Đã quá thời gian có thể hủy đặt phòng!!!");
+      return;
+    }
+
+    const updateData = {
+      status: ORDER_STATUS.CANCELLED,
+    };
+
+    toast
+      .promise(updateBookingAPI(booking?._id, updateData), {
+        pending: "Đang hủy đặt phòng...",
+      })
+      .then((res) => {
+        if (!res.error) {
+          toast.success("Hủy đặt phòng thành công!!!");
+          handleAfterCUDNewBooking();
+        }
+        handleReset();
+      });
+  };
 
   return (
     <div className="flex justify-between gap-8 border-1 border-gray-300 rounded-2xl p-[40px]">
+      {openModal && (
+        <Modal
+          title="Hủy đơn đặt phòng"
+          handleCloseModal={handleReset}
+          modalStyle="w-[450px]"
+        >
+          <div className="mt-6 relative">
+            <p className="text-black">Xác nhận hủy đơn đặt phòng này?</p>
+
+            <div className="flex justify-end">
+              <div className="flex items-center gap-2 mt-8">
+                <Button
+                  title="Trở lại"
+                  type="cancel"
+                  onClick={() => handleReset()}
+                />
+                <Button
+                  title="Hủy"
+                  type="warning"
+                  onClick={handleCancelBooking}
+                />
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+
       <div className="flex gap-5 relative">
         <img
           src={booking?.hotelImages?.[0]}
@@ -29,11 +113,20 @@ const BookingHistoryCard = ({ booking }) => {
             </p>
           </div>
 
-          <Button
-            onClick={() => navigate(`/hotels/${booking?.hotelId}`)}
-            title="Đặt phòng lần nữa"
-            style="mt-5 text-[14px]"
-          />
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={() => navigate(`/hotels/${booking?.hotelId}`)}
+              title="Đặt phòng lần nữa"
+              style="mt-5 text-[14px]"
+            />
+            {checkAvailableCancel() && (
+              <Button
+                onClick={() => setOpenModal(true)}
+                title="Hủy đặt phòng"
+                style="mt-5 text-[14px]"
+              ></Button>
+            )}
+          </div>
         </div>
       </div>
 

@@ -38,7 +38,10 @@ const Register = () => {
   };
 
   return (
-    <form className="pt-12 pb-16" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="bg-white rounded-lg px-12 pt-12 pb-16"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <img src={MeoLogo} className="w-28 h-28 mx-auto" alt="" />
       <h2 className="font-bold text-[36px] text-center">
         Đăng ký tài khoản <span className="text-blue-600">Meo</span>Station.

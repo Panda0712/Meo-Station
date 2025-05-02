@@ -9,7 +9,10 @@ const Auth = () => {
   const isRegister = location.pathname === "/register";
 
   return (
-    <div className="px-24">
+    <div
+      className="px-24 h-screen flex justify-center items-center 
+    bg-[url('https://images5.alphacoders.com/134/1344548.png')] bg-cover bg-center"
+    >
       {isLogin && <Login />}
       {isRegister && <Register />}
     </div>
