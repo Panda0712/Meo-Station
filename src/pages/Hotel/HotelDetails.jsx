@@ -29,6 +29,8 @@ import {
 import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
 import { BOOKING_MODE } from "~/utils/constants";
 import {
+  addMinusOneDayAtMidnight,
+  formatHourMinute,
   formatVND,
   interceptorLoadingElements,
   toVNISOString,
@@ -80,13 +82,31 @@ const HotelDetails = () => {
       checkOutDate: booking.checkOutDate,
     }));
 
-  const disabledDayRanges = listInDayBookings?.map((b) => ({
+  const disabledDayRangesHours = listInDayBookings?.map((b) => ({
     from: new Date(b.checkInDate),
     to: new Date(b.checkOutDate),
+    startTime: formatHourMinute(new Date(b.checkInDate)),
+    endTime: formatHourMinute(new Date(b.checkOutDate)),
   }));
-  const disabledNightRanges = listInRangeBookings?.map((b) => ({
+  const disabledDayRangesForNightBooking = listInDayBookings?.map((b) =>
+    formatHourMinute(new Date(b.checkInDate)) === "20:00"
+      ? { from: new Date(b.checkInDate), to: new Date(b.checkOutDate) }
+      : null
+  );
+
+  const disabledNightRangesForNightBooking = listInRangeBookings?.map((b) => ({
+    from: new Date(b.checkInDate),
+    to: addMinusOneDayAtMidnight(new Date(b.checkOutDate), "minus"),
+  }));
+  const disabledNightsRangesForDayBooking = listInRangeBookings?.map((b) => ({
+    from: addMinusOneDayAtMidnight(new Date(b.checkInDate), "plus"),
+    to: addMinusOneDayAtMidnight(new Date(b.checkOutDate), "minus"),
+  }));
+  const disabledNightRangesHours = listInRangeBookings?.map((b) => ({
     from: new Date(b.checkInDate),
     to: new Date(b.checkOutDate),
+    startTime: formatHourMinute(new Date(b.checkInDate)),
+    endTime: formatHourMinute(new Date(b.checkOutDate)),
   }));
 
   const nightMode = bookingMode === BOOKING_MODE.night;
@@ -121,9 +141,11 @@ const HotelDetails = () => {
       }
 
       if (nightMode) {
-        const hasOverlap = disabledNightRanges.some((disabled) => {
-          return range.from <= disabled.to && range.to >= disabled.from;
-        });
+        const hasOverlap = disabledNightRangesForNightBooking.some(
+          (disabled) => {
+            return range.from <= disabled.to && range.to >= disabled.from;
+          }
+        );
         if (hasOverlap) {
           toast.error(
             "Khoảng thời gian bạn chọn đã có người đặt phòng. Vui lòng chọn khoảng thời gian khác!!!"
@@ -374,7 +396,10 @@ const HotelDetails = () => {
                     range={range}
                     isOpen={isOpen}
                     handleSelect={handleSelect}
-                    disabledDates={disabledNightRanges}
+                    disabledDates={[
+                      ...disabledNightRangesForNightBooking,
+                      ...disabledDayRangesForNightBooking,
+                    ]}
                   />
                 </div>
               </div>
@@ -385,6 +410,10 @@ const HotelDetails = () => {
                     Chọn khung giờ
                   </h6>
                   <TimeSlotSelector
+                    selectedDate={selectedDate}
+                    disabledDayRangesHours={disabledDayRangesHours}
+                    disabledNightRangesHours={disabledNightRangesHours}
+                    disabled={selectedDate !== "" ? false : true}
                     selectedSlot={selectedTimeSlot}
                     onChange={setSelectedTimeSlot}
                   />
@@ -397,7 +426,7 @@ const HotelDetails = () => {
                     mode={bookingMode}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
-                    disabledDates={disabledDayRanges}
+                    disabledDates={disabledNightsRangesForDayBooking}
                   />
                 </div>
               </div>
@@ -419,7 +448,7 @@ const HotelDetails = () => {
               />
             </div>
 
-            <p className="text-[16px] mt-4 font-light text-[#b0b0b0]">
+            <p className="text-[16px] max-w-[300px] mt-4 font-light text-[#b0b0b0]">
               Bạn sẽ trả{" "}
               <span
                 className={`font-medium text-[#152c5b] ${
