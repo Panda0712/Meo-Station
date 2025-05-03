@@ -16,7 +16,7 @@ const GuestSelector = ({ guestCount, maxGuest, handleChangeGuestCount }) => {
           rounded-lg cursor-pointer shadow-sm hover:bg-gray-200 transition"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className="text-[#152C5B] font-medium text-[16px]">
+        <span className="text-[#152C5B] font-medium md:text-[16px] text-[14px]">
           {guestCount || "Chọn số khách"}
         </span>
         <ChevronDown size={20} className="text-[#152C5B]" />

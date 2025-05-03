@@ -82,7 +82,7 @@ const BlogDetailManagement = () => {
       className={`container mx-auto ${
         currentUser.role === ACCOUNT_ROLES.ADMIN
           ? "px-4 py-8"
-          : "px-24 pt-16 pb-24"
+          : "lg:px-24 md:px-12 sm:px-8 px-4 pt-16 pb-24"
       }`}
     >
       {openModal && deleting && (
@@ -131,7 +131,7 @@ const BlogDetailManagement = () => {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">{blog?.title}</h1>
 
-        <div className="flex items-center text-gray-600 mb-4">
+        <div className="flex flex-wrap items-center text-gray-600 mb-4 gap-3">
           <div className="flex items-center">
             <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 mr-3">
               {blog?.author?.charAt(0).toUpperCase()}

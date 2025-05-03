@@ -134,7 +134,7 @@ const Hotels = () => {
     );
 
   return (
-    <section className="px-24 py-16">
+    <section className="lg:px-24 md:px-12 sm:px-8 px-4 py-16">
       <HotelSearch
         guestCount={guestCount}
         date={date}

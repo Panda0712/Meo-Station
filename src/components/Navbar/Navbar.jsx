@@ -11,7 +11,10 @@ const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
 
   return (
-    <nav className="flex text-xl items-center justify-between px-24 py-6 border border-t-0 border-r-0 border-l-0 border-bottom-1 border-gray-300">
+    <nav
+      className="flex flex-wrap flex-col md:flex-row gap-5 md:gap-12 text-xl items-center justify-center
+     lg:justify-between md:px-24 sm:px-12 px-8 py-6 border border-t-0 border-r-0 border-l-0 border-bottom-1 border-gray-300"
+    >
       <Link to="/">
         <div className="flex items-center gap-2">
           <img src={MeoLogo} className="object-cover w-8 h-8" alt="" />
@@ -20,7 +23,7 @@ const Navbar = () => {
           </h1>
         </div>
       </Link>
-      <ul className="flex text-[16px] text-lg items-center justify-between gap-5">
+      <ul className="flex flex-wrap text-[16px] text-lg items-center justify-center lg:justify-between gap-5">
         {menuList.map((menu) => (
           <Link key={menu.name} to={menu.path}>
             <li
@@ -32,8 +35,10 @@ const Navbar = () => {
             </li>
           </Link>
         ))}
-        <Notifications />
-        {currentUser && <UserProfile currentUser={currentUser} />}
+        <div className="flex items-center justify-center lg:w-auto w-full lg:justify-start gap-4">
+          <Notifications />
+          {currentUser && <UserProfile currentUser={currentUser} />}
+        </div>
       </ul>
     </nav>
   );

@@ -48,7 +48,10 @@ const Login = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <img src={MeoLogo} className="w-28 h-28 mx-auto" alt="" />
-      <h2 className="font-bold text-[36px] text-center">
+      <h2
+        className="font-bold lg:text-[36px] md:text-[32px] 
+      sm:text-[28px] text-[20px] text-center"
+      >
         Đăng nhập vào <span className="text-blue-600">Meo</span>Station.
       </h2>
 
@@ -69,6 +72,7 @@ const Login = () => {
       <div className="flex flex-col mt-8 mb-10 items-center text-right">
         <Input
           name="email"
+          loginStyle
           content="Email"
           type="email"
           {...register("email", {
@@ -82,6 +86,7 @@ const Login = () => {
         />
         <Input
           name="password"
+          loginStyle
           content="Mật khẩu"
           type="password"
           {...register("password", {

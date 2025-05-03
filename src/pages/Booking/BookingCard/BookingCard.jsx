@@ -9,8 +9,9 @@ const BookingCard = ({ bookingData }) => {
     cardInfoContainer:
       "my-16 bg-[#F2F0F2] max-w-[600px] shadow-sm rounded-[30px] overflow-hidden",
     headingStyle: "text-[36px] text-[#152c5b] font-semibold text-center mb-1",
-    textHeadingStyle: "text-[18px] font-semibold mb-3 text-[#181A18]",
-    textRegularStyle: "text-[18px] text-[#181A18]",
+    textHeadingStyle:
+      "md:text-[18px] text-[16px] font-semibold mb-3 text-[#181A18]",
+    textRegularStyle: "md:text-[18px] text-[16px] text-[#181A18]",
   };
 
   return (
@@ -48,9 +49,11 @@ const BookingCard = ({ bookingData }) => {
         <div className="flex items-center gap-5 mt-12">
           <div className="flex items-center gap-2">
             <UsersRound />
-            <p className="text-[18px] font-semibold text-[#181A18]">Số Khách</p>
+            <p className="md:text-[18px] text-[16px] font-semibold text-[#181A18]">
+              Số Khách
+            </p>
           </div>
-          <p className="text-[18px] font-semibold text-[#181A18]">
+          <p className="md:text-[18px] text-[16px] font-semibold text-[#181A18]">
             {bookingData?.guest}
           </p>
         </div>
@@ -62,22 +65,24 @@ const BookingCard = ({ bookingData }) => {
           <div className="flex gap-5">
             <BoxTimeline />
             <div className="flex flex-col gap-5">
-              <div className="flex gap-24">
+              <div className="flex flex-wrap gap-5">
                 <div className="leading-[1.4]">
-                  <h5 className="text-[18px] mb-1 text-[#181A18]">
+                  <h5 className="md:text-[18px] text-[16px] mb-1 text-[#181A18]">
                     Đặt trước phòng này
                   </h5>
-                  <p className="text-[14px] text-[#181A18]">Ngay bây giờ</p>
+                  <p className="md:text-[14px] text-[12px] text-[#181A18]">
+                    Ngay bây giờ
+                  </p>
                 </div>
-                <p className="text-[18px] mb-1 text-[#181A18]">
+                <p className="md:text-[18px] text-[16px] mb-1 text-[#181A18]">
                   {bookingData?.totalPrice}đ
                 </p>
               </div>
               <div className="leading-[1.4]">
-                <h5 className="text-[18px] mb-1 text-[#181A18]">
+                <h5 className="md:text-[18px] text-[16px] mb-1 text-[#181A18]">
                   Sau khi check-out
                 </h5>
-                <p className="text-[14px] text-[#181A18] flex items-center gap-2">
+                <p className="md:text-[14px] text-[12px] text-[#181A18] flex items-center gap-2">
                   Hoàn trả 100% chi phí nếu có sự cố phát sinh{" "}
                   <span>
                     <CircleAlert className="fill-black text-white" />

@@ -6,7 +6,7 @@ const HotelCard = ({ id, title, location, image, popular = false }) => {
   return (
     <section
       onClick={() => navigate(`/hotels/${id}`)}
-      className="relative basis-[calc(25%-12px)] transition transform hover:opacity-95 hover:translate-y-[-5px] cursor-pointer rounded-[18px]"
+      className="relative md:basis-[calc(25%-12px)] basis-[calc(50%-12px)] transition transform hover:opacity-95 hover:translate-y-[-5px] cursor-pointer rounded-[18px]"
     >
       {popular && (
         <div className="absolute right-0 top-0 bg-[#FF498B] px-4 py-2 rounded-tr-[18px] rounded-bl-[18px]">
@@ -17,11 +17,14 @@ const HotelCard = ({ id, title, location, image, popular = false }) => {
       )}
       <img
         src={image}
-        className="w-full min-h-[180px] max-h-[230px] object-cover rounded-[18px]"
+        className="w-full lg:min-h-[180px] md:min-h-[230px] md:max-h-[230px] min-h-[170px] 
+        max-h-[170px] object-cover rounded-[18px]"
         alt=""
       />
-      <h4 className="text-[18px] text-[#152C5B] mt-2">{title}</h4>
-      <p className="text-[14px] text-[#B0B0B0]">{location}</p>
+      <h4 className="lg:text-[18px] md:text-[16px] text-[14px] text-[#152C5B] mt-2">
+        {title}
+      </h4>
+      <p className="lg:text-[14px] text-[12px] text-[#B0B0B0]">{location}</p>
     </section>
   );
 };

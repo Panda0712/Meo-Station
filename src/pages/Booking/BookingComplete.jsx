@@ -42,12 +42,20 @@ const BookingComplete = () => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-5 my-16">
-      <h2 className="text-[36px] text-[#152c5b] font-semibold text-center mb-1">
+      <h2
+        className="lg:text-[36px] md:text-[32px] sm:text-[28px] 
+      text-[24px] text-[#152c5b] font-semibold text-center mb-1"
+      >
         Đặt phòng thành công
       </h2>
-      <p>Bạn sẽ được điều hướng về trang chủ trong {expiredTime} giây!!!</p>
+      <p className="text-center">
+        Bạn sẽ được điều hướng về trang chủ trong {expiredTime} giây!!!
+      </p>
       <img src={bookingComplete} className="mt-4" alt="" />
-      <p className="text-[18px] font-light mt-6 text-[#b0b0b0] text-center max-w-[400px]">
+      <p
+        className="md:text-[18px] text-[16px] 
+      font-light mt-6 text-[#b0b0b0] text-center max-w-[400px]"
+      >
         Chúng tôi sẽ gửi thông tin đặt phòng qua email cho bạn sau khi quá trình
         xác nhận hoàn tất.
       </p>
@@ -55,7 +63,7 @@ const BookingComplete = () => {
       <Button
         title="Trở về trang chủ"
         onClick={() => navigate("/")}
-        style="mt-7 py-3 min-w-[210px] text-[18px]"
+        style="mt-7 py-3 min-w-[210px] md:text-[18px] text-[16px]"
       />
     </div>
   );

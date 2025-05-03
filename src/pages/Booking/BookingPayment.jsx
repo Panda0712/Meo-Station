@@ -76,11 +76,14 @@ const BookingPayment = () => {
         subHeading="Hãy theo hướng dẫn thanh toán phía bên dưới"
       />
 
-      <div className="flex items-center justify-center gap-24 px-[70px]">
+      <div
+        className="flex lg:flex-row flex-col items-center 
+      justify-center lg:gap-24 gap-12"
+      >
         <BookingCard bookingData={bookingData} />
-        <BookingSeparate />
+        <BookingSeparate booking />
         <div>
-          <h6 className="text-[18px] text-[#152C5B] font-semibold">
+          <h6 className="md:text-[18px] text-[16px] text-[#152C5B] font-semibold">
             Phương thức thanh toán:
           </h6>
           <div className="flex flex-col gap-3 mt-4 mb-5">
@@ -92,7 +95,7 @@ const BookingPayment = () => {
                 checked={paymentMethod === PAYMENT_METHODS.CASH}
                 onChange={handleChange}
               />
-              <span className="text-[16px] font-medium text-[#152c5b]">
+              <span className="md:text-[16px] text-[14px] font-medium text-[#152c5b]">
                 Tiền mặt
               </span>
             </div>
@@ -104,7 +107,7 @@ const BookingPayment = () => {
                 checked={paymentMethod === PAYMENT_METHODS.MOMO}
                 onChange={handleChange}
               />
-              <span className="text-[16px] font-medium text-[#152c5b]">
+              <span className="md:text-[16px] text-[14px] font-medium text-[#152c5b]">
                 Ví Momo
               </span>
             </div>
@@ -116,38 +119,47 @@ const BookingPayment = () => {
                 checked={paymentMethod === PAYMENT_METHODS.ZALOPAY}
                 onChange={handleChange}
               />
-              <span className="text-[16px] font-medium text-[#152c5b]">
+              <span className="md:text-[16px] text-[14px] font-medium text-[#152c5b]">
                 Ví ZaloPay
               </span>
             </div>
           </div>
 
-          <h6 className="text-[18px] text-[#152C5B] font-semibold mb-4">
+          <h6 className="md:text-[18px] text-[16px] text-[#152C5B] font-semibold mb-4">
             Thông tin thanh toán:
           </h6>
-          <p className="text-[16px] text-[#152C5B]">
+          <p className="md:text-[16px] text-[14px] text-[#152C5B]">
             Thuế TAX: <span className="font-medium ml-1">10%</span>
           </p>
-          <p className="text-[16px] text-[#152C5B]">
+          <p className="md:text-[16px] text-[14px] text-[#152C5B]">
             Giá phòng: <span className="font-medium ml-1">400.000đ</span>
           </p>
-          <p className="text-[16px] text-[#152C5B]">
+          <p className="md:text-[16px] text-[14px] text-[#152C5B]">
             Tổng giá: <span className="font-medium ml-1">450.000đ</span>
           </p>
 
-          <div className="border-2 text-[#152c5b] font-medium mt-10 max-w-[400px] border-[#152c5b] pt-3 pb-5 px-4 rounded-sm">
-            <p>Lưu ý cho trường hợp hủy đặt phòng:</p>
-            <p>
+          <div
+            className="border-2 text-[#152c5b] md:text-[18px] text-[16px]
+           font-medium mt-10 max-w-[400px] border-[#152c5b] pt-3 pb-5 px-4 rounded-sm"
+          >
+            <p className="md:text-[16px] text-[14px]">
+              Lưu ý cho trường hợp hủy đặt phòng:
+            </p>
+            <p className="md:text-[16px] text-[14px]">
               &#34;Yêu cầu hủy của quý khách sẽ được ghi nhận xử lý và Thời gian
               quý khách sẽ được hoàn tiền theo quy định của ngân hàng phát hành
               thẻ như sau:
             </p>
-            <p>
+            <p className="md:text-[16px] text-[14px]">
               - Thẻ nội địa/Ví điện tử/Tài khoản ngân hàng: từ 10 - 14 ngày làm
               việc.
             </p>
-            <p>- Thẻ quốc tế: từ 8 - 17 ngày làm việc.</p>
-            <p>**Ngày làm việc: Không bao gồm T7, CN, Lễ&#34;</p>
+            <p className="md:text-[16px] text-[14px]">
+              - Thẻ quốc tế: từ 8 - 17 ngày làm việc.
+            </p>
+            <p className="md:text-[16px] text-[14px]">
+              **Ngày làm việc: Không bao gồm T7, CN, Lễ&#34;
+            </p>
           </div>
         </div>
       </div>

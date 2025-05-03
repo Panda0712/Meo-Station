@@ -33,14 +33,20 @@ const Contact = () => {
   };
 
   return (
-    <section className="px-24 py-16">
-      <h3 className="text-[32px] text-[#152c5b] font-semibold mb-12">
+    <section className="lg:px-24 md:px-12 sm:px-8 px-4 py-16">
+      <h3
+        className="lg:text-[32px] md:text-[28px] sm:text-[24px] 
+      text-[20px] text-[#152c5b] font-semibold mb-12"
+      >
         Hãy cho chúng tôi biết thêm về bạn
       </h3>
 
-      <div className="flex justify-between gap-5">
+      <div className="flex lg:flex-nowrap flex-wrap justify-between lg:gap-5 gap-12">
         <div className="relative">
-          <h4 className="text-[24px] text-[#152c5b] font-medium mb-8">
+          <h4
+            className="lg:text-[24px] md:text-[22px] sm:text-[20px] 
+          text-[18px] text-[#152c5b] font-medium mb-8"
+          >
             Bạn muốn liên hệ chúng tôi vì điều gì?
           </h4>
           <form
@@ -62,6 +68,7 @@ const Contact = () => {
                 },
               })}
               error={errors?.name}
+              style="w-[90%]!"
             />
             <Input
               name="email"
@@ -75,6 +82,7 @@ const Contact = () => {
                 },
               })}
               error={errors?.email}
+              style="w-[90%]!"
             />
             <Input
               name="phone"
@@ -87,6 +95,7 @@ const Contact = () => {
                 },
               })}
               error={errors?.phone}
+              style="w-[90%]!"
             />
             <Input
               name="message"
@@ -104,7 +113,7 @@ const Contact = () => {
                 },
               })}
               error={errors?.message}
-              style="pt-3"
+              style="pt-3 w-[90%]!"
             />
             <div className="flex justify-start mt-1">
               <Button title="Gửi" type="submit" />
@@ -112,7 +121,7 @@ const Contact = () => {
           </form>
         </div>
         <div className="flex flex-col gap-[32px]">
-          <div className="flex items-start gap-[32px]">
+          <div className="flex flex-wrap items-start gap-[32px]">
             <p className="min-w-[180px] text-[24px] font-semibold">
               Đặt phòng:
             </p>
@@ -121,14 +130,14 @@ const Contact = () => {
               <h6>0369332842</h6>
             </div>
           </div>
-          <div className="flex items-start gap-[32px]">
+          <div className="flex flex-wrap items-start gap-[32px]">
             <p className="min-w-[180px] text-[24px] font-semibold">Hotline:</p>
             <div className="text-[18px] text-[#181a18]">
               <h6>meohotline@gmail.com</h6>
               <h6>0903997865</h6>
             </div>
           </div>
-          <div className="flex items-start gap-[32px]">
+          <div className="flex flex-wrap items-start gap-[32px]">
             <p className="min-w-[180px] text-[24px] font-semibold">
               Hỗ trợ dịch vụ:
             </p>

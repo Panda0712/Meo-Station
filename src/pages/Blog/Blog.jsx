@@ -15,7 +15,6 @@ const Blog = () => {
 
   const query = new URLSearchParams(location.search);
   const page = parseInt(query.get("page") || 1, 10);
-  // const search = query.get("search") || "";
 
   const totalPages = Math.ceil(totalBlogs / DEFAULT_ITEMS_PER_PAGE);
 
@@ -46,8 +45,11 @@ const Blog = () => {
     );
 
   return (
-    <div className="mt-12 mb-24">
-      <h2 className="text-[36px] text-[#152c5b] font-semibold text-center mb-1">
+    <div className="md:px-4 px-16 mt-12 mb-24">
+      <h2
+        className="lg:text-[36px] md:text-[28px] 
+      text-[20px] text-[#152c5b] font-semibold text-center mb-1"
+      >
         Danh sách bài viết
       </h2>
 

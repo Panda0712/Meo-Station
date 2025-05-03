@@ -21,7 +21,7 @@ const DateRangePicker = ({
         <div className="bg-[#152C5B] p-2 absolute left-0 top-0 rounded-md ">
           <Calendar className="text-white" size={24} strokeWidth={2.5} />
         </div>
-        <p className="text-[#152C5B] text-[16px] font-medium text-center">
+        <p className="text-[#152C5B] md:text-[16px] text-[14px] font-medium text-center">
           {range.from && range.to
             ? `${format(range.from, "dd MMM")} - ${format(range.to, "dd MMM")}`
             : "Chọn ngày"}

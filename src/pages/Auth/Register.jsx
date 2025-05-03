@@ -43,13 +43,17 @@ const Register = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <img src={MeoLogo} className="w-28 h-28 mx-auto" alt="" />
-      <h2 className="font-bold text-[36px] text-center">
+      <h2
+        className="font-bold lg:text-[36px] md:text-[32px] 
+      sm:text-[28px] text-[20px] text-center"
+      >
         Đăng ký tài khoản <span className="text-blue-600">Meo</span>Station.
       </h2>
 
       <div className="flex flex-col mt-8 mb-10 items-center text-right">
         <Input
           name="name"
+          loginStyle
           content="Họ và tên"
           {...register("name", {
             required: FIELD_REQUIRED_MESSAGE,
@@ -66,6 +70,7 @@ const Register = () => {
         />
         <Input
           name="username"
+          loginStyle
           content="Tên người dùng"
           {...register("username", {
             required: FIELD_REQUIRED_MESSAGE,
@@ -84,6 +89,7 @@ const Register = () => {
           name="email"
           content="Email"
           type="email"
+          loginStyle
           {...register("email", {
             required: FIELD_REQUIRED_MESSAGE,
             pattern: {
@@ -95,6 +101,7 @@ const Register = () => {
         />
         <Input
           name="password"
+          loginStyle
           content="Mật khẩu"
           type="password"
           {...register("password", {
@@ -108,6 +115,7 @@ const Register = () => {
         />
         <Input
           name="confirm_password"
+          loginStyle
           content="Nhập lại mật khẩu"
           type="password"
           {...register("confirm_password", {

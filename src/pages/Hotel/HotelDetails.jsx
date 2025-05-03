@@ -115,12 +115,14 @@ const HotelDetails = () => {
     !guestCount || dayMode
       ? !selectedDate || !selectedTimeSlot
       : !nights || !range.from || !range.to;
-  const totalPrice =
+  const totalPrice = Math.max(
     nightMode && !disabledButton
       ? activeHotel?.pricePerNight * nights - activeHotel?.discount
       : activeHotel?.priceEachHour * 3 -
-        activeHotel?.discount -
-        (activeHotel?.priceEachHour - activeHotel?.priceFirstHour);
+          activeHotel?.discount -
+          (activeHotel?.priceEachHour - activeHotel?.priceFirstHour),
+    0
+  );
   const priceText = nightMode
     ? `${nights} đêm`
     : `khung giờ ${selectedTimeSlot.label || "8h - 11h"}`;
@@ -263,16 +265,25 @@ const HotelDetails = () => {
     );
 
   return (
-    <section className="px-24 py-16 relative w-full">
-      <h2 className="absolute left-[96px]">
+    <section className="lg:px-24 md:px-12 px-8 py-16 relative w-full">
+      <h2
+        className="absolute md:left-[96px] md:translate-x-0 md:text-normal 
+      text-center left-1/2 transform -translate-x-1/2"
+      >
         Trang chủ /
         <span className="text-[#152C5B] font-semibold">Chi tiết phòng</span>
       </h2>
-      <div className="mx-auto mb-12">
-        <h4 className="text-center font-semibold text-[36px] text-[#152C5B]">
+      <div className="mx-auto mb-12 lg:mt-0 mt-16">
+        <h4
+          className="text-center font-semibold lg:text-[36px] 
+        md:text-[32px] sm:text-[28px] text-[24px] text-[#152C5B]"
+        >
           {activeHotel?.title}
         </h4>
-        <p className="text-center text-[18px] font-light text-[#b0b0b0]">
+        <p
+          className="text-center lg:text-[18px] md:text-[16px] 
+        text-[14px] font-light text-[#b0b0b0]"
+        >
           {activeHotel?.location}
         </p>
       </div>
@@ -299,35 +310,46 @@ const HotelDetails = () => {
         </div>
       </div>
 
-      <div className="mt-12 flex gap-16">
+      <div
+        className="mt-12 flex lg:flex-nowrap max-[900px]:flex-col 
+      flex-row flex-wrap gap-16"
+      >
         <div className="basis-[calc(65%-32px)]">
-          <h5 className="text-[#152C5B] font-medium text-[20px] mb-3">
+          <h5 className="text-[#152C5B] font-medium md:text-[20px] text-[18px] mb-3">
             Giới thiệu phòng
           </h5>
-          <p className="max-w-[600px] text-[16px] font-light text-[#b0b0b0]">
+          <p className="max-w-[600px] md:text-[16px] text-[14px] font-light text-[#b0b0b0]">
             {activeHotel?.description}
           </p>
 
-          <div className="grid grid-cols-4 gap-4 mt-8">
+          <div className="grid sm:grid-cols-4 grid-cols-3 gap-4 mt-8">
             {activeHotel?.utilities.map((item) => (
               <div key={item.type} className="flex flex-col gap-1">
                 <img
-                  className="w-[38px] h-[38px]"
+                  className="md:w-[38px] md:h-[38px] w-[30px] h-[30px]"
                   src={imagesMap[item.type]}
                   alt={item.type}
                 />
-                <p className="text-[16px]">{item.value}</p>
+                <p className="md:text-[16px] sm:text-[14px] text-[12px]">
+                  {item.value}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="basis-[calc(35%-32px)] flex items-center justify-center min-h-[550px] rounded-xl border-[2px] border-gray-200">
-          <div className="py-8">
-            <h5 className="text-[#152C5B] font-medium text-[20px] mb-3">
+        <div
+          className="basis-[calc(35%-32px)] flex items-center justify-center 
+        min-h-[550px] rounded-xl border-[2px] border-gray-200"
+        >
+          <div className="py-8 px-4">
+            <h5
+              className="text-[#152C5B] font-medium md:text-[20px] 
+            sm:text-[18px] text-[16px] mb-3"
+            >
               Tiến hành đặt phòng
             </h5>
-            <p className="text-[36px]">
+            <p className="lg:text-[36px] md:text-[32px] sm:text-[24px] text-[20px]">
               <span className="text-[#1ABC9C] font-medium">
                 {formatVND(activeHotel?.pricePerNight - activeHotel?.discount)}đ
               </span>
@@ -346,7 +368,10 @@ const HotelDetails = () => {
                   onChange={() => handleChangeBookingMode(BOOKING_MODE.night)}
                   checked={nightMode}
                 />
-                <label htmlFor="night" className="text-[18px]">
+                <label
+                  htmlFor="night"
+                  className="md:text-[18px] sm:text-[16px] text-[14px]"
+                >
                   Đặt theo đêm
                 </label>
               </div>
@@ -361,14 +386,19 @@ const HotelDetails = () => {
                   onChange={() => handleChangeBookingMode(BOOKING_MODE.day)}
                   checked={dayMode}
                 />
-                <label htmlFor="day" className="text-[18px]">
+                <label
+                  htmlFor="day"
+                  className="md:text-[18px] sm:text-[16px] text-[14px]"
+                >
                   Đặt trong ngày
                 </label>
               </div>
             </div>
 
             <div>
-              <h6 className="text-[16px] text-[#152C5B] mb-3">Số khách</h6>
+              <h6 className="md:text-[16px] text-[14px] text-[#152C5B] mb-3">
+                Số khách
+              </h6>
               <GuestSelector
                 maxGuest={activeHotel?.maxGuest}
                 guestCount={guestCount}
@@ -379,7 +409,7 @@ const HotelDetails = () => {
             {nightMode ? (
               <div>
                 <div className="mb-7 mt-5">
-                  <h6 className="text-[16px] text-[#152C5B] mb-3">
+                  <h6 className="md:text-[16px] text-[14px] text-[#152C5B] mb-3">
                     Bạn sẽ ở trong bao lâu?
                   </h6>
                   <NightSelector
@@ -389,7 +419,9 @@ const HotelDetails = () => {
                 </div>
 
                 <div>
-                  <h6 className="text-[16px] text-[#152C5B] mb-3">Chọn ngày</h6>
+                  <h6 className="md:text-[16px] text-[14px] text-[#152C5B] mb-3">
+                    Chọn ngày
+                  </h6>
                   <DateRangePicker
                     toggleOpen={toggleOpen}
                     mode={bookingMode}
@@ -406,7 +438,7 @@ const HotelDetails = () => {
             ) : (
               <div>
                 <div className="mb-7 mt-5">
-                  <h6 className="text-[16px] text-[#152C5B] mb-3">
+                  <h6 className="md:text-[16px] text-[14px] text-[#152C5B] mb-3">
                     Chọn khung giờ
                   </h6>
                   <TimeSlotSelector
@@ -419,7 +451,9 @@ const HotelDetails = () => {
                   />
                 </div>
                 <div>
-                  <h6 className="text-[16px] text-[#152C5B] mb-3">Chọn ngày</h6>
+                  <h6 className="md:text-[16px] text-[14px] text-[#152C5B] mb-3">
+                    Chọn ngày
+                  </h6>
                   <DateSelect
                     isOpen={isOpen}
                     toggleOpen={toggleOpen}
@@ -438,17 +472,19 @@ const HotelDetails = () => {
                 value={voucherCode}
                 content="Nhập mã voucher"
                 onChange={handleChangeVoucherCode}
-                style="sm:w-full w-full rounded-tr-none rounded-br-none outline-none"
+                style="sm:w-full w-full md:text-[16px]! text-[14px]!
+                 rounded-tr-none rounded-br-none outline-none"
               />
               <Button
                 title={loadingButton ? <Spin size="small" /> : "Áp dụng"}
                 disabled={loadingButton}
                 onClick={handleVoucherCode}
-                style="h-[50px] rounded-tl-none rounded-bl-none"
+                style="h-[50px] md:text-[16px]! text-[14px]! 
+                text-center py-0! px-2! w-[40%] rounded-tl-none rounded-bl-none"
               />
             </div>
 
-            <p className="text-[16px] max-w-[300px] mt-4 font-light text-[#b0b0b0]">
+            <p className="md:text-[16px] text-[14px] max-w-[300px] mt-4 font-light text-[#b0b0b0]">
               Bạn sẽ trả{" "}
               <span
                 className={`font-medium text-[#152c5b] ${
@@ -473,9 +509,10 @@ const HotelDetails = () => {
               onClick={handleSubmit}
               disabled={disabledButton}
               title="Tiếp tục đặt phòng"
-              style={`interceptor-loading w-full mt-12 text-[18px] py-3 font-medium shadow-lg ${
-                disabledButton && "bg-slate-300 cursor-default"
-              }`}
+              style={`interceptor-loading w-full mt-12 md:text-[18px] 
+                text-[16px] py-3 font-medium shadow-lg ${
+                  disabledButton && "bg-slate-300 cursor-default"
+                }`}
             />
           </div>
         </div>

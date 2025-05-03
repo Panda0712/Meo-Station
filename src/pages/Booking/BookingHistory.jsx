@@ -28,7 +28,10 @@ const BookingHistory = () => {
 
   return (
     <div className="pt-5 pb-16">
-      <h5 className="text-[36px] font-semibold text-[#152c5b] text-center">
+      <h5
+        className="lg:text-[36px] md:text-[32px] sm:text-[24px] 
+      text-[20px] font-semibold text-[#152c5b] text-center"
+      >
         Lịch sử đặt phòng
       </h5>
 

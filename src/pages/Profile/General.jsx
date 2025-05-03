@@ -84,28 +84,35 @@ const General = () => {
         type="file"
         image={image}
         handleImageChange={handleImageChange}
-        style="mx-auto max-w-md"
+        style="md:mx-auto mx-0 md:max-w-md w-full"
       />
 
       <div className="mt-5">
-        <div className="flex flex-col mb-5">
+        <div className="relative sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col mb-5">
           <p>Email</p>
           <Input
             content={currentUser?.email}
             name="email"
             type="email"
+            style="w-full!"
             disabled
           />
         </div>
         <div className="flex flex-col mb-5">
           <p>Tên người dùng</p>
-          <Input content={currentUser?.username} name="username" disabled />
+          <Input
+            content={currentUser?.username}
+            style="w-full!"
+            name="username"
+            disabled
+          />
         </div>
         <div className="flex flex-col mb-5">
           <p>Tên hiển thị</p>
           <Input
             content={currentUser?.displayName}
             name="displayName"
+            style="w-full!"
             value={newDisplayName}
             onChange={(e) => setNewDisplayName(e.target.value)}
           />

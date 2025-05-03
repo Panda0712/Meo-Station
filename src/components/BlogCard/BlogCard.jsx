@@ -10,8 +10,9 @@ const BlogCard = ({ blog, userUi = false }) => {
   return (
     <div
       className={`${
-        userUi && "min-w-xl"
-      } bg-white border border-slate-200 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1`}
+        userUi && "lg:min-w-sm md:w-[300px] w-full"
+      } bg-white border border-slate-200 rounded-lg shadow-md overflow-hidden
+       transition-transform duration-300 hover:shadow-xl hover:-translate-y-1`}
     >
       <Link
         to={`${
@@ -27,12 +28,15 @@ const BlogCard = ({ blog, userUi = false }) => {
         />
       </Link>
       <div className="p-5">
-        <div className="flex items-center mb-3">
+        <div
+          className="flex flex-wrap lg:flex-row flex-col 
+        justify-center lg:justify-normal items-start lg:items-center gap-4 mb-3"
+        >
           <span className="text-xs text-gray-500">
             {formatDate(blog.createdAt)}
           </span>
           {blog.tags && blog.tags.length > 0 && (
-            <div className="ml-auto flex gap-1">
+            <div className="flex gap-1">
               {blog.tags.slice(0, 2).map((tag, index) => (
                 <span
                   key={index}
@@ -56,12 +60,19 @@ const BlogCard = ({ blog, userUi = false }) => {
               : `/blog/${blog._id}`
           }`}
         >
-          <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors">
-            {blog.title}
+          <h3
+            className="lg:text-xl md:text-lg text-[16px] 
+          font-semibold md:min-h-[60px] min-h-[40px] mb-2 hover:text-blue-600 transition-colors"
+          >
+            {blog.title?.length > 40
+              ? blog.title.slice(0, 40) + "..."
+              : blog.title}
           </h3>
         </Link>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-          {blog.summary}
+        <p className="text-gray-600 md:min-h-[60px] min-h-[40px] mb-2 text-sm line-clamp-3">
+          {blog.summary?.length > 80
+            ? blog.summary.slice(0, 80) + "..."
+            : blog.summary}
         </p>
         <div className="flex items-center">
           <div className="flex items-center">

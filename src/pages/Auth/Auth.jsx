@@ -10,7 +10,8 @@ const Auth = () => {
 
   return (
     <div
-      className="px-24 h-screen flex justify-center items-center 
+      className="lg:px-24 md:px-12 sm:px-8 px-4 
+      h-screen flex justify-center items-center 
     bg-[url('https://images5.alphacoders.com/134/1344548.png')] bg-cover bg-center"
     >
       {isLogin && <Login />}

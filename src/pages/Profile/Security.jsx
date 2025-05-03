@@ -65,11 +65,12 @@ const Security = () => {
   return (
     <div className="flex flex-col justify-center items-center mt-12">
       <form onSubmit={handleSubmit(handleModal)} className="mt-5">
-        <div className="flex flex-col mb-5">
+        <div className="flex flex-col sm:max-w-[400px] sm:w-[400px] w-[300px] mb-5">
           <p>Mật khẩu cũ</p>
           <Input
             content="Nhập mật khẩu cũ"
             name="current_password"
+            style="w-full!"
             type="password"
             {...register("current_password", {
               required: FIELD_REQUIRED_MESSAGE,
@@ -86,6 +87,7 @@ const Security = () => {
           <Input
             content="Nhập mật khẩu mới"
             name="new_password"
+            style="w-full!"
             type="password"
             {...register("new_password", {
               required: FIELD_REQUIRED_MESSAGE,
@@ -102,6 +104,7 @@ const Security = () => {
           <Input
             content="Nhập lại mật khẩu"
             name="confirm_password"
+            style="w-full!"
             type="password"
             {...register("confirm_password", {
               validate: (value) => {

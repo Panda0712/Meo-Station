@@ -49,7 +49,8 @@ const BookingInfo = () => {
 
   if (!bookingData) navigate("/");
 
-  const inputLabelStyle = "text-[16px] font-medium text-[#181A18]";
+  const inputLabelStyle =
+    "md:text-[16px] text-[14px] font-medium text-[#181A18]";
 
   return (
     <div className="mt-12">
@@ -58,9 +59,12 @@ const BookingInfo = () => {
         subHeading="Vui lòng điền đầy đủ thông tin"
       />
 
-      <div className="flex gap-24 items-center justify-center relative">
+      <div
+        className="flex lg:flex-row flex-col 
+      lg:gap-24 gap-12 items-center justify-center relative"
+      >
         <BookingCard bookingData={bookingData} />
-        <BookingSeparate />
+        <BookingSeparate booking />
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <img
@@ -69,12 +73,13 @@ const BookingInfo = () => {
             alt=""
           />
           <div className="flex flex-col gap-5 mt-8 mb-10 items-center">
-            <div className="flex flex-col gap-1">
+            <div className="sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col gap-1">
               <h6 className={inputLabelStyle}>
                 {capitalizeWords("Họ và tên")}
               </h6>
               <Input
                 name="name"
+                style="w-full!"
                 content="Họ và tên"
                 {...register("name", {
                   required: FIELD_REQUIRED_MESSAGE,
@@ -91,11 +96,12 @@ const BookingInfo = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col gap-1">
               <h6 className={inputLabelStyle}>{capitalizeWords("Email")}</h6>
               <Input
                 name="email"
                 content="Email"
+                style="w-full!"
                 type="email"
                 {...register("email", {
                   required: FIELD_REQUIRED_MESSAGE,
@@ -108,12 +114,13 @@ const BookingInfo = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col gap-1">
               <h6 className={inputLabelStyle}>
                 {capitalizeWords("Số điện thoại")}
               </h6>
               <Input
                 name="phone"
+                style="w-full!"
                 content="Số điện thoại"
                 {...register("phone", {
                   required: FIELD_REQUIRED_MESSAGE,
@@ -126,11 +133,12 @@ const BookingInfo = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col gap-1">
               <h6 className={inputLabelStyle}>
                 {capitalizeWords("Ghi chú thêm (nếu có)")}
               </h6>
               <Input
+                style="w-full!"
                 name="note"
                 content="Nội dung ghi chú"
                 {...register("note")}
