@@ -15,7 +15,9 @@ const FileInput = ({
       </label>
       <label
         htmlFor="file_input"
-        className="flex flex-col items-center justify-center w-full h-30 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-200 hover:bg-gray-100 dark:hover:bg-gray-300 focus-within:ring-2 focus-within:ring-blue-500 transition"
+        className="flex flex-col items-center justify-center w-full h-30 border-2 border-dashed border-gray-300 rounded-lg 
+        cursor-pointer bg-gray-50 dark:bg-gray-200 hover:bg-gray-100 dark:hover:bg-gray-300 
+        focus-within:ring-2 focus-within:ring-blue-500 transition"
       >
         {image ? (
           <img

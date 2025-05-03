@@ -15,7 +15,9 @@ const Stepper = ({ currentStep }) => {
             {step}
           </div>
 
-          {index < 2 && <div className="w-32 h-[2px] bg-gray-300"></div>}
+          {index < 2 && (
+            <div className="lg:w-32 md:w-28 sm:w-24 w-20 h-[2px] bg-gray-300"></div>
+          )}
         </div>
       ))}
     </div>

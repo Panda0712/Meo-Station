@@ -3,7 +3,6 @@ import { Avatar, Button, Input, List, Modal, Rate, Spin, message } from "antd";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "~/redux/activeUser/activeUserSlice";
-
 import { DeleteOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import {
@@ -21,9 +20,7 @@ const HotelComments = ({ hotelId }) => {
   const [submitting, setSubmitting] = useState(false);
   const [commentValue, setCommentValue] = useState("");
   const [ratingValue, setRatingValue] = useState(5);
-
   const [editingCommentId, setEditingCommentId] = useState(null);
-
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedComment, setSelectedComment] = useState(null);
 
@@ -270,10 +267,15 @@ const HotelComments = ({ hotelId }) => {
 
   return (
     <div className="hotel-comments p-6 bg-white shadow-md rounded-lg border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Bình luận</h2>
+      <h2
+        className="lg:text-2xl md:text-[20px] sm:text-[18px] 
+      text-[16px] font-bold text-gray-800 mb-6"
+      >
+        Bình luận
+      </h2>
       {currentUser && (
         <div className="comment-form mb-8 bg-gray-50 p-5 rounded-lg border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+          <h3 className="md:text-lg text-[16px] font-semibold text-gray-700 mb-4">
             Thêm bình luận
           </h3>
           <div className="mb-4 flex items-center">
@@ -306,7 +308,10 @@ const HotelComments = ({ hotelId }) => {
           </div>
         ) : (
           <>
-            <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+            <h3
+              className="md:text-xl sm:text-[18px] text-[16px] 
+            font-semibold text-gray-700 mb-4 flex items-center"
+            >
               <span className="mr-2">{comments.length}</span>
               <span>{comments.length > 1 ? "Đánh giá" : "Đánh giá"}</span>
             </h3>

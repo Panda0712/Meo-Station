@@ -109,7 +109,7 @@ const TimeSlotSelector = ({
         }`}
         onClick={() => setIsOpen((prev) => (disabled ? false : !prev))}
       >
-        <span className="text-[#152C5B] font-medium text-[16px]">
+        <span className="text-[#152C5B] font-medium md:text-[16px] text-[14px]">
           {selectedSlot?.label ||
             `Chọn khung giờ ${disabled ? "(chọn ngày trước)" : ""}`}
         </span>

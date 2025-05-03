@@ -7,7 +7,7 @@ const Popular = ({ hotels }) => {
       <h3 className="text-[24px] text-[#152C5B] font-semibold mb-8 z-10">
         {capitalizeWords("Lựa chọn nhiều nhất")}
       </h3>
-      <div className="flex gap-6">
+      <div className="flex min-[800px]:flex-row flex-col gap-6">
         <div className="relative basis-[calc(30%-12px)]">
           <CardPopular expand hotel={hotels[0]} />
         </div>

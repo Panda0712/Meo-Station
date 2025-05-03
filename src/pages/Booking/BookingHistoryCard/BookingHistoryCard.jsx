@@ -65,7 +65,10 @@ const BookingHistoryCard = ({ booking }) => {
   };
 
   return (
-    <div className="flex justify-between gap-8 border-1 border-gray-300 rounded-2xl p-[40px]">
+    <div
+      className="flex justify-between flex-wrap lg:flex-nowrap 
+    gap-8 border-1 border-gray-300 rounded-2xl p-[40px]"
+    >
       {openModal && (
         <Modal
           title="Hủy đơn đặt phòng"
@@ -93,21 +96,22 @@ const BookingHistoryCard = ({ booking }) => {
         </Modal>
       )}
 
-      <div className="flex gap-5 relative">
+      <div className="flex sm:flex-nowrap flex-wrap gap-5 relative">
         <img
           src={booking?.hotelImages?.[0]}
-          className="w-[400px] h-[350px] object-cover rounded-xl"
+          className="sm:w-[400px] sm:h-[350px] 
+          w-full h-[200px] object-cover rounded-xl"
           alt=""
         />
         <div className="flex flex-col">
           <div>
-            <h6 className="text-[20px] font-medium text-[#152c5b]">
+            <h6 className="md:text-[20px] sm:text-[18px] text-[16px] font-medium text-[#152c5b]">
               Phòng: {booking?.hotelName}
             </h6>
-            <p className="text-[18px] text-[#b0b0b0] font-light mb-2">
+            <p className="md:text-[18px] sm:text-[16px] text-[14px] text-[#b0b0b0] font-light mb-2">
               Địa chỉ: {booking?.hotelLocation}
             </p>
-            <p className="text-[22px] text-[#152c5b] font-semibold flex items-center gap-2">
+            <p className="md:text-[22px] sm:text-[18px] text-[16px] text-[#152c5b] font-semibold flex items-center gap-2">
               <span className="font-normal">Giá theo đêm:</span>
               <span>{booking?.hotel?.[0]?.pricePerNight}đ</span>
             </p>
@@ -117,13 +121,13 @@ const BookingHistoryCard = ({ booking }) => {
             <Button
               onClick={() => navigate(`/hotels/${booking?.hotelId}`)}
               title="Đặt phòng lần nữa"
-              style="mt-5 text-[14px]"
+              style="mt-5 md:text-[14px] text-[12px]"
             />
             {checkAvailableCancel() && (
               <Button
                 onClick={() => setOpenModal(true)}
                 title="Hủy đặt phòng"
-                style="mt-5 text-[14px]"
+                style="mt-5 md:text-[14px] text-[12px]"
               ></Button>
             )}
           </div>
@@ -142,7 +146,7 @@ const BookingHistoryCard = ({ booking }) => {
             <CircleDot size={14} color="blue" />
           )}
           <span
-            className={`text-[14px] 
+            className={`md:text-[14px] text-[12px] 
           ${
             booking?.status === ORDER_STATUS.COMPLETED
               ? "text-[#1abc9c]"
@@ -157,44 +161,44 @@ const BookingHistoryCard = ({ booking }) => {
           </span>
         </div>
         <div>
-          <h5 className="text-[18px] font-medium text-[#b0b0b0]">
+          <h5 className="md:text-[18px] sm:text-[16px] text-[14px] font-medium text-[#b0b0b0]">
             Mã đơn đặt phòng
           </h5>
-          <p className="text-[18px] font-medium text-[#152c5b]">
+          <p className="md:text-[18px] sm:text-[16px] text-[14px] font-medium text-[#152c5b]">
             #{booking?._id}
           </p>
         </div>
         <div className="flex items-center gap-8">
           <div>
-            <h5 className="text-[18px] font-medium text-[#b0b0b0]">
+            <h5 className="md:text-[18px] sm:text-[16px] text-[14px] font-medium text-[#b0b0b0]">
               Ngày Check-In
             </h5>
-            <p className="text-[18px] font-medium text-[#152c5b]">
+            <p className="md:text-[18px] sm:text-[16px] text-[14px] font-medium text-[#152c5b]">
               {formatDate(booking?.checkInDate)}
             </p>
           </div>
           <div className="border-l-1 border-gray-300 pl-5">
-            <h5 className="text-[18px] font-medium text-[#b0b0b0]">
+            <h5 className="md:text-[18px] sm:text-[16px] text-[14px] font-medium text-[#b0b0b0]">
               Ngày Check-Out
             </h5>
-            <p className="text-[18px] font-medium text-[#152c5b]">
+            <p className="md:text-[18px] sm:text-[16px] text-[14px] font-medium text-[#152c5b]">
               {formatDate(booking?.checkOutDate)}
             </p>
           </div>
         </div>
         <div className="border-b-1 border-gray-300 pb-5">
-          <h5 className="text-[18px] font-medium text-[#b0b0b0]">
+          <h5 className="md:text-[18px] sm:text-[16px] text-[14px] font-medium text-[#b0b0b0]">
             Phương thức thanh toán
           </h5>
-          <p className="text-[18px] font-medium text-[#152c5b]">
+          <p className="md:text-[18px] sm:text-[16px] text-[14px] font-medium text-[#152c5b]">
             {booking?.paymentMethod}
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <h5 className="text-[20px] font-medium text-[#b0b0b0]">
+          <h5 className="md:text-[20px] sm:text-[18px] text-[16px] font-medium text-[#b0b0b0]">
             Tổng thanh toán:
           </h5>
-          <p className="text-[20px] font-medium text-[#152c5b]">
+          <p className="md:text-[20px] sm:text-[18px] text-[16px] font-medium text-[#152c5b]">
             {booking?.totalPrice}đ
           </p>
         </div>

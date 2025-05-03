@@ -9,6 +9,7 @@ const Input = ({
   images = [],
   handleImageChange = () => {},
   multiple = false,
+  loginStyle = false,
   ...props
 }) => {
   const { error } = props;
@@ -60,7 +61,7 @@ const Input = ({
   }
 
   return (
-    <div>
+    <div className={`w-full flex flex-col ${loginStyle && "items-center"}`}>
       <input
         name={name}
         placeholder={content}

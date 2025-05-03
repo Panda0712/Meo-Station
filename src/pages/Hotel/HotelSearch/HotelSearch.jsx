@@ -20,12 +20,14 @@ const HotelSearch = ({
   handleChangeDateValue,
   handleSubmit,
 }) => {
-  const spanTextStyle = "text-[16px] font-semibold";
+  const spanTextStyle =
+    "md:text-[16px] sm:text-[14px] text-[12px] font-semibold";
 
   return (
     <div
-      className="border-4 border-[#064749] h-[60px] pl-[40px] py-[6px] pb-[6px] rounded-[40px] max-w-[80%] mx-auto 
-    flex justify-between items-center gap-5"
+      className="relative border-4 border-[#064749] md:h-[60px] pl-[30px] md:py-[6px] py-5
+      md:pb-[6px] rounded-[40px] lg:max-w-[80%] max-w-full mx-auto 
+    flex md:flex-row flex-col justify-between items-center gap-5"
     >
       <div className="flex items-center gap-2">
         <div className="relative flex items-center gap-2 cursor-pointer">
@@ -88,7 +90,7 @@ const HotelSearch = ({
         </div>
       </div>
 
-      <div className="w-[2px] h-full bg-[#49735a]" />
+      <div className="md:w-[2px] w-full md:h-full h-[2px] bg-[#49735a]" />
 
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-2">
@@ -110,10 +112,15 @@ const HotelSearch = ({
         </div>
       </div>
 
-      <div className="w-[2px] h-full bg-[#49735a]" />
+      <div className="md:w-[2px] w-full md:h-full h-[3px] bg-[#49735a]" />
 
       <div>
-        <Button title="Tìm kiếm" onClick={handleSubmit} type="search" />
+        <Button
+          title="Tìm kiếm"
+          style="md:text-[16px] text-[14px]"
+          onClick={handleSubmit}
+          type="search"
+        />
       </div>
     </div>
   );

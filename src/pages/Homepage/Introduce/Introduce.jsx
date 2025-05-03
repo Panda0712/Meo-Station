@@ -4,10 +4,10 @@ import { capitalizeWords } from "~/utils/formatters";
 const Introduce = ({ title, filterList }) => {
   return (
     <>
-      <h3 className="text-[24px] text-[#152C5B] font-semibold mb-8">
+      <h3 className="lg:text-[24px] md:text-[20px] text-[18px] text-[#152C5B] font-semibold mb-8">
         {capitalizeWords(title)}
       </h3>
-      <div className="flex gap-6 basis-[100%]">
+      <div className="flex lg:flex-nowrap flex-wrap lg:gap-6 gap-4 basis-[100%]">
         {filterList?.slice(0, 4)?.map((hotel) => (
           <HotelCard
             key={hotel?._id}

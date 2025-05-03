@@ -8,7 +8,10 @@ const HotelFilter = ({
   handleSubmitFilter,
 }) => {
   return (
-    <div className="flex items-center justify-between gap-5 mt-[20px] max-w-[80%] mx-auto">
+    <div
+      className="flex md:flex-row flex-col flex-wrap items-center justify-center 
+    md:justify-between gap-5 mt-[20px] lg:max-w-[80%] max-w-full mx-auto"
+    >
       <div
         className="bg-[#064749] rounded-[40px] h-[48px] text-white p-[20px] 
       flex items-center justify-between gap-5 cursor-pointer transition hover:opacity-90"
@@ -17,13 +20,16 @@ const HotelFilter = ({
         <img src={ArrowDownFill} alt="" />
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex max-[577px]:flex-col max-[577px]:justify-center items-center gap-2">
         <span className="text-[18px] font-semibold">Sắp xếp theo:</span>
         <div
-          className="rounded-[40px] h-[48px] p-[20px] 
+          className="rounded-[40px] sm:h-[48px] h-full p-[20px] 
       flex items-center justify-between gap-5 cursor-pointer transition hover:opacity-90"
         >
-          <form onSubmit={handleSubmitFilter} className="flex gap-2">
+          <form
+            onSubmit={handleSubmitFilter}
+            className="flex items-center sm:flex-nowrap flex-wrap gap-2"
+          >
             <select
               value={filterField}
               onChange={handleFilterChange}

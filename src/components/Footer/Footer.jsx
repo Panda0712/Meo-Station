@@ -16,9 +16,9 @@ const Footer = () => {
   };
 
   return (
-    <footer className="px-24 border border-t-1 border-gray-300 border-x-0 border-b-0 pt-8 py-6">
-      <section className="flex justify-between items-start gap-5">
-        <div className="flex flex-col justify-center gap-4">
+    <footer className="md:px-24 sm:px-12 px-8 border border-t-1 border-gray-300 border-x-0 border-b-0 pt-8 py-6">
+      <section className="flex flex-wrap justify-between items-start gap-8">
+        <div className="flex flex-col border-b border-slate-300 w-full md:w-auto pb-8 md:pb-0 md:border-0 justify-center gap-4">
           <Link to="/">
             <div className="flex items-center gap-2">
               <img src={MeoLogo} className="object-cover w-8 h-8" alt="" />
@@ -42,7 +42,7 @@ const Footer = () => {
           <span>@ 2024 MeoStation</span>
         </div>
 
-        <div className="flex flex-col justify-center gap-2">
+        <div className="flex flex-col border-b border-slate-300 w-full md:w-auto pb-8 md:pb-0 md:border-0 justify-center gap-2">
           <h2 className="font-medium text-[18px]">Khám phá</h2>
           <ul className={footerClass.listStyle}>
             {menuList.map((menu) => (
@@ -53,7 +53,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="flex flex-col justify-center gap-2">
+        <div className="flex flex-col border-b border-slate-300 w-full md:w-auto pb-8 md:pb-0 md:border-0 justify-center gap-2">
           <h2 className="font-medium text-[18px]">Kết nối với chúng tôi</h2>
           <ul className={footerClass.listStyle}>
             <li className="flex items-center gap-2">

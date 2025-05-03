@@ -14,7 +14,7 @@ const Booking = () => {
   const isBookingHistory = location.pathname === "/booking/history";
 
   return (
-    <section className="px-24 py-16">
+    <section className="md:px-24 sm:px-12 px-8 py-16">
       {!isBookingHistory && (
         <Stepper currentStep={isBookingInfo ? 1 : isBookingPayment ? 2 : 3} />
       )}

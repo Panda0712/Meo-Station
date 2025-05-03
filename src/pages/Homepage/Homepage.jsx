@@ -35,14 +35,17 @@ const Homepage = () => {
   );
 
   return (
-    <div className="px-24 py-16 mb-8">
+    <div className="lg:px-24 md:px-12 px-8 py-16 mb-8">
       {loading ? (
         <div className="flex justify-center items-center">
           <Spin size="large" />
         </div>
       ) : (
         <>
-          <section className="flex justify-between gap-5">
+          <section
+            className="flex lg:flex-nowrap flex-wrap 
+          lg:justify-between justify-center gap-6"
+          >
             <Heading />
           </section>
 
