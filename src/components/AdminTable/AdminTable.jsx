@@ -9,14 +9,18 @@ const AdminTable = ({
   optionItems,
   tHeadStyle,
   optionStyle,
+  responsiveStyle,
 }) => {
   const defaultTHeadStyle =
-    "font-medium border border-gray-200 px-4 py-2 text-[18px] break-words whitespace-normal";
+    "font-medium border border-gray-200 px-4 py-2 md:text-[18px] sm:text-[16px] text-[14px] break-words whitespace-normal";
   const defaultOptionStyle =
     "py-[12px] px-[16px] transition hover:bg-slate-100 cursor-pointer";
 
   return (
-    <table className="table-fixed w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
+    <table
+      className={`table-fixed w-full ${responsiveStyle} border 
+      border-gray-200 bg-white rounded-md shadow-sm my-8`}
+    >
       <thead className="bg-gray-100">
         <tr className="text-center">
           {headers.map((header, index) => (

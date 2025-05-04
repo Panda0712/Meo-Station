@@ -28,7 +28,7 @@ const BookingHistoryCard = ({ booking }) => {
     return (
       createdAtDiff <= FIFTEEN_MINUTES &&
       checkInDiff > 0 &&
-      checkInDiff <= TWENTY_FOUR_HOURS
+      checkInDiff >= TWENTY_FOUR_HOURS
     );
   };
 
@@ -117,19 +117,21 @@ const BookingHistoryCard = ({ booking }) => {
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="mt-5 flex flex-wrap items-center gap-4">
             <Button
               onClick={() => navigate(`/hotels/${booking?.hotelId}`)}
               title="Đặt phòng lần nữa"
-              style="mt-5 md:text-[14px] text-[12px]"
+              style="md:text-[14px] text-[12px]"
             />
-            {checkAvailableCancel() && (
-              <Button
-                onClick={() => setOpenModal(true)}
-                title="Hủy đặt phòng"
-                style="mt-5 md:text-[14px] text-[12px]"
-              ></Button>
-            )}
+            {checkAvailableCancel() &&
+              booking?.status !== ORDER_STATUS.CANCELLED && (
+                <Button
+                  onClick={() => setOpenModal(true)}
+                  type="warning"
+                  title="Hủy đặt phòng"
+                  style="md:text-[14px] text-[12px]"
+                ></Button>
+              )}
           </div>
         </div>
       </div>
