@@ -42,7 +42,7 @@ const BookingManagement = () => {
   };
 
   const updateStateData = (res) => {
-    setBookings(res.bookings || []);
+    setBookings(res.bookings?.reverse() || []);
     setTotalBookings(res.totalBookings || 0);
     setOpenOptions(
       res.bookings?.map((_, index) => ({
@@ -142,7 +142,8 @@ const BookingManagement = () => {
       .finally(() => setLoading(false));
   }, [location.search]);
 
-  const tHeadStyle = "font-medium border border-gray-200 px-4 py-2 text-[18px]";
+  const tHeadStyle =
+    "font-medium border border-gray-200 px-4 py-2 md:text-[18px] sm:text-[16px] text-[14px]";
   const optionStyle =
     "py-[12px] px-[16px] transition hover:bg-slate-100 cursor-pointer";
 
@@ -154,7 +155,7 @@ const BookingManagement = () => {
     );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-[900px]:overflow-auto">
       {openModal && (
         <Modal
           title={
@@ -210,9 +211,14 @@ const BookingManagement = () => {
         </Modal>
       )}
 
-      <h3 className="text-[20px] font-medium">Quản lý đặt phòng</h3>
+      <h3 className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-medium">
+        Quản lý đặt phòng
+      </h3>
 
-      <table className="table-fixed w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
+      <table
+        className="table-fixed max-[900px]:min-w-[950px] w-full 
+      border border-gray-200 bg-white rounded-md shadow-sm my-8"
+      >
         <thead className="bg-gray-100">
           <tr className="text-center">
             <th className={`${tHeadStyle} w-[200px]`}>Ảnh phòng</th>
@@ -230,7 +236,8 @@ const BookingManagement = () => {
               <td className={`${tHeadStyle}`}>
                 <img
                   src={booking?.hotelImages?.[0]}
-                  className="object-cover w-[200px] h-[150px] mx-auto rounded-sm"
+                  className="object-cover md:w-[200px] md:h-[150px] sm:w-[150px] sm:h-[100px] 
+                  w-[120px] h-[80px] mx-auto rounded-sm"
                   alt=""
                 />
               </td>
@@ -242,7 +249,10 @@ const BookingManagement = () => {
                   formatDate(booking?.checkOutDate)}
               </td>
               <td className={`${tHeadStyle}`}>
-                <div className="flex items-center justify-center gap-2 rounded-xl w-[120px] mx-auto bg-[#f5f5f5] py-1 shadow-sm">
+                <div
+                  className="flex items-center lg:flex-nowrap flex-wrap 
+                justify-center gap-2 rounded-xl max-w-[120px] mx-auto bg-[#f5f5f5] py-1 shadow-sm"
+                >
                   {booking?.status === ORDER_STATUS.COMPLETED && (
                     <CircleCheckBig size={14} color="#1ABC9C" />
                   )}

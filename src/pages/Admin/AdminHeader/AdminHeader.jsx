@@ -35,22 +35,23 @@ const AdminHeader = () => {
 
   return (
     <div className="flex items-center justify-between p-[24px] bg-white shadow-sm">
-      <h1 className="font-medium text-[24px]">
+      <h1 className="font-medium lg:text-[24px] md:text-[20px] sm:text-[18px] text-[16px]">
         Quản trị <span className="text-blue-600">Meo</span>Station.
       </h1>
       <div
         onClick={handleToggleOpenAdminProfile}
-        className="relative flex items-center gap-2 cursor-pointer transition hover:bg-slate-200 p-2 rounded-sm"
+        className="relative flex sm:flex-nowrap flex-wrap 
+        items-center gap-2 cursor-pointer transition hover:bg-slate-200 p-2 rounded-sm"
       >
         <img
           src="https://static1.personalitydatabase.net/2/pdb-images-prod/3fda573a/profile_images/fa6d2cd57fde44adaf9c8ffa0f161079.png"
-          className="w-[45px] h-[45px] object-cover"
+          className="md:w-[45px] md:h-[45px] sm:w-[40px] sm:h-[40px] w-[35px] h-[35px] object-cover"
           alt=""
         />
 
-        <div className="relative text-[18px] font-semibold text-[#555555]">
+        <div className="relative md:text-[18px] sm:text-[16px] text-[14px] font-semibold text-[#555555]">
           <p>{capitalizeWords(currentUser?.displayName)}</p>
-          <h6 className="text-[14px] font-medium text-[#6f767e]">
+          <h6 className="sm:text-[14px] text-[12px] font-medium text-[#6f767e]">
             Super {currentUser?.role}
           </h6>
         </div>

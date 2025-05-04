@@ -129,7 +129,12 @@ const BlogDetailManagement = () => {
       </div>
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">{blog?.title}</h1>
+        <h1
+          className="lg:text-4xl md:text-[28px] sm:text-[24px] text-[20px]
+         font-bold text-gray-800 mb-4"
+        >
+          {blog?.title}
+        </h1>
 
         <div className="flex flex-wrap items-center text-gray-600 mb-4 gap-3">
           <div className="flex items-center">
@@ -155,7 +160,8 @@ const BlogDetailManagement = () => {
             {blog.tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                className="px-3 py-1 md:text-[16px] text-[14px]
+                 bg-blue-100 text-blue-800 rounded-full text-sm"
               >
                 {tag}
               </span>
@@ -165,10 +171,10 @@ const BlogDetailManagement = () => {
       </div>
 
       {currentUser.role === ACCOUNT_ROLES.ADMIN && (
-        <div className="flex gap-4 mb-8">
+        <div className="flex md:flex-nowrap flex-wrap gap-4 mb-8">
           <Link
             to={`/admin/blogs/create/${blogId}`}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+            className="bg-blue-600 hover:bg-blue-700 md:text-[16px] text-[14px] text-white px-4 py-2 rounded-md transition-colors"
           >
             Chỉnh sửa bài viết
           </Link>
@@ -177,14 +183,14 @@ const BlogDetailManagement = () => {
               setOpenModal(true);
               setDeleting(true);
             }}
-            className="bg-red-600 hover:bg-red-700 cursor-pointer text-white px-4 py-2 rounded-md transition-colors"
+            className="bg-red-600 hover:bg-red-700 md:text-[16px] text-[14px] cursor-pointer text-white px-4 py-2 rounded-md transition-colors"
           >
             Xóa bài viết
           </button>
         </div>
       )}
 
-      <div className="prose prose-lg max-w-none">
+      <div className="prose prose-lg md:max-w-none max-w-[500px]">
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
       </div>
     </div>

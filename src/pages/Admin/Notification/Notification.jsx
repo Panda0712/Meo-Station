@@ -275,7 +275,7 @@ const NotificationManagement = () => {
   }, [editing, reset]);
 
   const tHeadStyle =
-    "font-medium border border-gray-200 px-4 py-2 text-[18px] break-words whitespace-normal";
+    "font-medium border border-gray-200 px-4 py-2 md:text-[18px] sm:text-[16px] text-[14px] break-words whitespace-normal";
   const optionStyle =
     "py-[12px] px-[16px] transition hover:bg-slate-100 cursor-pointer";
 
@@ -287,7 +287,7 @@ const NotificationManagement = () => {
     );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-[900px]:overflow-auto">
       {openModal && (
         <Modal
           title={
@@ -391,12 +391,18 @@ const NotificationManagement = () => {
         </Modal>
       )}
 
-      <div className="flex items-center justify-between">
-        <h3 className="text-[20px] font-medium">Quản lý thông báo</h3>
-        <Button title="Thêm thông báo mới" onClick={toggleModal} />
+      <div className="flex md:flex-nowrap flex-wrap gap-5 items-center justify-between">
+        <h3 className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-medium">
+          Quản lý thông báo
+        </h3>
+        <Button
+          title="Thêm thông báo mới"
+          style="md:text-[16px] text-[14px]"
+          onClick={toggleModal}
+        />
       </div>
 
-      <table className="table-fixed w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
+      <table className="table-fixed max-[900px]:min-w-[900px] w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
         <thead className="bg-gray-100">
           <tr className="text-center">
             <th className={`${tHeadStyle} w-[200px]`}>Hình ảnh</th>
@@ -411,7 +417,8 @@ const NotificationManagement = () => {
               <td className={`${tHeadStyle}`}>
                 <img
                   src={notify?.images}
-                  className="object-cover w-[200px] h-[150px] mx-auto rounded-sm"
+                  className="object-cover md:w-[200px] md:h-[150px] sm:w-[150px] sm:h-[100px] 
+                  w-[120px] h-[80px] mx-auto rounded-sm"
                   alt=""
                 />
               </td>

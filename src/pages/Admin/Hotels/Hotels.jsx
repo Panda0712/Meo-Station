@@ -304,7 +304,7 @@ const HotelsManagement = () => {
   }, [editing, reset]);
 
   const tHeadStyle =
-    "font-medium border border-gray-200 px-4 py-2 text-[18px] break-words whitespace-normal";
+    "font-medium border border-gray-200 px-4 py-2 md:text-[18px] sm:text-[16px] text-[14px] break-words whitespace-normal";
   const optionStyle =
     "py-[12px] px-[16px] transition hover:bg-slate-100 cursor-pointer";
 
@@ -316,7 +316,7 @@ const HotelsManagement = () => {
     );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-md:overflow-auto">
       {openModal && (
         <Modal
           title={
@@ -356,12 +356,16 @@ const HotelsManagement = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="mt-5 flex flex-col gap-4"
             >
-              <div className="flex flex-col gap-1">
+              <div
+                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
+              >
                 <label htmlFor="title" className="font-medium">
                   Tên phòng
                 </label>
                 <Input
                   name="title"
+                  style="w-[90%]!"
                   content="Nhập tên phòng"
                   {...register("title", {
                     required: FIELD_REQUIRED_MESSAGE,
@@ -378,12 +382,13 @@ const HotelsManagement = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
+              <div className="sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col gap-1">
                 <label htmlFor="location" className="font-medium">
                   Địa chỉ
                 </label>
                 <Input
                   name="location"
+                  style="w-[90%]!"
                   content="Nhập địa chỉ"
                   {...register("location", {
                     required: FIELD_REQUIRED_MESSAGE,
@@ -407,7 +412,10 @@ const HotelsManagement = () => {
                 multiple
               />
 
-              <div className="flex flex-col gap-1">
+              <div
+                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
+              >
                 <label htmlFor="description" className="font-medium">
                   Mô tả
                 </label>
@@ -415,7 +423,7 @@ const HotelsManagement = () => {
                   name="description"
                   content="Nhập mô tả"
                   type="textarea"
-                  style="pt-3"
+                  style="pt-3 w-[90%]!"
                   {...register("description", {
                     required: FIELD_REQUIRED_MESSAGE,
                     minLength: {
@@ -431,8 +439,11 @@ const HotelsManagement = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label htmlFor="utilities" className="font-medium">
+              <div
+                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
+              >
+                <label htmlFor="utilities" className="font-medium max-w-sm">
                   Tiện ích (Nhập theo thứ tự: số phòng ngủ, phòng khách, phòng
                   tắm, phòng ăn, tốc độ internet, số máy lạnh, số tủ lạnh, TV) *
                   Lưu ý: Nhập cách nhau bởi dấu phẩy và khoảng trắng
@@ -441,7 +452,7 @@ const HotelsManagement = () => {
                   name="utilities"
                   content="Nhập tiện ích"
                   type="textarea"
-                  style="pt-3"
+                  style="pt-3 w-[90%]!"
                   {...register("utilities", {
                     required: FIELD_REQUIRED_MESSAGE,
                     minLength: {
@@ -457,12 +468,16 @@ const HotelsManagement = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
+              <div
+                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
+              >
                 <label htmlFor="maxGuest" className="font-medium">
                   Số khách tối đa
                 </label>
                 <Input
                   name="maxGuest"
+                  style="w-[90%]!"
                   content="Nhập số khách tối đa"
                   type="number"
                   {...register("maxGuest", {
@@ -472,12 +487,16 @@ const HotelsManagement = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
+              <div
+                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
+              >
                 <label htmlFor="pricePerNight" className="font-medium">
                   Giá mỗi đêm
                 </label>
                 <Input
                   name="pricePerNight"
+                  style="w-[90%]!"
                   content="Nhập giá mỗi đêm"
                   type="number"
                   {...register("pricePerNight", {
@@ -487,12 +506,16 @@ const HotelsManagement = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
+              <div
+                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
+              >
                 <label htmlFor="priceFirstHour" className="font-medium">
                   Giá giờ đầu
                 </label>
                 <Input
                   name="priceFirstHour"
+                  style="w-[90%]!"
                   content="Nhập giá giờ đầu"
                   type="number"
                   {...register("priceFirstHour", {
@@ -502,12 +525,16 @@ const HotelsManagement = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
+              <div
+                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
+              >
                 <label htmlFor="priceEachHour" className="font-medium">
                   Giá gốc
                 </label>
                 <Input
                   name="priceEachHour"
+                  style="w-[90%]!"
                   content="Nhập giá gốc"
                   type="number"
                   {...register("priceEachHour", {
@@ -517,12 +544,16 @@ const HotelsManagement = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
+              <div
+                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
+              >
                 <label htmlFor="discount" className="font-medium">
                   Khuyến mãi
                 </label>
                 <Input
                   name="discount"
+                  style="w-[90%]!"
                   content="Nhập khuyến mãi"
                   type="number"
                   {...register("discount", {
@@ -540,12 +571,21 @@ const HotelsManagement = () => {
         </Modal>
       )}
 
-      <div className="flex items-center justify-between">
-        <h3 className="text-[20px] font-medium">Quản lý phòng</h3>
-        <Button title="Thêm phòng mới" onClick={toggleOpenModal} />
+      <div className="flex md:flex-nowrap flex-wrap gap-5 items-center justify-between">
+        <h3
+          className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px]
+         font-medium"
+        >
+          Quản lý phòng
+        </h3>
+        <Button
+          title="Thêm phòng mới"
+          style="md:text-[16px] text-[14px]"
+          onClick={toggleOpenModal}
+        />
       </div>
 
-      <table className="table-fixed w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
+      <table className="table-fixed w-full max-md:min-w-[800px] border border-gray-200 bg-white rounded-md shadow-sm my-8">
         <thead className="bg-gray-100">
           <tr className="text-center">
             <th className={`${tHeadStyle} w-[200px]`}>Hình ảnh</th>
@@ -561,7 +601,8 @@ const HotelsManagement = () => {
               <td className={`${tHeadStyle}`}>
                 <img
                   src={hotel?.images[0]}
-                  className="object-cover w-[200px] h-[150px] mx-auto rounded-sm"
+                  className="object-cover md:w-[200px] md:h-[150px] sm:w-[150px] sm:h-[100px] 
+                  w-[120px] h-[80px] mx-auto rounded-sm"
                   alt=""
                 />
               </td>

@@ -72,9 +72,9 @@ const Dashboard = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex sm:flex-nowrap flex-wrap justify-between items-center mb-6 gap-5">
         <h1 className="text-xl font-medium">Thống kê đặt phòng</h1>
-        <div className="flex gap-4">
+        <div className="flex sm:flex-nowrap flex-wrap gap-4">
           <DatePicker
             picker="month"
             placeholder="Chọn tháng"

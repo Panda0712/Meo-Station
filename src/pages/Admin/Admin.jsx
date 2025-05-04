@@ -4,7 +4,7 @@ import AdminSidebar from "~/pages/Admin/AdminSidebar/AdminSidebar";
 
 const Admin = () => {
   return (
-    <section className="flex overflow-hidden h-screen">
+    <section className="flex lg:flex-row flex-col overflow-hidden lg:h-screen h-auto">
       <AdminSidebar />
 
       <div className="flex flex-col bg-[#f0f7ff] basis-[80%]">

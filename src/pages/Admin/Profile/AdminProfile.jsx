@@ -30,7 +30,7 @@ const AdminProfile = () => {
           <p className="text-[18px] font-semibold">Thông tin cá nhân</p>
         </div>
 
-        <div className="flex items-center gap-16">
+        <div className="flex md:flex-nowrap flex-wrap items-center md:gap-16 gap-6">
           <div className="relative">
             <p className="text-[18px] font-semibold">Tên</p>
             <h5 className="text-[16px]">{currentUser?.displayName}</h5>

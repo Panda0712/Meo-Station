@@ -90,20 +90,25 @@ const BookingDetailsManagement = () => {
         </Modal>
       )}
 
-      <h3 className="text-[20px] font-medium mb-10">Chi tiết đơn đặt phòng</h3>
+      <h3
+        className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px]
+       font-medium mb-10"
+      >
+        Chi tiết đơn đặt phòng
+      </h3>
 
       {!activeBooking ? (
         <div className="flex items-center justify-center">
-          <h2 className="text-[20px] font-semibold text-center">
+          <h2 className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-semibold text-center">
             Không có dữ liệu đặt phòng tương ứng!! Vui lòng thử lại sau!!!
           </h2>
         </div>
       ) : (
         <div className="flex flex-col gap-5">
-          <h4 className="text-[18px] font-medium mb-5">
+          <h4 className="md:text-[18px] sm:text-[16px] text-[14px] font-medium mb-5">
             {activeBooking?.hotelName}
           </h4>
-          <div className="relative flex items-center gap-5 h-[350px]">
+          <div className="relative flex items-center gap-5 md:h-[350px] sm:h-[250px] h-[200px]">
             <div className="basis-[calc(60%-10px)] h-full">
               <img
                 src={activeBooking?.hotelImages?.[0]}
@@ -114,70 +119,94 @@ const BookingDetailsManagement = () => {
             <div className="relative flex flex-col gap-4 basis-[calc(40%-10px)] h-full">
               <img
                 src={activeBooking?.hotelImages?.[1]}
-                className="w-full h-[167px] object-cover rounded-md"
+                className="w-full md:h-[167px] sm:h-[117px] h-[92px] object-cover rounded-md"
                 alt=""
               />
               <img
                 src={activeBooking?.hotelImages?.[2]}
-                className="w-full h-[167px] object-cover rounded-md"
+                className="w-full md:h-[167px] sm:h-[117px] h-[92px] object-cover rounded-md"
                 alt=""
               />
             </div>
           </div>
 
           <div className="mb-5">
-            <h4 className="text-[18px] font-medium my-3">
+            <h4 className="md:text-[18px] sm:text-[16px] text-[14px] font-medium my-3">
               Thông tin đặt phòng
             </h4>
             <div className={boxStyle}>
-              <div className="flex gap-16">
+              <div className="flex md:flex-nowrap flex-wrap md:gap-16 gap-6">
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Ngày check-in</p>
-                  <h5 className="text-[16px]">
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Ngày check-in
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
                     {formatDate(activeBooking?.checkInDate)}
                   </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Ngày check-out</p>
-                  <h5 className="text-[16px]">
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Ngày check-out
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
                     {formatDate(activeBooking?.checkOutDate)}
                   </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Địa chỉ</p>
-                  <h5 className="text-[16px]">
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Địa chỉ
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
                     {activeBooking?.hotelLocation}
                   </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Số khách</p>
-                  <h5 className="text-[16px]">{activeBooking?.guest}</h5>
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Số khách
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
+                    {activeBooking?.guest}
+                  </h5>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="mb-5">
-            <h4 className="text-[18px] font-medium my-3">
+            <h4 className="md:text-[18px] sm:text-[16px] text-[14px] font-medium my-3">
               Thông tin khách hàng
             </h4>
             <div className={boxStyle}>
-              <div className="flex gap-16">
+              <div className="flex md:flex-nowrap flex-wrap md:gap-16 gap-6">
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Khách hàng</p>
-                  <h5 className="text-[16px]">{activeBooking?.userName}</h5>
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Khách hàng
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
+                    {activeBooking?.userName}
+                  </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Email</p>
-                  <h5 className="text-[16px]">{activeBooking?.userEmail}</h5>
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Email
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
+                    {activeBooking?.userEmail}
+                  </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Số điện thoại</p>
-                  <h5 className="text-[16px]">{activeBooking?.phone}</h5>
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Số điện thoại
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
+                    {activeBooking?.phone}
+                  </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Loại phòng</p>
-                  <h5 className="text-[16px]">
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Loại phòng
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
                     {activeBooking?.mode === BOOKING_MODE.day
                       ? "Theo ngày"
                       : "Theo đêm"}
@@ -188,14 +217,16 @@ const BookingDetailsManagement = () => {
           </div>
 
           <div className="mb-5">
-            <h4 className="text-[18px] font-medium my-3">
+            <h4 className="md:text-[18px] sm:text-[16px] text-[14px] font-medium my-3">
               Trạng thái đặt phòng
             </h4>
             <div className={boxStyle}>
-              <div className="flex gap-16">
+              <div className="flex md:flex-nowrap flex-wrap md:gap-16 gap-6">
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Trạng thái</p>
-                  <h5 className="text-[16px]">
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Trạng thái
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
                     {activeBooking?.status === ORDER_STATUS.COMPLETED
                       ? "Đã thanh toán"
                       : activeBooking?.status === ORDER_STATUS.CANCELLED
@@ -204,24 +235,28 @@ const BookingDetailsManagement = () => {
                   </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
                     Phương thức thanh toán
                   </p>
-                  <h5 className="text-[16px]">
+                  <h5 className="sm:text-[16px] text-[14px]">
                     {activeBooking?.paymentMethod === PAYMENT_METHODS.CASH
                       ? "Tiền mặt"
                       : activeBooking?.paymentMethod}
                   </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Số đêm</p>
-                  <h5 className="text-[16px]">
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Số đêm
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
                     {activeBooking?.numberOfNight || "Trong ngày"}
                   </h5>
                 </div>
                 <div className="relative">
-                  <p className="text-[18px] font-semibold">Tổng thanh toán</p>
-                  <h5 className="text-[16px]">
+                  <p className="md:text-[18px] sm:text-[16px] text-[14px] font-semibold">
+                    Tổng thanh toán
+                  </p>
+                  <h5 className="sm:text-[16px] text-[14px]">
                     {formatVND(activeBooking?.totalPrice)}
                   </h5>
                 </div>
@@ -232,12 +267,14 @@ const BookingDetailsManagement = () => {
           <div className="flex items-center justify-end gap-4">
             <Button
               title="Trở lại"
+              style="md:text-[16px] text-[14px]"
               type="cancel"
               onClick={() => navigate(-1)}
             />
             {activeBooking?.status === ORDER_STATUS.PENDING && (
               <Button
                 title="Thanh toán"
+                style="md:text-[16px] text-[14px]"
                 type="submit"
                 onClick={() => setOpenModal(true)}
               ></Button>

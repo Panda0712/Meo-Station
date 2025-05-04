@@ -232,7 +232,7 @@ const VoucherManagement = () => {
   }, [editing, reset]);
 
   const tHeadStyle =
-    "font-medium border border-gray-200 px-4 py-2 text-[18px] break-words whitespace-normal";
+    "font-medium border border-gray-200 px-4 py-2 md:text-[18px] sm:text-[16px] text-[14px] break-words whitespace-normal";
   const optionStyle =
     "py-[12px] px-[16px] transition hover:bg-slate-100 cursor-pointer";
 
@@ -244,7 +244,7 @@ const VoucherManagement = () => {
     );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-[900px]:overflow-auto">
       {openModal && (
         <Modal
           title={
@@ -461,12 +461,18 @@ const VoucherManagement = () => {
         </Modal>
       )}
 
-      <div className="flex items-center justify-between">
-        <h3 className="text-[20px] font-medium">Quản lý voucher</h3>
-        <Button title="Thêm voucher mới" onClick={toggleOpenModal} />
+      <div className="flex sm:flex-nowrap flex-wrap gap-5 items-center justify-between">
+        <h3 className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-medium">
+          Quản lý voucher
+        </h3>
+        <Button
+          title="Thêm voucher mới"
+          style="md:text-[16px] text-[14px]"
+          onClick={toggleOpenModal}
+        />
       </div>
 
-      <table className="table-fixed w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
+      <table className="table-fixed max-[900px]:min-w-[1100px] w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
         <thead className="bg-gray-100">
           <tr className="text-center">
             <th className={`${tHeadStyle} w-[150px]`}>Tên</th>

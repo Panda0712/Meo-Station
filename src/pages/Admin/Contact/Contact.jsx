@@ -96,7 +96,7 @@ const ContactManagement = () => {
   }, [location.search]);
 
   const tHeadStyle =
-    "font-medium border border-gray-200 px-4 py-2 text-[18px] break-words whitespace-normal";
+    "font-medium border border-gray-200 px-4 py-2 md:text-[18px] sm:text-[16px] text-[14px] break-words whitespace-normal";
   const optionStyle =
     "py-[12px] px-[16px] transition hover:bg-slate-100 cursor-pointer";
 
@@ -108,7 +108,7 @@ const ContactManagement = () => {
     );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-[900px]:overflow-auto">
       {openModal && (
         <Modal
           title="Xóa liên hệ"
@@ -135,9 +135,11 @@ const ContactManagement = () => {
         </Modal>
       )}
 
-      <h3 className="text-[20px] font-medium">Quản lý liên hệ</h3>
+      <h3 className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-medium">
+        Quản lý liên hệ
+      </h3>
 
-      <table className="table-fixed w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
+      <table className="table-fixed max-[900px]:min-w-[1050px] w-full border border-gray-200 bg-white rounded-md shadow-sm my-8">
         <thead className="bg-gray-100">
           <tr className="text-center">
             <th className={`${tHeadStyle}`}>Tên</th>
