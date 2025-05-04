@@ -155,12 +155,15 @@ const BlogFormPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-[20px] font-medium mb-8">
+      <h1
+        className="lg:text-[20px] md:text-[18px] 
+      text-[16px] font-medium mb-8"
+      >
         {isEditMode ? "Chỉnh sửa bài viết" : "Tạo bài viết mới"}
       </h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div>
+        <div className="relative sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col mb-5">
           <label
             htmlFor="title"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -169,6 +172,7 @@ const BlogFormPage = () => {
           </label>
           <Input
             name="title"
+            style="w-[95%]!"
             content="Nhập tiêu đề"
             {...register("title", {
               required: FIELD_REQUIRED_MESSAGE,
@@ -185,7 +189,7 @@ const BlogFormPage = () => {
           />
         </div>
 
-        <div>
+        <div className="relative sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col mb-5">
           <label
             htmlFor="summary"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -196,7 +200,7 @@ const BlogFormPage = () => {
             name="summary"
             content="Nhập tóm tắt"
             type="textarea"
-            style="pt-3"
+            style="pt-3 w-[95%]!"
             {...register("summary", {
               required: FIELD_REQUIRED_MESSAGE,
               minLength: {
@@ -223,11 +227,11 @@ const BlogFormPage = () => {
             type="file"
             image={previewImage}
             handleImageChange={handleImageUpload}
-            style="sm:w-[400px] w-[350px]"
+            style="sm:w-[400px]! w-full!"
           />
         </div>
 
-        <div>
+        <div className="relative sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col mb-5">
           <label
             htmlFor="tags"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -236,6 +240,7 @@ const BlogFormPage = () => {
           </label>
           <Input
             name="tags"
+            style="w-[95%]!"
             content="Nhập tags"
             placeholder="travel, hotel, vacation"
             {...register("tags")}
@@ -268,6 +273,7 @@ const BlogFormPage = () => {
           <Button
             title="Trở lại"
             type="cancel"
+            style="md:text-[16px] text-[14px]"
             onClick={(e) => {
               e.preventDefault();
               navigate("/admin/blogs");
@@ -282,6 +288,7 @@ const BlogFormPage = () => {
                 : "Tạo bài viết"
             }
             type="submit"
+            style="md:text-[16px] text-[14px]"
             disabled={loading}
           />
         </div>

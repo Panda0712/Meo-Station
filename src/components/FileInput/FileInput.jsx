@@ -56,10 +56,10 @@ const FileInput = ({
                 d="M3 16.5V17a4 4 0 004 4h10a4 4 0 004-4v-.5M16 16l-4-4m0 0l-4 4m4-4v12"
               ></path>
             </svg>
-            <p className="mt-2 text-sm text-gray-800 dark:text-gray-800">
+            <p className="mt-2 text-sm text-gray-800 text-center dark:text-gray-800">
               Nhấn để chọn file hoặc kéo thả vào đây
             </p>
-            <p className="text-xs text-gray-800 dark:text-gray-800">
+            <p className="text-xs text-gray-800 text-center dark:text-gray-800">
               PNG, JPG, JPEG (tối đa 10MB)
             </p>
           </div>

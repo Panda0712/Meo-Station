@@ -78,22 +78,29 @@ const BlogManagement = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h3 className="text-[20px] font-medium">Quản lý bài viết</h3>
+      <div className="flex md:flex-nowrap flex-wrap gap-5 justify-between items-center mb-8">
+        <h3 className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-medium">
+          Quản lý bài viết
+        </h3>
         <Link
           to="/admin/blogs/create"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+          className="bg-blue-600 hover:bg-blue-700 text-white md:text-[16px] text-[14px]
+           px-4 py-2 rounded-md transition-colors"
         >
           Tạo bài viết mới
         </Link>
       </div>
 
       <div className="mb-8">
-        <form onSubmit={handleSearch} className="flex gap-2">
+        <form
+          onSubmit={handleSearch}
+          className="flex md:flex-nowrap flex-wrap gap-2"
+        >
           <select
             value={filterField}
             onChange={handleFilterFieldChange}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border md:text-[16px] text-[14px]
+             border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="title">Tiêu đề</option>
             <option value="content">Nội dung</option>
@@ -106,11 +113,13 @@ const BlogManagement = () => {
             placeholder="Tìm kiếm bài viết..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 px-4 py-2 md:text-[16px] text-[14px] 
+            border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+            className="bg-blue-600 hover:bg-blue-700 md:text-[16px] text-[14px]
+             text-white px-4 py-2 rounded-md transition-colors"
           >
             Tìm
           </button>
