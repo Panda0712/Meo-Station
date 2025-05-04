@@ -41,7 +41,7 @@ const AdminSidebar = () => {
 
       <div
         className="flex lg:flex-col items-center
-       flex-row lg:overflow-unset overflow-auto lg:gap-6 gap-0 text-white w-full"
+       flex-row lg:overflow-unset overflow-auto lg:gap-6 gap-0 text-white w-full custom-scrollbar"
       >
         {menuAdminList.map((menu) => (
           <Link to={menu.path} key={menu?.name} className="w-full">

@@ -1,11 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Spin } from "antd";
-import { Ellipsis } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import ReactPaginate from "react-paginate";
-import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import {
   createNewHotelAPI,
   deleteHotelAPI,
@@ -13,31 +9,16 @@ import {
   updateHotelAPI,
   uploadHotelImagesAPI,
 } from "~/apis";
+import AdminTable from "~/components/AdminTable/AdminTable";
 import Button from "~/components/Button/Button";
+import DeleteConfirmationModal from "~/components/DeleteConfirmationModal/DeleteConfirmationModal";
+import FormModal from "~/components/FormModal/FormModal";
 import Input from "~/components/Input/Input";
-import Modal from "~/components/Modal/Modal";
-import { DEFAULT_ITEMS_PER_PAGE, UTILITIES_LIST } from "~/utils/constants";
-import {
-  FIELD_REQUIRED_MESSAGE,
-  singleFileValidator,
-} from "~/utils/validators";
+import Pagination from "~/components/Pagination/Pagination";
+import useHotelTable from "~/hooks/useHotelTable";
+import { FIELD_REQUIRED_MESSAGE } from "~/utils/validators";
 
 const HotelsManagement = () => {
-  const [hotels, setHotels] = useState([]);
-  const [totalHotels, setTotalHotels] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [editing, setEditing] = useState({
-    edit: false,
-    data: null,
-  });
-  const [deleting, setDeleting] = useState({
-    delete: false,
-    id: null,
-  });
-  const [openOptions, setOpenOptions] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [images, setImages] = useState([]);
-
   const {
     register,
     handleSubmit,
@@ -46,228 +27,36 @@ const HotelsManagement = () => {
     reset,
   } = useForm();
 
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const query = new URLSearchParams(location.search);
-  const currentPage = parseInt(query.get("page") || "1", 10);
-  const totalPages = Math.ceil(totalHotels / DEFAULT_ITEMS_PER_PAGE);
-
-  const reqDataRef = useRef(null);
-
-  const handlePageChange = (newPage) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      const params = new URLSearchParams(location.search);
-      params.set("page", newPage.toString());
-      navigate(`?${params.toString()}`);
-    }
-  };
-
-  const updateStateData = (res) => {
-    setHotels(res.hotels || []);
-    setTotalHotels(res.totalHotels || 0);
-    setOpenOptions(
-      res.hotels?.map((_, index) => ({
-        index,
-        open: false,
-      }))
-    );
-  };
-
-  const handleImageChange = (event) => {
-    const files = Array.from(event.target?.files || []);
-    const errors = [];
-
-    if (files.length > 3) {
-      toast.error("Bạn chỉ được chọn tối đa 3 ảnh!!");
-      return;
-    }
-
-    if (files.length < 3) {
-      toast.error("Bạn phải chọn 3 ảnh!!");
-      return;
-    }
-
-    // handle errors validate file image type
-    const validFiles = files.filter((file) => {
-      const error = singleFileValidator(file);
-      if (error) errors.push(error);
-      return !error;
-    });
-
-    if (errors.length) {
-      toast.error(errors.join(", "));
-      return;
-    }
-
-    // handle the preview image for the file input
-    const previews = [];
-    validFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        previews.push(e.target.result);
-        if (previews.length === validFiles.length) {
-          setImages(previews);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // change avatar logic
-    const formData = new FormData();
-    validFiles.forEach((file) => {
-      formData.append("hotel-images", file);
-    });
-
-    reqDataRef.current = formData;
-
-    // for (const [key, value] of form.entries()) {
-    //   console.log(`${key}: `, value);
-    // }
-    // console.log("files length: ", files.length);
-    // how to console log formData values
-    // for (const value of reqData.values()) {
-    //   console.log(value);
-    // }
-  };
-
-  const toggleOpenModal = () => setOpenModal(!openModal);
-
-  const handleToggle = (type, data) => {
-    setOpenModal(type === "options" ? false : true);
-    if (type === "edit")
-      setEditing({
-        edit: true,
-        data,
-      });
-    else if (type === "delete")
-      setDeleting({
-        delete: true,
-        id: data,
-      });
-    else if (type === "options")
-      setOpenOptions((prevOptions) =>
-        prevOptions.map((item, index) =>
-          index === data
-            ? {
-                ...item,
-                open: !item.open,
-              }
-            : {
-                ...item,
-                open: false,
-              }
-        )
-      );
-  };
-
-  const handleReset = () => {
-    setEditing({
-      edit: false,
-      data: null,
-    });
-    setDeleting({
-      delete: false,
-      id: null,
-    });
-    setOpenOptions((prevOptions) =>
-      prevOptions.map((item) => ({
-        ...item,
-        open: false,
-      }))
-    );
-    setOpenModal(false);
-  };
-
-  const onDeleting = async () => {
-    toast
-      .promise(deleteHotelAPI(deleting.id), {
-        pending: "Đang xóa phòng...",
-      })
-      .then((res) => {
-        if (!res.error) {
-          toast.success("Xóa phòng thành công!!!");
-          handleAfterCUDNewHotel();
-        }
-      });
-
-    handleReset();
-  };
-
-  const onSubmit = async (data) => {
-    if (!images.length) {
-      toast.error("Vui lòng chọn ảnh trước khi tạo!!!");
-      return;
-    }
-
-    const formData = reqDataRef.current;
-    if (!formData && !editing.edit) {
-      toast.error("Dữ liệu ảnh không hợp lệ!!!");
-      return;
-    }
-
-    const currentImagesFormData = getValues("images") || [];
-    let imagesList = [];
-    if (formData)
-      imagesList = await toast.promise(uploadHotelImagesAPI(formData), {
-        pending: "Đang tải ảnh lên...",
-        success: "Tải ảnh thành công!!!",
-        error: "Tải ảnh thất bại!",
-      });
-
-    if (imagesList?.length || currentImagesFormData.length) {
-      const utilitiesList = UTILITIES_LIST.map((utility, index) => ({
-        type: utility,
-        value: data.utilities.split(", ")[index],
-      }));
-
-      const apiData = {
-        ...data,
-        utilities: utilitiesList,
-        images: imagesList?.length
-          ? imagesList?.map((image) => image.secure_url)
-          : currentImagesFormData,
-      };
-
-      toast
-        .promise(
-          editing.edit
-            ? updateHotelAPI(editing.data._id, apiData)
-            : createNewHotelAPI(apiData),
-          {
-            pending: editing.edit
-              ? "Đang chỉnh sửa khách sạn..."
-              : "Đang tạo khách sạn mới...",
-          }
-        )
-        .then((res) => {
-          if (!res.error) {
-            toast.success(
-              editing.edit
-                ? "Chỉnh sửa thành công"
-                : "Tạo khách sạn mới thành công!!!"
-            );
-            handleAfterCUDNewHotel();
-          }
-
-          handleReset();
-          setImages([]);
-          reset();
-          reqDataRef.current = null;
-        });
-    }
-  };
-
-  const handleAfterCUDNewHotel = () => {
-    fetchHotelsAPI(location.search).then(updateStateData);
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchHotelsAPI(location.search)
-      .then(updateStateData)
-      .finally(() => setLoading(false));
-  }, [location.search]);
+  const {
+    dataHotels: hotels,
+    loading,
+    editing,
+    deleting,
+    openOptions,
+    openModal,
+    images,
+    currentPage,
+    totalPages,
+    handlePageChange,
+    handleToggle,
+    handleReset,
+    onDeleting,
+    onSubmit,
+    handleImageChange,
+    toggleOpenModal,
+    setImages,
+  } = useHotelTable({
+    fetchDataFn: fetchHotelsAPI,
+    createDataFn: createNewHotelAPI,
+    updateDataFn: updateHotelAPI,
+    deleteDataFn: deleteHotelAPI,
+    uploadImageFn: uploadHotelImagesAPI,
+    currentImagesFormData: getValues("images") || [],
+    dataKey: "hotels",
+    totalKey: "totalHotels",
+    imageKey: "hotel-images",
+    resetFn: reset,
+  });
 
   useEffect(() => {
     if (editing.edit && editing.data) {
@@ -303,6 +92,27 @@ const HotelsManagement = () => {
     }
   }, [editing, reset]);
 
+  const headerList = [
+    {
+      label: "Hình ảnh",
+      width: "w-[200px]",
+    },
+    {
+      label: "Tên",
+    },
+    {
+      label: "Địa chỉ",
+    },
+    {
+      label: "Giá mỗi đêm",
+      width: "w-[150px]",
+    },
+    {
+      label: "",
+      width: "w-[100px]",
+    },
+  ];
+
   const tHeadStyle =
     "font-medium border border-gray-200 px-4 py-2 md:text-[18px] sm:text-[16px] text-[14px] break-words whitespace-normal";
   const optionStyle =
@@ -316,260 +126,234 @@ const HotelsManagement = () => {
     );
 
   return (
-    <div className="flex flex-col max-md:overflow-auto">
-      {openModal && (
-        <Modal
-          title={
-            editing.edit
-              ? "Chỉnh sửa phòng"
-              : !deleting.delete
-              ? "Thêm phòng mới"
-              : "Xóa phòng"
-          }
-          handleCloseModal={() => handleReset()}
-          modalStyle="w-[450px]"
+    <div className="flex flex-col max-md:overflow-auto min-h-screen">
+      <DeleteConfirmationModal
+        isOpen={openModal}
+        onClose={handleReset}
+        onConfirm={onDeleting}
+        title="Xóa phòng"
+        message="Bạn có chắc chắn muốn xóa phòng không? Sau khi xóa không thể hoàn tác!"
+        confirmButtonText="Xóa"
+        cancelButtonText="Trở lại"
+        modalStyle="w-[450px]"
+      />
+
+      <FormModal
+        isOpen={openModal && !deleting.delete}
+        onClose={handleReset}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        title={editing.edit ? "Chỉnh sửa phòng" : "Thêm phòng mới"}
+        submitButtonText={editing.edit ? "Chỉnh sửa" : "Thêm phòng"}
+        modalStyle="w-[450px]"
+      >
+        <div
+          className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+              flex flex-col gap-1"
         >
-          {deleting.delete ? (
-            <div className="mt-6 relative">
-              <p className="text-black">
-                Bạn có chắc chắn muốn xóa phòng không? Sau khi xóa không thể
-                hoàn tác!
-              </p>
+          <label htmlFor="title" className="font-medium">
+            Tên phòng
+          </label>
+          <Input
+            name="title"
+            style="w-[90%]!"
+            content="Nhập tên phòng"
+            {...register("title", {
+              required: FIELD_REQUIRED_MESSAGE,
+              minLength: {
+                value: 5,
+                message: "Tên tối thiểu 5 ký tự",
+              },
+              maxLength: {
+                value: 50,
+                message: "Tên tối đa 50 ký tự",
+              },
+            })}
+            error={errors?.title}
+          />
+        </div>
 
-              <div className="flex justify-end">
-                <div className="flex items-center gap-2 mt-8">
-                  <Button
-                    title="Trở lại"
-                    type="cancel"
-                    onClick={() => handleReset()}
-                  />
-                  <Button
-                    title="Xóa phòng"
-                    type="warning"
-                    onClick={onDeleting}
-                  />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="mt-5 flex flex-col gap-4"
-            >
-              <div
-                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+        <div className="sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col gap-1">
+          <label htmlFor="location" className="font-medium">
+            Địa chỉ
+          </label>
+          <Input
+            name="location"
+            style="w-[90%]!"
+            content="Nhập địa chỉ"
+            {...register("location", {
+              required: FIELD_REQUIRED_MESSAGE,
+              minLength: {
+                value: 5,
+                message: "Địa chỉ tối thiểu 5 ký tự",
+              },
+              maxLength: {
+                value: 80,
+                message: "Địa chỉ tối đa 50 ký tự",
+              },
+            })}
+            error={errors?.location}
+          />
+        </div>
+
+        <Input
+          type="file"
+          images={images}
+          handleImageChange={handleImageChange}
+          multiple
+        />
+
+        <div
+          className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
               flex flex-col gap-1"
-              >
-                <label htmlFor="title" className="font-medium">
-                  Tên phòng
-                </label>
-                <Input
-                  name="title"
-                  style="w-[90%]!"
-                  content="Nhập tên phòng"
-                  {...register("title", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                    minLength: {
-                      value: 5,
-                      message: "Tên tối thiểu 5 ký tự",
-                    },
-                    maxLength: {
-                      value: 50,
-                      message: "Tên tối đa 50 ký tự",
-                    },
-                  })}
-                  error={errors?.title}
-                />
-              </div>
+        >
+          <label htmlFor="description" className="font-medium">
+            Mô tả
+          </label>
+          <Input
+            name="description"
+            content="Nhập mô tả"
+            type="textarea"
+            style="pt-3 w-[90%]!"
+            {...register("description", {
+              required: FIELD_REQUIRED_MESSAGE,
+              minLength: {
+                value: 5,
+                message: "Mô tả tối thiểu 5 ký tự",
+              },
+              maxLength: {
+                value: 350,
+                message: "Mô tả tối đa 350 ký tự",
+              },
+            })}
+            error={errors?.description}
+          />
+        </div>
 
-              <div className="sm:max-w-[400px] sm:w-[400px] w-[300px] flex flex-col gap-1">
-                <label htmlFor="location" className="font-medium">
-                  Địa chỉ
-                </label>
-                <Input
-                  name="location"
-                  style="w-[90%]!"
-                  content="Nhập địa chỉ"
-                  {...register("location", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                    minLength: {
-                      value: 5,
-                      message: "Địa chỉ tối thiểu 5 ký tự",
-                    },
-                    maxLength: {
-                      value: 80,
-                      message: "Địa chỉ tối đa 50 ký tự",
-                    },
-                  })}
-                  error={errors?.location}
-                />
-              </div>
-
-              <Input
-                type="file"
-                images={images}
-                handleImageChange={handleImageChange}
-                multiple
-              />
-
-              <div
-                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+        <div
+          className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
               flex flex-col gap-1"
-              >
-                <label htmlFor="description" className="font-medium">
-                  Mô tả
-                </label>
-                <Input
-                  name="description"
-                  content="Nhập mô tả"
-                  type="textarea"
-                  style="pt-3 w-[90%]!"
-                  {...register("description", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                    minLength: {
-                      value: 5,
-                      message: "Mô tả tối thiểu 5 ký tự",
-                    },
-                    maxLength: {
-                      value: 350,
-                      message: "Mô tả tối đa 350 ký tự",
-                    },
-                  })}
-                  error={errors?.description}
-                />
-              </div>
+        >
+          <label htmlFor="utilities" className="font-medium max-w-sm">
+            Tiện ích (Nhập theo thứ tự: số phòng ngủ, phòng khách, phòng tắm,
+            phòng ăn, tốc độ internet, số máy lạnh, số tủ lạnh, TV) * Lưu ý:
+            Nhập cách nhau bởi dấu phẩy và khoảng trắng
+          </label>
+          <Input
+            name="utilities"
+            content="Nhập tiện ích"
+            type="textarea"
+            style="pt-3 w-[90%]!"
+            {...register("utilities", {
+              required: FIELD_REQUIRED_MESSAGE,
+              minLength: {
+                value: 5,
+                message: "Tiện ích tối thiểu 5 ký tự",
+              },
+              maxLength: {
+                value: 150,
+                message: "Tiện ích tối đa 150 ký tự",
+              },
+            })}
+            error={errors?.utilities}
+          />
+        </div>
 
-              <div
-                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+        <div
+          className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
               flex flex-col gap-1"
-              >
-                <label htmlFor="utilities" className="font-medium max-w-sm">
-                  Tiện ích (Nhập theo thứ tự: số phòng ngủ, phòng khách, phòng
-                  tắm, phòng ăn, tốc độ internet, số máy lạnh, số tủ lạnh, TV) *
-                  Lưu ý: Nhập cách nhau bởi dấu phẩy và khoảng trắng
-                </label>
-                <Input
-                  name="utilities"
-                  content="Nhập tiện ích"
-                  type="textarea"
-                  style="pt-3 w-[90%]!"
-                  {...register("utilities", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                    minLength: {
-                      value: 5,
-                      message: "Tiện ích tối thiểu 5 ký tự",
-                    },
-                    maxLength: {
-                      value: 150,
-                      message: "Tiện ích tối đa 150 ký tự",
-                    },
-                  })}
-                  error={errors?.utilities}
-                />
-              </div>
+        >
+          <label htmlFor="maxGuest" className="font-medium">
+            Số khách tối đa
+          </label>
+          <Input
+            name="maxGuest"
+            style="w-[90%]!"
+            content="Nhập số khách tối đa"
+            type="number"
+            {...register("maxGuest", {
+              required: FIELD_REQUIRED_MESSAGE,
+            })}
+            error={errors?.maxGuest}
+          />
+        </div>
 
-              <div
-                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+        <div
+          className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
               flex flex-col gap-1"
-              >
-                <label htmlFor="maxGuest" className="font-medium">
-                  Số khách tối đa
-                </label>
-                <Input
-                  name="maxGuest"
-                  style="w-[90%]!"
-                  content="Nhập số khách tối đa"
-                  type="number"
-                  {...register("maxGuest", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                  })}
-                  error={errors?.maxGuest}
-                />
-              </div>
+        >
+          <label htmlFor="pricePerNight" className="font-medium">
+            Giá mỗi đêm
+          </label>
+          <Input
+            name="pricePerNight"
+            style="w-[90%]!"
+            content="Nhập giá mỗi đêm"
+            type="number"
+            {...register("pricePerNight", {
+              required: FIELD_REQUIRED_MESSAGE,
+            })}
+            error={errors?.pricePerNight}
+          />
+        </div>
 
-              <div
-                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+        <div
+          className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
               flex flex-col gap-1"
-              >
-                <label htmlFor="pricePerNight" className="font-medium">
-                  Giá mỗi đêm
-                </label>
-                <Input
-                  name="pricePerNight"
-                  style="w-[90%]!"
-                  content="Nhập giá mỗi đêm"
-                  type="number"
-                  {...register("pricePerNight", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                  })}
-                  error={errors?.pricePerNight}
-                />
-              </div>
+        >
+          <label htmlFor="priceFirstHour" className="font-medium">
+            Giá giờ đầu
+          </label>
+          <Input
+            name="priceFirstHour"
+            style="w-[90%]!"
+            content="Nhập giá giờ đầu"
+            type="number"
+            {...register("priceFirstHour", {
+              required: FIELD_REQUIRED_MESSAGE,
+            })}
+            error={errors?.priceFirstHour}
+          />
+        </div>
 
-              <div
-                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+        <div
+          className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
               flex flex-col gap-1"
-              >
-                <label htmlFor="priceFirstHour" className="font-medium">
-                  Giá giờ đầu
-                </label>
-                <Input
-                  name="priceFirstHour"
-                  style="w-[90%]!"
-                  content="Nhập giá giờ đầu"
-                  type="number"
-                  {...register("priceFirstHour", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                  })}
-                  error={errors?.priceFirstHour}
-                />
-              </div>
+        >
+          <label htmlFor="priceEachHour" className="font-medium">
+            Giá gốc
+          </label>
+          <Input
+            name="priceEachHour"
+            style="w-[90%]!"
+            content="Nhập giá gốc"
+            type="number"
+            {...register("priceEachHour", {
+              required: FIELD_REQUIRED_MESSAGE,
+            })}
+            error={errors?.priceEachHour}
+          />
+        </div>
 
-              <div
-                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
+        <div
+          className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
               flex flex-col gap-1"
-              >
-                <label htmlFor="priceEachHour" className="font-medium">
-                  Giá gốc
-                </label>
-                <Input
-                  name="priceEachHour"
-                  style="w-[90%]!"
-                  content="Nhập giá gốc"
-                  type="number"
-                  {...register("priceEachHour", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                  })}
-                  error={errors?.priceEachHour}
-                />
-              </div>
-
-              <div
-                className="sm:max-w-[400px] sm:w-[400px] w-[300px] 
-              flex flex-col gap-1"
-              >
-                <label htmlFor="discount" className="font-medium">
-                  Khuyến mãi
-                </label>
-                <Input
-                  name="discount"
-                  style="w-[90%]!"
-                  content="Nhập khuyến mãi"
-                  type="number"
-                  {...register("discount", {
-                    required: FIELD_REQUIRED_MESSAGE,
-                  })}
-                  error={errors?.discount}
-                />
-              </div>
-
-              <div className="flex justify-end mt-5">
-                <Button title={editing.edit ? "Chỉnh sửa" : "Thêm phòng"} />
-              </div>
-            </form>
-          )}
-        </Modal>
-      )}
+        >
+          <label htmlFor="discount" className="font-medium">
+            Khuyến mãi
+          </label>
+          <Input
+            name="discount"
+            style="w-[90%]!"
+            content="Nhập khuyến mãi"
+            type="number"
+            {...register("discount", {
+              required: FIELD_REQUIRED_MESSAGE,
+            })}
+            error={errors?.discount}
+          />
+        </div>
+      </FormModal>
 
       <div className="flex md:flex-nowrap flex-wrap gap-5 items-center justify-between">
         <h3
@@ -585,90 +369,51 @@ const HotelsManagement = () => {
         />
       </div>
 
-      <table className="table-fixed w-full max-md:min-w-[800px] border border-gray-200 bg-white rounded-md shadow-sm my-8">
-        <thead className="bg-gray-100">
-          <tr className="text-center">
-            <th className={`${tHeadStyle} w-[200px]`}>Hình ảnh</th>
-            <th className={`${tHeadStyle}`}>Tên</th>
-            <th className={`${tHeadStyle}`}>Địa chỉ</th>
-            <th className={`${tHeadStyle} w-[150px]`}>Giá mỗi đêm</th>
-            <th className={`${tHeadStyle} w-[100px]`}></th>
-          </tr>
-        </thead>
-        <tbody>
-          {hotels?.map((hotel, index) => (
-            <tr key={index} className="text-center">
-              <td className={`${tHeadStyle}`}>
-                <img
-                  src={hotel?.images[0]}
-                  className="object-cover md:w-[200px] md:h-[150px] sm:w-[150px] sm:h-[100px] 
+      <AdminTable
+        headers={headerList}
+        data={hotels}
+        renderRow={(hotel) => (
+          <>
+            <td className={`${tHeadStyle}`}>
+              <img
+                src={hotel?.images[0]}
+                className="object-cover md:w-[200px] md:h-[150px] sm:w-[150px] sm:h-[100px] 
                   w-[120px] h-[80px] mx-auto rounded-sm"
-                  alt=""
-                />
-              </td>
-              <td className={`${tHeadStyle}`}>{hotel?.title}</td>
-              <td className={`${tHeadStyle}`}>{hotel?.location}</td>
-              <td className={`${tHeadStyle}`}>{hotel?.pricePerNight}</td>
-              <td className={`${tHeadStyle} relative`}>
-                <div className="relative">
-                  <Ellipsis
-                    size={18}
-                    className="cursor-pointer mx-auto"
-                    onClick={() => handleToggle("options", index)}
-                  />
-
-                  {openOptions[index]?.open && (
-                    <ul
-                      className="w-[150px] bg-white shadow-md z-100
-                  border border-slate-100 rounded-sm absolute bottom-[-calc(50%)] text-[14px] right-0"
-                    >
-                      <li
-                        className={`${optionStyle} border-b border-slate-200`}
-                      >
-                        Xem thông tin
-                      </li>
-                      <li
-                        className={`${optionStyle} border-b border-slate-200 `}
-                        onClick={() => handleToggle("edit", hotel)}
-                      >
-                        Chỉnh sửa
-                      </li>
-                      <li
-                        className={`${optionStyle}`}
-                        onClick={() => handleToggle("delete", hotel?._id)}
-                      >
-                        Xóa phòng
-                      </li>
-                    </ul>
-                  )}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                alt=""
+              />
+            </td>
+            <td className={`${tHeadStyle}`}>{hotel?.title}</td>
+            <td className={`${tHeadStyle}`}>{hotel?.location}</td>
+            <td className={`${tHeadStyle}`}>{hotel?.pricePerNight}</td>
+          </>
+        )}
+        openOptions={openOptions}
+        handleToggleOptions={(idx) => handleToggle("options", idx)}
+        optionItems={[
+          {
+            label: "Xem thông tin",
+            onClick: () => {},
+          },
+          {
+            label: "Chỉnh sửa",
+            onClick: (hotel) => handleToggle("edit", hotel),
+          },
+          {
+            label: "Xóa phòng",
+            onClick: (hotel) => handleToggle("delete", hotel?._id),
+          },
+        ]}
+        tHeadStyle={tHeadStyle}
+        optionStyle={optionStyle}
+        responsiveStyle="max-md:min-w-[800px]"
+      />
 
       {totalPages > 1 && (
-        <div className="mt-10">
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel={<FiChevronRight />}
-            previousLabel={<FiChevronLeft />}
-            onPageChange={(selected) => handlePageChange(selected.selected + 1)}
-            pageRangeDisplayed={5}
-            marginPagesDisplayed={2}
-            pageCount={totalPages}
-            renderOnZeroPageCount={null}
-            forcePage={currentPage - 1}
-            containerClassName="flex items-center justify-center gap-2 mt-6"
-            pageClassName="px-4 py-2 text-sm font-medium text-black border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
-            activeClassName="bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
-            previousClassName="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
-            nextClassName="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
-            disabledClassName="opacity-50 cursor-not-allowed"
-            breakClassName="px-3 py-2 text-gray-500"
-          />
-        </div>
+        <Pagination
+          handlePageChange={handlePageChange}
+          totalPages={totalPages}
+          currentPage={currentPage}
+        />
       )}
     </div>
   );
