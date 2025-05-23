@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { DatePicker, Spin } from "antd";
 import { Ban, CircleCheckBig, CircleDot } from "lucide-react";
 import { deleteBookingAPI, getListBookingsAPI, updateBookingAPI } from "~/apis";
 import AdminTable from "~/components/AdminTable/AdminTable";
@@ -14,16 +14,19 @@ const BookingManagement = () => {
     dataBookings: bookings,
     loading,
     openOptions,
+    currentPage,
+    totalPages,
+    openModal,
+    deleting,
+    startDate,
+    endDate,
+    navigate,
+    onUpdating,
+    onDeleting,
     handleToggle,
     handleReset,
     handlePageChange,
-    currentPage,
-    totalPages,
-    onUpdating,
-    onDeleting,
-    openModal,
-    deleting,
-    navigate,
+    handleDateChange,
   } = useBookingTable({
     fetchDataFn: getListBookingsAPI,
     updateDataFn: updateBookingAPI,
@@ -95,9 +98,33 @@ const BookingManagement = () => {
         modalStyle="w-[450px]"
       />
 
-      <h3 className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-medium">
-        Quản lý đặt phòng
-      </h3>
+      <div className="flex sm:flex-nowrap flex-wrap justify-between items-center mb-6 gap-5">
+        <h3 className="lg:text-[20px] md:text-[18px] sm:text-[16px] text-[14px] font-medium">
+          Quản lý đặt phòng
+        </h3>
+        <div className="flex sm:flex-nowrap flex-wrap gap-4">
+          <DatePicker
+            placeholder="Từ ngày"
+            style={{ width: 150 }}
+            value={startDate}
+            onChange={(date) => handleDateChange("start", date)}
+            allowClear
+            format="DD/MM/YYYY"
+          />
+          <DatePicker
+            placeholder="Đến ngày"
+            style={{ width: 150 }}
+            value={endDate}
+            onChange={(date) => handleDateChange("end", date)}
+            allowClear
+            format="DD/MM/YYYY"
+            disabledDate={(current) => {
+              if (!startDate) return false;
+              return current && current < startDate;
+            }}
+          />
+        </div>
+      </div>
 
       <AdminTable
         headers={headerList}
