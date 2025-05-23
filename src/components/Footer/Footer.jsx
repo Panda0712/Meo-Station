@@ -4,9 +4,9 @@ import InstagramIcon from "~/assets/instagram.svg?react";
 import LocationIcon from "~/assets/location.svg?react";
 import MailIcon from "~/assets/mail.svg?react";
 import PhoneIcon from "~/assets/phone.svg?react";
-import MeoLogo from "/panda-logo.png";
 import TwitterIcon from "~/assets/twitter.svg?react";
 import { menuList } from "~/components/Navbar/constants";
+import MeoLogo from "/panda-logo.png";
 
 const Footer = () => {
   const footerClass = {
@@ -28,15 +28,21 @@ const Footer = () => {
             </div>
           </Link>
           <div className="flex items-center gap-3">
-            <FacebookIcon
-              className={`${footerClass.iconStyle} fill-[#4267B2]`}
-            />
-            <TwitterIcon
-              className={`${footerClass.iconStyle} fill-[#1DA1F2]`}
-            />
-            <InstagramIcon
-              className={`${footerClass.iconStyle} fill-[#C13584]`}
-            />
+            <Link to="https://www.facebook.com/">
+              <FacebookIcon
+                className={`${footerClass.iconStyle} fill-[#4267B2]`}
+              />
+            </Link>
+            <Link to="https://x.com/">
+              <TwitterIcon
+                className={`${footerClass.iconStyle} fill-[#1DA1F2]`}
+              />
+            </Link>
+            <Link to="https://www.instagram.com/">
+              <InstagramIcon
+                className={`${footerClass.iconStyle} fill-[#C13584]`}
+              />
+            </Link>
           </div>
           <p>Liên lạc: 0369332842</p>
           <span>@ 2024 MeoStation</span>
@@ -45,11 +51,13 @@ const Footer = () => {
         <div className="flex flex-col border-b border-slate-300 w-full md:w-auto pb-8 md:pb-0 md:border-0 justify-center gap-2">
           <h2 className="font-medium text-[18px]">Khám phá</h2>
           <ul className={footerClass.listStyle}>
-            {menuList.map((menu) => (
-              <Link key={menu.name} to={menu.path}>
-                <li className={footerClass.itemStyle}>{menu.name}</li>
-              </Link>
-            ))}
+            {menuList.map((menu) =>
+              menu.path !== "/login" ? (
+                <Link key={menu.name} to={menu.path}>
+                  <li className={footerClass.itemStyle}>{menu.name}</li>
+                </Link>
+              ) : null
+            )}
           </ul>
         </div>
 

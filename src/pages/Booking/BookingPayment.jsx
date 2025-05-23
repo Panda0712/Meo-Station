@@ -7,6 +7,7 @@ import BookingCard from "~/pages/Booking/BookingCard/BookingCard";
 import BookingHeading from "~/pages/Booking/BookingHeading/BookingHeading";
 import BookingSeparate from "~/pages/Booking/BookingSeparate/BookingSeparate";
 import { ORDER_STATUS, PAYMENT_METHODS } from "~/utils/constants";
+import { formatVND } from "~/utils/formatters";
 
 const BookingPayment = () => {
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS.CASH);
@@ -129,13 +130,10 @@ const BookingPayment = () => {
             Thông tin thanh toán:
           </h6>
           <p className="md:text-[16px] text-[14px] text-[#152C5B]">
-            Thuế TAX: <span className="font-medium ml-1">10%</span>
-          </p>
-          <p className="md:text-[16px] text-[14px] text-[#152C5B]">
-            Giá phòng: <span className="font-medium ml-1">400.000đ</span>
-          </p>
-          <p className="md:text-[16px] text-[14px] text-[#152C5B]">
-            Tổng giá: <span className="font-medium ml-1">450.000đ</span>
+            Tổng giá:{" "}
+            <span className="font-medium ml-1">
+              {formatVND(bookingData?.totalPrice)}đ
+            </span>
           </p>
 
           <div

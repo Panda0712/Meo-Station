@@ -109,6 +109,10 @@ const HotelDetails = () => {
     endTime: formatHourMinute(new Date(b.checkOutDate)),
   }));
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const pastDaysDisabled = { before: today };
+
   const nightMode = bookingMode === BOOKING_MODE.night;
   const dayMode = bookingMode === BOOKING_MODE.day;
   const disabledButton =
@@ -431,6 +435,7 @@ const HotelDetails = () => {
                     disabledDates={[
                       ...disabledNightRangesForNightBooking,
                       ...disabledDayRangesForNightBooking,
+                      pastDaysDisabled,
                     ]}
                   />
                 </div>
@@ -460,7 +465,10 @@ const HotelDetails = () => {
                     mode={bookingMode}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
-                    disabledDates={disabledNightsRangesForDayBooking}
+                    disabledDates={[
+                      ...disabledNightsRangesForDayBooking,
+                      pastDaysDisabled,
+                    ]}
                   />
                 </div>
               </div>

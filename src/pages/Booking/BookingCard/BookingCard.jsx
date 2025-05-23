@@ -1,6 +1,6 @@
 import { CalendarMinus2, CircleAlert, UsersRound } from "lucide-react";
 import BoxTimeline from "~/components/BoxTimeline/BoxTimeline";
-import { formatDate } from "~/utils/formatters";
+import { formatDate, formatVND } from "~/utils/formatters";
 
 const BookingCard = ({ bookingData }) => {
   const bookingInfoStyle = {
@@ -75,7 +75,7 @@ const BookingCard = ({ bookingData }) => {
                   </p>
                 </div>
                 <p className="md:text-[18px] text-[16px] mb-1 text-[#181A18]">
-                  {bookingData?.totalPrice}đ
+                  {formatVND(bookingData?.totalPrice)}đ
                 </p>
               </div>
               <div className="leading-[1.4]">
