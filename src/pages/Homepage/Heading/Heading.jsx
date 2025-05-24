@@ -23,9 +23,7 @@ const Heading = () => {
         text-[28px] text-[#152C5B] font-semibold sm:max-w-md 
         max-w-[80%] lg:mx-0 mx-auto mb-3 lg:text-start text-center"
         >
-          {capitalizeWords(
-            "Nơi nghỉ chân lý tưởng sau những chuyến đi dài mỏi mệt"
-          )}
+          {capitalizeWords("Nơi nghỉ chân lý tưởng trong những chuyến đi")}
         </h1>
         <p className="sm:max-w-md max-w-[80%] lg:mx-0 mx-auto text-[#B0B0B0] mb-7 lg:text-start text-center">
           Chúng tôi có đầy đủ tiện nghi và dịch vụ để quý khách trải nghiệm và
