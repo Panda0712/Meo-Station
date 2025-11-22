@@ -1,8 +1,8 @@
 <div align="center">
-  <h1 align="center">FlaDev-LMS — Frontend</h1>
-  <h3>LMS & E-learning Platform</h3>
+  <h1 align="center">HotelMaster — Frontend</h1>
+  <h3>Hotel Management & Booking Platform</h3>
 
-<img src="public/lms-icon.png" alt="Papermark" style="width:80px;height:80px"></a>
+<img src="public/hotel-icon.png" alt="HotelMaster" style="width:80px;height:80px"></a>
 
 </div>
 
@@ -14,32 +14,26 @@
 
 ## Overview
 
-React + Vite frontend for the FlaDev Learning Management System (LMS). It provides a full user experience: course discovery, course learning, cart & checkout, blog, notifications, user profiles, and an admin dashboard to manage courses, blogs, contacts, orders, and more.
+React + Vite frontend for a Hotel Management & Booking system. It provides a full user experience: search and browse hotels, check availability, create bookings and payments, manage user profiles, and an admin dashboard to manage hotels, bookings, contacts, vouchers and notifications.
 
 ## Main features
 
-- **Admin dashboard:** manage courses, blogs, contacts, orders, reviews, vouchers, and notifications.
-- **Course browsing & filtering:** lists, search, categories, and paginated results.
-- **Course learning experience:** lesson navigation, video playback, and progress tracking.
-- **Cart & checkout:** add to cart, view cart details, and create orders (payment handled by backend services).
-- **Authentication & profiles:** register, login, and manage user profiles.
-- **Real-time notifications:** socket-based updates for notifications and live events.
-- **Blog & rich content:** create/edit blog posts using a rich text editor (Quill/react-quill).
-- **File & media uploads:** file/video input components for uploading course materials.
-- **Reviews & ratings:** students can rate and review courses; admin can manage reviews.
-- **Wishlist & sharing:** wishlist functionality and social sharing utilities.
+- **Admin dashboard:** manage hotels, rooms, bookings, blogs, contacts, vouchers, and notifications.
+- **Hotel browsing & filtering:** lists, search, categories, location filters, and paginated results.
+- **Booking flow:** select rooms, choose dates, guest selection, view price breakdown, and complete bookings (payment handled by backend services).
+- **Payments & orders:** integrations with payment providers (Momo, ZaloPay, etc.) handled by backend controllers and services.
+- **Authentication & profiles:** register, login, email/phone verification, and manage user profiles.
+- **Real-time notifications:** socket-based updates for booking status, admin messages, and promotional notifications.
+- **Blog & content:** blog pages and rich content support for hotel articles and announcements.
+- **File & media uploads:** upload hotel images and assets via Cloudinary integration.
+- **Reviews & ratings:** guests can rate hotels and leave comments; admin can moderate reviews.
+- **Vouchers & discounts:** create and apply vouchers for bookings.
 
 ## Demo
 
-<img src="public/LMS-demo-1.gif" width="840" alt="Demo GIF 1">
+<img src="public/hotel-demo-1.gif" width="840" alt="Demo GIF 1">
 <br>
-<img src="public/LMS-demo-4.gif" width="840" alt="Demo GIF 4">
-<br>
-<img src="public/LMS-demo-2.gif" width="840" alt="Demo GIF 2">
-<br>
-<img src="public/LMS-demo-3.gif" width="840" alt="Demo GIF 3">
-<br>
-<img src="public/LMS-demo-5.gif" width="840" alt="Demo GIF 5">
+<img src="public/hotel-demo-2.gif" width="840" alt="Demo GIF 2">
 
 ## Tech stack
 
@@ -55,20 +49,21 @@ React + Vite frontend for the FlaDev Learning Management System (LMS). It provid
 
 1. Clone the repository
 
-```shell
-git clone https://github.com/Panda0712/FlaDev-LMS.git
+```powershell
+git clone <your-repo-url>
 ```
 
-2. Install dependencies
+2. Install frontend dependencies
 
 ```powershell
+cd frontend
 npm install
 ```
 
-3. Create a `.env` file at the project root and add required client variables (use `VITE_` prefix so Vite exposes them to the client). Example keys:
+3. Create a `.env` file at the `frontend` project root and add required client variables (use `VITE_` prefix so Vite exposes them to the client). Example keys:
 
 ```
-REACT_APP_API_BASE_URL=https://api.example.com
+VITE_API_BASE_URL=https://api.example.com
 ```
 
 4. Run development server
@@ -89,7 +84,18 @@ npm run build
 npm run preview
 ```
 
+Notes on backend
+
+- Backend services for payments, booking processing and admin APIs are located in the `backend/` folder of this workspace. Start the backend separately (see `backend/README.md`) and ensure the `VITE_API_BASE_URL` points to the running backend server.
+
 ## Notes
 
-- Backend services for payments and order processing are separate (see related backend folders in the workspace). Configure `REACT_APP_API_BASE_URL` to point to your running backend.
-- Replace "https://api.example.com" with backend domain of this project: "lms-backend-production-b51f.up.railway.app"
+- Replace `https://api.example.com` with your backend domain or local backend address (e.g., `http://localhost:5000`).
+- Payment integrations (Momo, ZaloPay) require backend configuration and provider keys — do not store secret keys in the frontend `.env`.
+- For image uploads this project uses Cloudinary (see `backend/src/providers/CloudinaryProvider.js`).
+
+If you'd like, I can also:
+
+- Add example `.env.local` templates for `frontend` and `backend`.
+- Create a short `CONTRIBUTING.md` with dev guidelines.
+- Add GitHub Actions workflow for frontend build and preview.
