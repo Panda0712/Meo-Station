@@ -1,8 +1,8 @@
 <div align="center">
-  <h1 align="center">HotelMaster — Frontend</h1>
+  <h1 align="center">MeoStation — Frontend</h1>
   <h3>Hotel Management & Booking Platform</h3>
 
-<img src="public/hotel-icon.png" alt="HotelMaster" style="width:80px;height:80px"></a>
+<img src="public/hotel-icon.avif" alt="HotelMaster" style="width:80px;height:80px"></a>
 
 </div>
 
@@ -34,6 +34,10 @@ React + Vite frontend for a Hotel Management & Booking system. It provides a ful
 <img src="public/hotel-demo-1.gif" width="840" alt="Demo GIF 1">
 <br>
 <img src="public/hotel-demo-2.gif" width="840" alt="Demo GIF 2">
+<br>
+<img src="public/hotel-demo-3.gif" width="840" alt="Demo GIF 3">
+<br>
+<img src="public/hotel-demo-4.gif" width="840" alt="Demo GIF 4">
 
 ## Tech stack
 
@@ -50,52 +54,33 @@ React + Vite frontend for a Hotel Management & Booking system. It provides a ful
 1. Clone the repository
 
 ```powershell
-git clone <your-repo-url>
+git clone https://github.com/Panda0712/Meo-Station.git
 ```
 
-2. Install frontend dependencies
+2. Install dependencies
 
 ```powershell
-cd frontend
 npm install
 ```
 
-3. Create a `.env` file at the `frontend` project root and add required client variables (use `VITE_` prefix so Vite exposes them to the client). Example keys:
-
-```
-VITE_API_BASE_URL=https://api.example.com
-```
-
-4. Run development server
+3. Run development server
 
 ```powershell
 npm run dev
 ```
 
-5. Build for production
+4. Build for production
 
 ```powershell
 npm run build
 ```
 
-6. Preview production build
+5. Preview production build
 
 ```powershell
 npm run preview
 ```
 
-Notes on backend
-
-- Backend services for payments, booking processing and admin APIs are located in the `backend/` folder of this workspace. Start the backend separately (see `backend/README.md`) and ensure the `VITE_API_BASE_URL` points to the running backend server.
-
 ## Notes
 
-- Replace `https://api.example.com` with your backend domain or local backend address (e.g., `http://localhost:5000`).
-- Payment integrations (Momo, ZaloPay) require backend configuration and provider keys — do not store secret keys in the frontend `.env`.
-- For image uploads this project uses Cloudinary (see `backend/src/providers/CloudinaryProvider.js`).
-
-If you'd like, I can also:
-
-- Add example `.env.local` templates for `frontend` and `backend`.
-- Create a short `CONTRIBUTING.md` with dev guidelines.
-- Add GitHub Actions workflow for frontend build and preview.
+- For image uploads this project uses Cloudinary.
